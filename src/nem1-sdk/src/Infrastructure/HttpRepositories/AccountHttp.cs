@@ -95,6 +95,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
                         ulong.Parse(accountInfo["account"]["importance"].ToString()),
                         ulong.Parse(accountInfo["account"]["harvestedBlocks"].ToString()),
                         ulong.Parse(accountInfo["account"]["vestedBalance"].ToString()),
+                        ulong.Parse(accountInfo["account"]["balance"].ToString()),
                         new MultisigAccountInfo(
                             PublicAccount.CreateFromPublicKey(
                                 accountInfo["account"]["publicKey"].ToString(), new NodeHttp(Url).GetNetworkType().Wait()),
@@ -104,6 +105,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
                                 ulong.Parse(accountInfo["importance"].ToString()),
                                 ulong.Parse(accountInfo["harvestedBlocks"].ToString()),
                                 ulong.Parse(accountInfo["vestedBalance"].ToString()),
+                                ulong.Parse(accountInfo["balance"].ToString()),
                                 null)).ToList(),
                             accountInfo["meta"]["cosignatoryOf"]?.Select(accountInfo2 => new AccountInfo(
                                 Address.CreateFromEncoded(accountInfo["address"].ToString()),
@@ -111,6 +113,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
                                 ulong.Parse(accountInfo["importance"].ToString()),
                                 ulong.Parse(accountInfo["harvestedBlocks"].ToString()),
                                 ulong.Parse(accountInfo["vestedBalance"].ToString()),
+                                ulong.Parse(accountInfo["balance"].ToString()),
                                 null)).ToList()
                         ));
                 });
@@ -148,6 +151,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
                         ulong.Parse(accountInfo["account"]["importance"].ToString()),
                         ulong.Parse(accountInfo["account"]["harvestedBlocks"].ToString()),
                         ulong.Parse(accountInfo["account"]["vestedBalance"].ToString()),
+                        ulong.Parse(accountInfo["account"]["balance"].ToString()),
                         new MultisigAccountInfo(
                             PublicAccount.CreateFromPublicKey(
                                 accountInfo["account"]["publicKey"].ToString(), new NodeHttp(Url).GetNetworkType().Wait()),
@@ -157,6 +161,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
                                 ulong.Parse(accountInfo["importance"].ToString()),
                                 ulong.Parse(accountInfo["harvestedBlocks"].ToString()),
                                 ulong.Parse(accountInfo["vestedBalance"].ToString()),
+                                ulong.Parse(accountInfo["balance"].ToString()),
                                 null)).ToList(),
                             accountInfo["meta"]["cosignatoryOf"]?.Select(accountInfo2 => new AccountInfo(
                                 Address.CreateFromEncoded(accountInfo["address"].ToString()),
@@ -164,6 +169,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
                                 ulong.Parse(accountInfo["importance"].ToString()),
                                 ulong.Parse(accountInfo["harvestedBlocks"].ToString()),
                                 ulong.Parse(accountInfo["vestedBalance"].ToString()),
+                                ulong.Parse(accountInfo["balance"].ToString()),
                                 null)).ToList()
                         ));
                 });

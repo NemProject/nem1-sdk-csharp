@@ -60,6 +60,12 @@ namespace io.nem1.sdk.Model.Accounts
         public ulong VestedBalance { get; }
 
         /// <summary>
+        /// Gets the balance.
+        /// </summary>
+        /// <value>The balance.</value>
+        public ulong Balance { get; }
+
+        /// <summary>
         /// Gets the multisig account information.
         /// </summary>
         /// <value>The multisig account information.</value>
@@ -89,12 +95,13 @@ namespace io.nem1.sdk.Model.Accounts
         /// <param name="harvestedBlocks">The harvested blocks.</param>
         /// <param name="vestedBalance">The vested balance.</param>
         /// <param name="multisigAccountInfo">The multisig account information.</param>
-        public AccountInfo(Address address,  string publicKey, ulong importance, ulong harvestedBlocks, ulong vestedBalance, MultisigAccountInfo multisigAccountInfo)
+        public AccountInfo(Address address,  string publicKey, ulong importance, ulong harvestedBlocks, ulong vestedBalance, ulong balance, MultisigAccountInfo multisigAccountInfo)
         {
             Address = address;
             HarvestedBlocks = harvestedBlocks;
             PublicKey = publicKey;
             VestedBalance = vestedBalance;
+            Balance = balance;
             Importance = importance;
             MultisigAccountInfo = multisigAccountInfo;          
         }
