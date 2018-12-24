@@ -160,7 +160,7 @@ namespace io.nem1.sdk.Infrastructure.Imported.Api
     }
 
     /// <exclude />
-    internal partial class NodeRoutesApi : INodeRoutesApi
+    internal class NodeRoutesApi : INodeRoutesApi
     {
         private ExceptionFactory _exceptionFactory = (name, response) => null;
 

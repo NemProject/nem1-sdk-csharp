@@ -1,4 +1,29 @@
-﻿namespace io.nem1.sdk.Model.Transactions
+﻿// ***********************************************************************
+// Assembly         : nem1-sdk-csharp
+// Author           : kailin
+// Created          : 06-01-2018
+//
+// Last Modified By : kailin
+// Last Modified On : 02-01-2018
+// ***********************************************************************
+// <copyright file="TransactionInfo.cs" company="Nem.io">
+// Copyright 2018 NEM
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+namespace io.nem1.sdk.Model.Transactions
 {
     /// <summary>
     /// Class TransactionInfo.
@@ -30,12 +55,6 @@
         public string InnerHash { get; }
 
         /// <summary>
-        /// Gets the time stamp.
-        /// </summary>
-        /// <value>The time stamp.</value>
-        public int TimeStamp { get; }
-
-        /// <summary>
         /// Gets a value indicating whether the transaction is a multisig transaction.
         /// </summary>
         /// <value><c>true</c> if this instance is multisig; otherwise, <c>false</c>.</value>
@@ -47,15 +66,13 @@
         /// <param name="height">The height.</param>
         /// <param name="id">The identifier.</param>
         /// <param name="hash">The hash.</param>
-        /// <param name="timeStamp">The time stamp.</param>
         /// <param name="innerHash">The inner hash.</param>
-        internal TransactionInfo(ulong height, int id, string hash, int timeStamp, string innerHash)
+        internal TransactionInfo(ulong height, int id, string hash, string innerHash)
         {
             Height = height;
             Id = id;
             Hash = hash;
             InnerHash = innerHash;
-            TimeStamp = timeStamp;
         }
 
         /// <summary>
@@ -64,12 +81,11 @@
         /// <param name="height">The height.</param>
         /// <param name="id">The identifier.</param>
         /// <param name="hash">The hash.</param>
-        /// <param name="timeStamp">The time stamp.</param>
         /// <param name="innerHash">The inner hash.</param>
         /// <returns>TransactionInfo.</returns>
-        public static TransactionInfo CreateMultisig(ulong height, int id, string hash, int timeStamp, string innerHash)
+        public static TransactionInfo CreateMultisig(ulong height, int id, string hash, string innerHash)
         {
-            return new TransactionInfo(height, id, hash, timeStamp, innerHash);
+            return new TransactionInfo(height, id, hash, innerHash);
         }
 
         /// <summary>
@@ -78,11 +94,10 @@
         /// <param name="height">The height.</param>
         /// <param name="id">The identifier.</param>
         /// <param name="hash">The hash.</param>
-        /// <param name="timeStamp">The time stamp.</param>
         /// <returns>TransactionInfo.</returns>
-        public static TransactionInfo Create(ulong height, int id, string hash, int timeStamp)
+        public static TransactionInfo Create(ulong height, int id, string hash)
         {
-            return new TransactionInfo(height, id, hash, timeStamp, null);
+            return new TransactionInfo(height, id, hash, null);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly         : nem2-sdk
+// Assembly         : nem1-sdk-csharp
 // Author           : kailin
 // Created          : 01-26-2018
 //
@@ -23,7 +23,7 @@
 // <summary></summary>
 // ***********************************************************************
 
-namespace io.nem1.sdk.Model.Transactions.Messages
+namespace io.nem1.sdk.Model.Network.Messages
 {
     /// <summary>
     /// Class MessageType.

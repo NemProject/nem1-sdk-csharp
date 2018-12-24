@@ -1,4 +1,29 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : nem1-sdk-csharp
+// Author           : kailin
+// Created          : 06-01-2018
+//
+// Last Modified By : kailin
+// Last Modified On : 02-01-2018
+// ***********************************************************************
+// <copyright file="ImportanceTransferTransaction.cs" company="Nem.io">
+// Copyright 2018 NEM
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+using System;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 using io.nem1.sdk.Infrastructure.Buffers;
 using io.nem1.sdk.Infrastructure.Buffers.Schema;
@@ -12,7 +37,7 @@ namespace io.nem1.sdk.Model.Transactions
     /// <summary>
     /// Class ImportanceTransferTransaction.
     /// </summary>
-    /// <seealso cref="io.nem1.sdk.Model.Transactions.Transaction" />
+    /// <seealso cref="Transaction" />
     public class ImportanceTransferTransaction : Transaction
     {
         /// <summary>
@@ -27,10 +52,11 @@ namespace io.nem1.sdk.Model.Transactions
         public ImportanceTransferMode.Mode Mode { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImportanceTransferTransaction"/> class.
+        /// Initializes a new signed instance of the <see cref="ImportanceTransferTransaction"/> class.
         /// </summary>
         /// <param name="networkType">Type of the network.</param>
         /// <param name="version">The version.</param>
+        /// <param name="networkTime">The networkTime.</param>
         /// <param name="deadline">The deadline.</param>
         /// <param name="fee">The fee.</param>
         /// <param name="mode">The mode.</param>
@@ -38,10 +64,11 @@ namespace io.nem1.sdk.Model.Transactions
         /// <param name="signature">The signature.</param>
         /// <param name="signer">The signer.</param>
         /// <param name="transactionInfo">The transaction information.</param>
-        public ImportanceTransferTransaction(NetworkType.Types networkType, int version, Deadline deadline, ulong fee, ImportanceTransferMode.Mode mode, PublicAccount remoteAccount, string signature, PublicAccount signer, TransactionInfo transactionInfo)
+        public ImportanceTransferTransaction(NetworkType.Types networkType, int version, NetworkTime networkTime, Deadline deadline, ulong fee, ImportanceTransferMode.Mode mode, PublicAccount remoteAccount, string signature, PublicAccount signer, TransactionInfo transactionInfo)
         {
             TransactionType = TransactionTypes.Types.ImportanceTransfer;
             Version = version;
+            NetworkTime = networkTime;
             Deadline = deadline;
             NetworkType = networkType;
             Signature = signature;
@@ -114,7 +141,7 @@ namespace io.nem1.sdk.Model.Transactions
             ImportanceTransferBuffer.AddPublicKeyLen(builder, 32); 
             ImportanceTransferBuffer.AddPublicKey(builder, signer);
             ImportanceTransferBuffer.AddFee(builder, Fee);
-            ImportanceTransferBuffer.AddDeadline(builder, Deadline.Ticks);
+            ImportanceTransferBuffer.AddDeadline(builder, Deadline.TimeStamp);
             ImportanceTransferBuffer.AddMode(builder, Mode.GetValue());
             ImportanceTransferBuffer.AddRemotePublicKeyLen(builder, 32);
             ImportanceTransferBuffer.AddRemotePublicKey(builder, remote);

@@ -1,4 +1,29 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : nem1-sdk-csharp
+// Author           : kailin
+// Created          : 06-01-2018
+//
+// Last Modified By : kailin
+// Last Modified On : 02-01-2018
+// ***********************************************************************
+// <copyright file="CosignatureTransaction.cs" company="Nem.io">
+// Copyright 2018 NEM
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+using System;
 using System.Text;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 using io.nem1.sdk.Infrastructure.Buffers;
@@ -25,10 +50,11 @@ namespace io.nem1.sdk.Model.Transactions
         public Address MultisigAddress { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CosignatureTransaction"/> class.
+        /// Initializes a new signed instance of the <see cref="CosignatureTransaction"/> class.
         /// </summary>
         /// <param name="networkType">Type of the network.</param>
         /// <param name="version">The version.</param>
+        /// <param name="networkTime">The networkTime.</param>
         /// <param name="deadline">The deadline.</param>
         /// <param name="fee">The fee.</param>
         /// <param name="hash">The hash of the transaction to sign.</param>
@@ -36,10 +62,11 @@ namespace io.nem1.sdk.Model.Transactions
         /// <param name="signature">The signature.</param>
         /// <param name="signer">The signer.</param>
         /// <param name="transactionInfo">The transaction information.</param>
-        public CosignatureTransaction(NetworkType.Types networkType, int version, Deadline deadline, ulong fee, string hash, Address multisigAddress, string signature, PublicAccount signer, TransactionInfo transactionInfo)
+        public CosignatureTransaction(NetworkType.Types networkType, int version, NetworkTime networkTime, Deadline deadline, ulong fee, string hash, Address multisigAddress, string signature, PublicAccount signer, TransactionInfo transactionInfo)
         {
             TransactionType = TransactionTypes.Types.SignatureTransaction;
             Version = version;
+            NetworkTime = networkTime;
             Deadline = deadline;
             NetworkType = networkType;
             Signature = signature;
@@ -140,7 +167,7 @@ namespace io.nem1.sdk.Model.Transactions
             SignatureTransactionBuffer.AddPublicKeyLen(builder, 32); 
             SignatureTransactionBuffer.AddPublicKey(builder, signer); 
             SignatureTransactionBuffer.AddFee(builder, Fee); 
-            SignatureTransactionBuffer.AddDeadline(builder, Deadline.Ticks); 
+            SignatureTransactionBuffer.AddDeadline(builder, Deadline.TimeStamp); 
             SignatureTransactionBuffer.AddHashObjLength(builder, 0x24); 
             SignatureTransactionBuffer.AddSha3HashLength(builder, 0x20); 
             SignatureTransactionBuffer.AddHash(builder, hash); 

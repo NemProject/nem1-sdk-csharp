@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
-// Assembly         : nem2-sdk
+// Assembly         : nem1-sdk-csharp
 // Author           : kailin
 // Created          : 06-01-2018
 //
 // Last Modified By : kailin
 // Last Modified On : 02-01-2018
 // ***********************************************************************
-// <copyright file="AggregateTransaction.cs" company="Nem.io">
+// <copyright file="Deadline.cs" company="Nem.io">
 // Copyright 2018 NEM
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@
 // <summary></summary>
 // ***********************************************************************
 
+using io.nem1.sdk.Model.Network;
 using System;
 
 namespace io.nem1.sdk.Model.Transactions
@@ -30,45 +31,19 @@ namespace io.nem1.sdk.Model.Transactions
     /// <summary>
     /// Class Deadline.
     /// </summary>
-    public class Deadline
+    public class Deadline : NetworkTime
     {
         /// <summary>
-        /// Gets or sets the epoch date.
+        /// Initializes a new instance of the <see cref="Deadline"/> class.
         /// </summary>
-        /// <value>The epoch date.</value>
-        internal DateTime EpochDate { get; set; }
-
-        /// <summary>
-        /// Gets the ticks.
-        /// </summary>
-        /// <value>The ticks.</value>
-        internal int Ticks { get; }
+        /// <param name="timestamp">The timestamp.</param>
+        public Deadline(int timestamp) : base(timestamp) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Deadline"/> class.
         /// </summary>
-        /// <param name="time">The time.</param>
-        public Deadline(TimeSpan time)
-        {
-            EpochDate = new DateTime(2015, 03, 29, 0, 6, 25, 0);
-
-            var now = DateTime.UtcNow;
-
-            var deadline = now - EpochDate;
-
-            Ticks = (int)deadline.Add(time).TotalSeconds;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Deadline"/> class.
-        /// </summary>
-        /// <param name="ticks">The ticks.</param>
-        public Deadline(int ticks)
-        {
-            EpochDate = new DateTime(2015, 03, 29, 0, 6, 25, 0).ToUniversalTime();
-
-            Ticks = ticks;
-        }
+        /// <param name="time">The timespan.</param>
+        public Deadline(TimeSpan timespan) : base(timespan) { }
 
         /// <summary>
         /// Creates a deadline in hours.
@@ -90,32 +65,5 @@ namespace io.nem1.sdk.Model.Transactions
             return new Deadline(TimeSpan.FromMinutes(mins));
         }
 
-        /// <summary>
-        /// Gets the instant.
-        /// </summary>
-        /// <returns>System.Int32.</returns>
-        public virtual int GetInstant()
-        {
-            return Ticks;
-        }
-
-        /// <summary>
-        /// Gets the local date time.
-        /// </summary>
-        /// <param name="timeZoneInfo">The time zone information.</param>
-        /// <returns>DateTime.</returns>
-        public DateTime GetLocalDateTime(TimeZoneInfo timeZoneInfo)
-        {
-            return TimeZoneInfo.ConvertTimeFromUtc(new DateTime((long)Ticks), timeZoneInfo);
-        }
-
-        /// <summary>
-        /// Gets the local date time.
-        /// </summary>
-        /// <returns>DateTime.</returns>
-        public DateTime GetLocalDateTime()
-        {
-            return TimeZoneInfo.ConvertTimeFromUtc(new DateTime((long)Ticks), TimeZoneInfo.Local);
-        }
     }
 }

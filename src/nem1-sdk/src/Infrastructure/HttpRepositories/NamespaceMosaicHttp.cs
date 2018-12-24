@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly         : nem2-sdk
+// Assembly         : nem1-sdk-csharp
 // Author           : kailin
 // Created          : 06-01-2018
 //
@@ -31,7 +31,7 @@ using io.nem1.sdk.Infrastructure.Imported.Api;
 using io.nem1.sdk.Model.Accounts;
 using io.nem1.sdk.Model.Mosaics;
 using io.nem1.sdk.Model.Namespace;
-using io.nem1.sdk.Model.Transactions;
+using io.nem1.sdk.Model.Network;
 using Newtonsoft.Json.Linq;
 
 namespace io.nem1.sdk.Infrastructure.HttpRepositories

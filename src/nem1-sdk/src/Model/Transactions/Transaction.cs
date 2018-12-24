@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly         : nem2-sdk
+// Assembly         : nem1-sdk-csharp
 // Author           : kailin
 // Created          : 06-01-2018
 //
@@ -25,9 +25,9 @@
 
 using System;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
-using io.nem1.sdk.Core.Utils;
 using io.nem1.sdk.Model.Accounts;
 using io.nem1.sdk.Model.Blockchain;
+using io.nem1.sdk.Model.Network;
 
 namespace io.nem1.sdk.Model.Transactions
 {
@@ -36,6 +36,12 @@ namespace io.nem1.sdk.Model.Transactions
     /// </summary>
     public abstract class Transaction
     {
+        /// <summary>
+        /// Gets the NetworkTime.
+        /// </summary>
+        /// <value>The NetworkTime.</value>
+        public NetworkTime NetworkTime { get; internal set; }
+
         /// <summary>
         /// Gets the fee.
         /// </summary>
@@ -54,6 +60,10 @@ namespace io.nem1.sdk.Model.Transactions
         /// <value>The type of the network.</value>
         public NetworkType.Types NetworkType { get; internal set; }
 
+        /// <summary>
+        /// Gets the Version.
+        /// </summary>
+        /// <value>The Version.</value>
         public int Version { get; set; }
 
         /// <summary>

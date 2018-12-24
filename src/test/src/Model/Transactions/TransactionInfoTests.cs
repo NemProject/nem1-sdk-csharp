@@ -34,7 +34,7 @@ namespace Tests.Model.Transactions
         [TestMethod]
         public void CreateATransactionInfoWithStaticConstructorCreateForStandaloneTransactions()
         {
-            TransactionInfo transactionInfo = TransactionInfo.Create(121855, 1, "B6C7648A3DDF71415650805E9E7801424FE03BBEE7D21F9C57B60220D3E95B2F", 100000);
+            TransactionInfo transactionInfo = TransactionInfo.Create(121855, 1, "B6C7648A3DDF71415650805E9E7801424FE03BBEE7D21F9C57B60220D3E95B2F");
 
             Assert.AreEqual((ulong)121855, transactionInfo.Height);
             Assert.IsTrue(transactionInfo.Hash == "B6C7648A3DDF71415650805E9E7801424FE03BBEE7D21F9C57B60220D3E95B2F");
@@ -46,14 +46,13 @@ namespace Tests.Model.Transactions
         [TestMethod]
         public void CreateATransactionInfoWithStaticConstructorCreateForAggregateInnerTransactions()
         {
-            TransactionInfo transactionInfo = TransactionInfo.CreateMultisig(121855, 1, "3D28C804EDD07D5A728E5C5FFEC01AB07AFA5766AE6997B38526D36015A4D006", 101133019,
+            TransactionInfo transactionInfo = TransactionInfo.CreateMultisig(121855, 1, "3D28C804EDD07D5A728E5C5FFEC01AB07AFA5766AE6997B38526D36015A4D006",
                     "3D28C804EDD07D5A728E5C5FFEC01AB07AFA5766AE6997B38526D36015A4D006");
 
             Assert.AreEqual((ulong)121855, transactionInfo.Height);
             Assert.IsTrue(transactionInfo.InnerHash == "3D28C804EDD07D5A728E5C5FFEC01AB07AFA5766AE6997B38526D36015A4D006");
             Assert.IsNotNull(transactionInfo.Id);
             Assert.IsTrue(transactionInfo.Hash == "3D28C804EDD07D5A728E5C5FFEC01AB07AFA5766AE6997B38526D36015A4D006");
-            Assert.AreEqual(transactionInfo.TimeStamp, 101133019);
         }
     }
 }

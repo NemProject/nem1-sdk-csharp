@@ -324,7 +324,7 @@ namespace io.nem1.sdk.Infrastructure.Imported.Api
     }
 
     /// <exclude />
-    internal partial class AccountRoutesApi : IAccountRoutesApi
+    internal class AccountRoutesApi : IAccountRoutesApi
     {
         private ExceptionFactory _exceptionFactory = (name, response) => null;
 

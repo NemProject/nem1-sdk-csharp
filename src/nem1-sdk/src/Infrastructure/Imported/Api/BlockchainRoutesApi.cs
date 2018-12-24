@@ -107,7 +107,7 @@ namespace io.nem1.sdk.Infrastructure.Imported.Api
     }
 
     /// <exclude />
-    internal partial class BlockchainRoutesApi : IBlockchainRoutesApi
+    internal class BlockchainRoutesApi : IBlockchainRoutesApi
     {
         private ExceptionFactory _exceptionFactory = (name, response) => null;
 

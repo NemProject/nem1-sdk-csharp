@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using io.nem1.sdk.Infrastructure.HttpRepositories;
 using io.nem1.sdk.Model.Accounts;
 using io.nem1.sdk.Model.Blockchain;
 using io.nem1.sdk.Model.Mosaics;
+using io.nem1.sdk.Model.Network.Messages;
 using io.nem1.sdk.Model.Transactions;
-using io.nem1.sdk.Model.Transactions.Messages;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IntegrationTest.infrastructure.Transactions

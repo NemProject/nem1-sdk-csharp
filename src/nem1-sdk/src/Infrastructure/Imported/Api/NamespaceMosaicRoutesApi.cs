@@ -84,7 +84,7 @@ namespace io.nem1.sdk.Infrastructure.Imported.Api
     }
 
     /// <exclude />
-    internal partial class NamespaceMosaicRoutesApi : INamespaceMosaicRoutesApi
+    internal class NamespaceMosaicRoutesApi : INamespaceMosaicRoutesApi
     {
         private ExceptionFactory _exceptionFactory = (name, response) => null;
 

@@ -1,4 +1,29 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : nem1-sdk-csharp
+// Author           : kailin
+// Created          : 06-01-2018
+//
+// Last Modified By : kailin
+// Last Modified On : 02-01-2018
+// ***********************************************************************
+// <copyright file="ProvisionNamespaceTransaction.cs" company="Nem.io">
+// Copyright 2018 NEM
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+using System;
 using System.Linq;
 using System.Text;
 using io.nem1.sdk.Infrastructure.Buffers;
@@ -27,10 +52,11 @@ namespace io.nem1.sdk.Model.Transactions
         public string Parent { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProvisionNamespaceTransaction"/> class.
+        /// Initializes a new signed instance of the <see cref="ProvisionNamespaceTransaction"/> class.
         /// </summary>
         /// <param name="networkType">Type of the network.</param>
         /// <param name="version">The version.</param>
+        /// <param name="networkTime">The networkTime.</param>
         /// <param name="deadline">The deadline.</param>
         /// <param name="fee">The fee.</param>
         /// <param name="newPart">The new part.</param>
@@ -38,10 +64,11 @@ namespace io.nem1.sdk.Model.Transactions
         /// <param name="signature">The signature.</param>
         /// <param name="signer">The signer.</param>
         /// <param name="transactionInfo">The transaction information.</param>
-        public ProvisionNamespaceTransaction(NetworkType.Types networkType, int version, Deadline deadline, ulong fee, string newPart, string parent, string signature, PublicAccount signer, TransactionInfo transactionInfo)
+        public ProvisionNamespaceTransaction(NetworkType.Types networkType, int version, NetworkTime networkTime, Deadline deadline, ulong fee, string newPart, string parent, string signature, PublicAccount signer, TransactionInfo transactionInfo)
         {
             TransactionType = TransactionTypes.Types.ProvisionNamespace;
             Version = version;
+            NetworkTime = networkTime;
             Deadline = deadline;
             NetworkType = networkType;
             Signature = signature;
@@ -145,7 +172,7 @@ namespace io.nem1.sdk.Model.Transactions
             ProvisionNamespaceTransactionBuffer.AddPublicKeyLen(builder, 32); 
             ProvisionNamespaceTransactionBuffer.AddPublicKey(builder, signer); 
             ProvisionNamespaceTransactionBuffer.AddFee(builder, Fee); 
-            ProvisionNamespaceTransactionBuffer.AddDeadline(builder, Deadline.Ticks); 
+            ProvisionNamespaceTransactionBuffer.AddDeadline(builder, Deadline.TimeStamp); 
             ProvisionNamespaceTransactionBuffer.AddSinkAddressLength(builder, 40); 
             ProvisionNamespaceTransactionBuffer.AddSinkAddressString(builder, sink); 
             ProvisionNamespaceTransactionBuffer.AddRentalFee(builder, Parent == null ? 0x5F5E100 : 0x989680); 

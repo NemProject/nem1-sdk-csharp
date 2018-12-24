@@ -110,7 +110,7 @@ namespace io.nem1.sdk.Infrastructure.Imported.Client
         public Configuration()
         {
             UserAgent = "Swagger-Codegen/1.0.0/csharp";
-            BasePath = "http://104.128.226.60:7890";
+            BasePath = "http://104.128.226.60:7890";    // testBigAlice2path
             DefaultHeader = new ConcurrentDictionary<string, string>();
             ApiKey = new ConcurrentDictionary<string, string>();
             ApiKeyPrefix = new ConcurrentDictionary<string, string>();
@@ -126,7 +126,7 @@ namespace io.nem1.sdk.Infrastructure.Imported.Client
             IDictionary<string, string> defaultHeader,
             IDictionary<string, string> apiKey,
             IDictionary<string, string> apiKeyPrefix,
-            string basePath = "http://104.128.226.60:7890") : this()
+            string basePath = "http://104.128.226.60:7890") : this()    //  testBigAlice2path
         {
             if (string.IsNullOrWhiteSpace(basePath))
                 throw new ArgumentException("The provided basePath is invalid.", "basePath");

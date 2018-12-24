@@ -15,9 +15,9 @@ namespace Tests.Model.Transactions
             return new FakeDeadline(new TimeSpan(1));
         }
 
-        public override int GetInstant()
-        {
-            return 1;
-        }
+        //public override int GetInstant()
+        //{
+        //    return 1;
+        //}
     }
 }

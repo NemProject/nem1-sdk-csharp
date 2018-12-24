@@ -65,7 +65,7 @@ namespace io.nem1.sdk.Infrastructure.Imported.Api
     }
 
     /// <exclude />
-    internal partial class NisRoutesApi : INisRoutesApi
+    internal class NisRoutesApi : INisRoutesApi
     {
         private ExceptionFactory _exceptionFactory = (name, response) => null;
 

@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly         : nem2-sdk
+// Assembly         : nem1-sdk-csharp
 // Author           : kailin
 // Created          : 06-01-2018
 //
@@ -26,7 +26,7 @@
 using io.nem1.sdk.Core.Crypto;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 
-namespace io.nem1.sdk.Model.Transactions.Messages
+namespace io.nem1.sdk.Model.Network.Messages
 {
     /// <summary>
     /// Class SecureMessage.

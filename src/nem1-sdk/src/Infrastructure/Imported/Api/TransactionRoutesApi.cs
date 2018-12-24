@@ -49,7 +49,7 @@ namespace io.nem1.sdk.Infrastructure.Imported.Api
     }
 
     /// <exclude />
-    internal partial class TransactionRoutesApi : ITransactionRoutesApi
+    internal class TransactionRoutesApi : ITransactionRoutesApi
     {
         private ExceptionFactory _exceptionFactory = (name, response) => null;
 

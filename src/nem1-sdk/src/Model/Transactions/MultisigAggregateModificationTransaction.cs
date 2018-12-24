@@ -1,4 +1,29 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : nem1-sdk-csharp
+// Author           : kailin
+// Created          : 06-01-2018
+//
+// Last Modified By : kailin
+// Last Modified On : 02-01-2018
+// ***********************************************************************
+// <copyright file="MultisigAggregateModificationTransaction.cs" company="Nem.io">
+// Copyright 2018 NEM
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+using System;
 using System.Collections.Generic;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 using io.nem1.sdk.Core.Utils;
@@ -27,10 +52,11 @@ namespace io.nem1.sdk.Model.Transactions
         public List<MultisigModification> Modifications { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MultisigAggregateModificationTransaction"/> class.
+        /// Initializes a new signed instance of the <see cref="MultisigAggregateModificationTransaction"/> class.
         /// </summary>
         /// <param name="networkType">Type of the network.</param>
         /// <param name="version">The version.</param>
+        /// <param name="networkTime">The networkTime.</param>
         /// <param name="deadline">The deadline.</param>
         /// <param name="fee">The fee.</param>
         /// <param name="relativeChange">The relative change.</param>
@@ -38,10 +64,11 @@ namespace io.nem1.sdk.Model.Transactions
         /// <param name="signature">The signature.</param>
         /// <param name="signer">The signer.</param>
         /// <param name="transactionInfo">The transaction information.</param>
-        public MultisigAggregateModificationTransaction(NetworkType.Types networkType, int version, Deadline deadline, ulong fee, int relativeChange, List<MultisigModification> modifications, string signature, PublicAccount signer, TransactionInfo transactionInfo)
+        public MultisigAggregateModificationTransaction(NetworkType.Types networkType, int version, NetworkTime networkTime, Deadline deadline, ulong fee, int relativeChange, List<MultisigModification> modifications, string signature, PublicAccount signer, TransactionInfo transactionInfo)
         {
             TransactionType = TransactionTypes.Types.MultisigAggregateModification;
             Version = version;
+            NetworkTime = networkTime;
             Deadline = deadline;
             NetworkType = networkType;
             Signature = signature;
@@ -124,7 +151,7 @@ namespace io.nem1.sdk.Model.Transactions
         /// <param name="deadline">The deadline.</param>
         /// <param name="modifications">The modifications.</param>
         /// <returns>MultisigAggregateModificationTransaction.</returns>
-        public static MultisigAggregateModificationTransaction Create(NetworkType.Types network, Deadline deadline, List<MultisigModification> modifications)
+        public static MultisigAggregateModificationTransaction Create(NetworkType.Types network,  Deadline deadline, List<MultisigModification> modifications)
         {
             return new MultisigAggregateModificationTransaction(network, 2, deadline, 500000, modifications);
         }
@@ -160,7 +187,7 @@ namespace io.nem1.sdk.Model.Transactions
             MultisigAggregateModificationBuffer.AddPublicKeyLen(builder, 32); 
             MultisigAggregateModificationBuffer.AddPublicKey(builder, signer);
             MultisigAggregateModificationBuffer.AddFee(builder, Fee);
-            MultisigAggregateModificationBuffer.AddDeadline(builder, Deadline.Ticks); 
+            MultisigAggregateModificationBuffer.AddDeadline(builder, Deadline.TimeStamp); 
             MultisigAggregateModificationBuffer.AddNumerOfModifications(builder, Modifications.Count);
             MultisigAggregateModificationBuffer.AddModifications(builder, modificationsVector);
             MultisigAggregateModificationBuffer.AddMinimumCosignatoriesLength(builder, RelativeChange == 0 ? 0 : 0x04);

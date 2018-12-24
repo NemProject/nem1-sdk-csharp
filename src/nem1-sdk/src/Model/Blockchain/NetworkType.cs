@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly         : nem2-sdk
+// Assembly         : nem1-sdk-csharp
 // Author           : kailin
 // Created          : 06-01-2018
 //
@@ -38,6 +38,10 @@ namespace io.nem1.sdk.Model.Blockchain
         public enum Types
         {
             /// <summary>
+            /// Unsupported net
+            /// </summary>
+            UNSUPPORTED_NET = 0x00, // To detect networkId 0, occasionaly received in the TESTNET NisInfo
+            /// <summary>
             /// The main net
             /// </summary>
             MAIN_NET = 0x68,
@@ -75,6 +79,8 @@ namespace io.nem1.sdk.Model.Blockchain
         {
             switch (name)
             {
+                case "":
+                    return Types.UNSUPPORTED_NET;
                 case "mijinTest":
                     return Types.MIJIN_TEST;
                 case "mijin":
@@ -95,7 +101,8 @@ namespace io.nem1.sdk.Model.Blockchain
         {
             switch (value)
             {
-                  
+                case 0x00:
+                    return Types.UNSUPPORTED_NET;
                 case 0x90:
                     return Types.MIJIN_TEST;
                 case 0x60:
@@ -105,7 +112,7 @@ namespace io.nem1.sdk.Model.Blockchain
                 case 0x68:
                     return Types.MAIN_NET;
                 default:
-                    throw new ArgumentException("invalid network name.");
+                    throw new ArgumentException("invalid network value.");
             }
         }
     }  

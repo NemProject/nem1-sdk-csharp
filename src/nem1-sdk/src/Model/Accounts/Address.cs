@@ -79,7 +79,7 @@ namespace io.nem1.sdk.Model.Accounts
         /// The network type of the account
         /// </summary>
         /// <value>The network byte.</value>
-        public NetworkType.Types NetworkByte { get; }
+        public NetworkType.Types Networktype { get; }
 
         /// <summary>
         /// Get address in plain format ex: SB3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3.
@@ -94,18 +94,18 @@ namespace io.nem1.sdk.Model.Accounts
         public string Pretty => Regex.Replace(_Address, ".{6}", "$0-");
 
         /// <summary>
-        /// Create an Address from a given encoded address.
+        /// Create an Address from a given encoded (plain or pretty) address.
         /// </summary>
         /// <param name="address">The Address</param>
         /// <returns>Address.</returns>
         /// <exception cref="System.Exception">
-        /// Address " + addressTrimAndUpperCase + " has to be 40 characters long
+        /// Address has to be 40 characters long 
         /// or
         /// Address Network unsupported
         /// </exception>
         public static Address CreateFromEncoded(string address)
         {
-            NetworkType.Types networkType;
+            NetworkType.Types networktype;
 
             var addressTrimAndUpperCase = address
                 .Trim()
@@ -120,27 +120,38 @@ namespace io.nem1.sdk.Model.Accounts
             switch (addressTrimAndUpperCase.ToCharArray()[0])
             {
                 case 'S':
-                    networkType = NetworkType.Types.MIJIN_TEST;
+                    networktype = NetworkType.Types.MIJIN_TEST;
                     break;
                 case 'M':
-                    networkType = NetworkType.Types.MIJIN;
+                    networktype = NetworkType.Types.MIJIN;
                     break;
                 case 'T':
-                    networkType = NetworkType.Types.TEST_NET;
+                    networktype = NetworkType.Types.TEST_NET;
                     break;
                 case 'N':
-                    networkType = NetworkType.Types.MAIN_NET;
+                    networktype = NetworkType.Types.MAIN_NET;
                     break;
                 default:
                     throw new Exception("Address Network unsupported");
             }
-            return new Address(addressTrimAndUpperCase, networkType);
+            return new Address(addressTrimAndUpperCase, networktype);
         }
 
+        /// <summary>
+        /// Create an Address from a given hexadecimal address.
+        /// </summary>
+        /// <param name="address">The hexadecimal Address</param>
+        /// <returns>Address.</returns>
+        /// <exception cref="System.Exception">
+        /// Address has to be 40 characters long 
+        /// or
+        /// Address Network unsupported
+        /// </exception>
         public static Address CreateFromHex(string address)
         {
             return CreateFromEncoded(address.FromHex().ToBase32String());
         }
+
         /// <summary>
         /// Create an Address from a given public key and network type.
         /// </summary>
@@ -188,10 +199,10 @@ namespace io.nem1.sdk.Model.Accounts
         /// </summary>
         /// <param name="address">The address of the account</param>
         /// <param name="network">The network type of the account</param>
-        public Address(string address, NetworkType.Types network)
+        public Address(string address, NetworkType.Types networktype)
         {
             _Address = Regex.Replace(address.Replace("-", ""), @"\s+", "").ToUpper();
-            NetworkByte = network;
+            Networktype = networktype;
         }  
     }
 }

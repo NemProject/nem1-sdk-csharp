@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly         : nem2-sdk
+// Assembly         : nem1-sdk-csharp
 // Author           : kailin
 // Created          : 06-01-2018
 //
@@ -28,23 +28,75 @@ using System;
 namespace io.nem1.sdk.Model.Network
 {
     /// <summary>
-    /// Static NetworkTime
+    /// NetworkTime
     /// </summary>
-    public static class NetworkTime
+    public class NetworkTime
     {
+        public static readonly DateTime Epoch = new DateTime(2015, 03, 29, 0, 6, 25, 0, DateTimeKind.Utc); // Time of NEMesis block
+
         /// <summary>
         /// Gets the time since genesis block in miliseconds.
         /// </summary>
         /// <returns>The network time.</returns>
         public static int EpochTimeInMilliSeconds()
         {
-            var d = new DateTime(2015, 03, 29, 0, 6, 25, 0);
-
-            var n = DateTime.UtcNow;
-            
-            var span = n - d;
-
-            return (int)span.TotalSeconds;
+            var timespan = DateTime.UtcNow - Epoch;
+            return (int)timespan.TotalMilliseconds;
         }
+
+        /// <summary>
+        /// Gets the TimeStamp in seconds since the NEMesis block.
+        /// </summary>
+        /// <value>The TimeStamp.</value>
+        internal int TimeStamp { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetworkTime"/> class.
+        /// </summary>
+        /// <param name="timestamp">The timestamp in seconds since the NEMesis block.</param>
+        public NetworkTime(int timestamp)
+        {
+            TimeStamp = timestamp;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetworkTime"/> class.
+        /// </summary>
+        /// <param name="timespan">The timespan.</param>
+        public NetworkTime(TimeSpan timespan)
+        {
+            var timespanNow = DateTime.UtcNow - NetworkTime.Epoch;
+            TimeStamp = (int)timespanNow.Add(timespan).TotalSeconds;
+        }
+
+        /// <summary>
+        /// Gets the UTC date time.
+        /// </summary>
+        /// <returns>DateTime.</returns>
+        public DateTime GetUtcDateTime()
+        {
+            const long TICKSPERSECOND = 10000000;   // .NET library DateTime ticks definition
+            return new DateTime((long)TimeStamp * TICKSPERSECOND + NetworkTime.Epoch.Ticks, DateTimeKind.Utc);  // DateTime constructor with Ticks as parameter
+        }
+
+        /// <summary>
+        /// Gets the local date time.
+        /// </summary>
+        /// <param name="timeZoneInfo">The time zone information.</param>
+        /// <returns>DateTime.</returns>
+        public DateTime GetLocalDateTime(TimeZoneInfo timeZoneInfo)
+        {
+            return TimeZoneInfo.ConvertTimeFromUtc(GetUtcDateTime(), timeZoneInfo);
+        }
+
+        /// <summary>
+        /// Gets the local date time.
+        /// </summary>
+        /// <returns>DateTime.</returns>
+        public DateTime GetLocalDateTime()
+        {
+            return GetLocalDateTime(TimeZoneInfo.Local);
+        }
+
     }
 }

@@ -1,5 +1,5 @@
 ﻿using io.nem1.sdk.Model.Accounts;
-using io.nem1.sdk.Model.Transactions;
+using io.nem1.sdk.Model.Network;
 
 namespace io.nem1.sdk.Model.Mosaics
 {

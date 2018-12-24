@@ -1,4 +1,29 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : nem1-sdk-csharp
+// Author           : kailin
+// Created          : 06-01-2018
+//
+// Last Modified By : kailin
+// Last Modified On : 02-01-2018
+// ***********************************************************************
+// <copyright file="MultisigTransaction.cs" company="Nem.io">
+// Copyright 2018 NEM
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+using System;
 using System.Collections.Generic;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 using io.nem1.sdk.Infrastructure.Buffers;
@@ -50,21 +75,23 @@ namespace io.nem1.sdk.Model.Transactions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MultisigTransaction"/> class.
+        /// Initializes a new signed instance of the <see cref="MultisigTransaction"/> class.
         /// </summary>
         /// <param name="networkType">Type of the network.</param>
         /// <param name="version">The version.</param>
+        /// <param name="networkTime">The networkTime.</param>
         /// <param name="deadline">The deadline.</param>
         /// <param name="fee">The fee.</param>
         /// <param name="innerTransaction">The inner transaction.</param>
         /// <param name="signature">The signature.</param>
         /// <param name="signer">The signer.</param>
         /// <param name="transactionInfo">The transaction information.</param>
-        public MultisigTransaction(NetworkType.Types networkType, int version, Deadline deadline, ulong fee, Transaction innerTransaction, string signature, PublicAccount signer, TransactionInfo transactionInfo)
+        public MultisigTransaction(NetworkType.Types networkType, int version, NetworkTime networkTime, Deadline deadline, ulong fee, Transaction innerTransaction, string signature, PublicAccount signer, TransactionInfo transactionInfo)
         {
             TransactionType = TransactionTypes.Types.Multisig;
             NetworkType = networkType;
             Version = version;
+            NetworkTime = networkTime;
             Deadline = deadline;
             Fee = fee  == 0 ? 150000 : fee;
             InnerTransaction = innerTransaction;
@@ -74,10 +101,11 @@ namespace io.nem1.sdk.Model.Transactions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MultisigTransaction"/> class.
+        /// Initializes a new sigend instance of the <see cref="MultisigTransaction"/> class.
         /// </summary>
         /// <param name="networkType">Type of the network.</param>
         /// <param name="version">The version.</param>
+        /// <param name="networkTime">The networkTime.</param>
         /// <param name="deadline">The deadline.</param>
         /// <param name="fee">The fee.</param>
         /// <param name="innerTransaction">The inner transaction.</param>
@@ -85,11 +113,12 @@ namespace io.nem1.sdk.Model.Transactions
         /// <param name="signature">The signature.</param>
         /// <param name="signer">The signer.</param>
         /// <param name="transactionInfo">The transaction information.</param>
-        public MultisigTransaction(NetworkType.Types networkType, int version, Deadline deadline, ulong fee, Transaction innerTransaction, List<CosignatureTransaction> cosignatures, string signature, PublicAccount signer, TransactionInfo transactionInfo)
+        public MultisigTransaction(NetworkType.Types networkType, int version, NetworkTime networkTime, Deadline deadline, ulong fee, Transaction innerTransaction, List<CosignatureTransaction> cosignatures, string signature, PublicAccount signer, TransactionInfo transactionInfo)
         {
             TransactionType = TransactionTypes.Types.Multisig;
             NetworkType = networkType;
             Version = version;
+            NetworkTime = networkTime;
             Deadline = deadline;
             Fee = fee == 0 ? 150000 : fee;
             InnerTransaction = innerTransaction;
@@ -163,7 +192,7 @@ namespace io.nem1.sdk.Model.Transactions
             MultisigTransactionBuffer.AddPublicKeyLen(builder, 32); 
             MultisigTransactionBuffer.AddPublicKey(builder, signer);
             MultisigTransactionBuffer.AddFee(builder, Fee);
-            MultisigTransactionBuffer.AddDeadline(builder, Deadline.Ticks); 
+            MultisigTransactionBuffer.AddDeadline(builder, Deadline.TimeStamp); 
             MultisigTransactionBuffer.AddInnerTransactionLength(builder, innerTransactionBytes.Length); 
             MultisigTransactionBuffer.AddInnerTransactionBytes(builder, innerTransaction);
 

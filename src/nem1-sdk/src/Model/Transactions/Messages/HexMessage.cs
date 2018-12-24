@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 
-namespace io.nem1.sdk.Model.Transactions.Messages
+namespace io.nem1.sdk.Model.Network.Messages
 {
     /// <summary>
     /// Class HexMessage.
     /// </summary>
-    /// <seealso cref="io.nem1.sdk.Model.Transactions.Messages.PlainMessage" />
+    /// <seealso cref="io.nem1.sdk.Model.Network.Messages.PlainMessage" />
     public class HexMessage : PlainMessage
     {
         /// <summary>

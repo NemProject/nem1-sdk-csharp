@@ -15,9 +15,9 @@
 
 using io.nem1.sdk.Model.Accounts;
 using io.nem1.sdk.Model.Blockchain;
-using io.nem1.sdk.Model.Transactions;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using io.nem1.sdk.Model.Transactions;
 
 namespace Tests.Model.AccountTest
 {

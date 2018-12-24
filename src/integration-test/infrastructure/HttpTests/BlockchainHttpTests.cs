@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 using io.nem1.sdk.Infrastructure.HttpRepositories;
 using io.nem1.sdk.Model.Blockchain;
+using io.nem1.sdk.Model.Network;
 using io.nem1.sdk.Model.Transactions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -53,7 +54,7 @@ namespace IntegrationTest.infrastructure.HttpTests
 
             var tx = (MultisigAggregateModificationTransaction)block.Transactions[0];
 
-            Assert.AreEqual(101844173, tx.Deadline.GetInstant());
+            Assert.AreEqual(101844173, tx.Deadline.TimeStamp);
             Assert.AreEqual((ulong)500000, tx.Fee);
             Assert.AreEqual(0x98, tx.NetworkType.GetNetwork());
             Assert.AreEqual("7f8f04574139efcd1734fc1f2ad7e5bbe8d99deb2ab46abe8c3e1e29697b80962d93339dd1d28c37feb3b574b66abcc93a32ff2560234f7d99d6d444fac2d800", tx.Signature);
@@ -80,7 +81,7 @@ namespace IntegrationTest.infrastructure.HttpTests
 
             var tx = (MultisigTransaction)block.Transactions[0];
 
-            Assert.AreEqual(101849518, tx.Deadline.GetInstant());
+            Assert.AreEqual(101849518, tx.Deadline.TimeStamp);
             Assert.AreEqual((ulong)150000, tx.Fee);
             Assert.AreEqual(0x98, tx.NetworkType.GetNetwork());
             Assert.AreEqual("8a3eea425d4904fc17fe93f917692b450ea67c9d8140d19ff32ee874ff0057d9bddf6cc3aaaac9c95cf6cb2ebbe15fd7a5a4fe0020f1e7e2c6a8b539c09da702", tx.Signature);
@@ -89,7 +90,7 @@ namespace IntegrationTest.infrastructure.HttpTests
 
             var cosignature = tx.Cosignatures[0];
                 
-            Assert.AreEqual(101849553, cosignature.Deadline.GetInstant());
+            Assert.AreEqual(101849553, cosignature.Deadline.TimeStamp);
             Assert.AreEqual((ulong)150000, cosignature.Fee);
             Assert.AreEqual(0x98, cosignature.NetworkType.GetNetwork());
             Assert.AreEqual("0102d2937edfa9d26b4854d2d298b3e500e66dce419b72be2dab8fad6e2a1ea495d5c509047dacc092877161680ffcd589a378348b7c02fed00a133d7c65d90e", cosignature.Signature);
@@ -117,7 +118,7 @@ namespace IntegrationTest.infrastructure.HttpTests
 
             var tx = (TransferTransaction)block.Transactions[0];
 
-            Assert.AreEqual(101436255, tx.Deadline.GetInstant());
+            Assert.AreEqual(101436255, tx.Deadline.TimeStamp);
             Assert.AreEqual((ulong)100000, tx.Fee);
             Assert.AreEqual(0x98, tx.NetworkType.GetNetwork());
             Assert.AreEqual("286734306db83992b4d7e192d473c5f46d9150bd5dbefb0eee6acf88f9a5897e1fd92e5973c1ac12e23c13f405e02e67d7a05b3203371c79cf18b75c70e1ff00", tx.Signature);
@@ -145,7 +146,7 @@ namespace IntegrationTest.infrastructure.HttpTests
 
             var tx = (ImportanceTransferTransaction)block.Transactions[0];
 
-            Assert.AreEqual(101598553, tx.Deadline.GetInstant());
+            Assert.AreEqual(101598553, tx.Deadline.TimeStamp);
             Assert.AreEqual((ulong)150000, tx.Fee);
             Assert.AreEqual(0x98, tx.NetworkType.GetNetwork());
             Assert.AreEqual("1afa6a903a9bf02ae64dcda5f407dd001cbf6abe41e808325f55c5911e5ef8a5e3e85865cf9769e9f1efd70ba30aa683ab75de0bee5a9b30f68ad6aaf3855c02", tx.Signature);
@@ -172,7 +173,7 @@ namespace IntegrationTest.infrastructure.HttpTests
 
             var tx = (MosaicDefinitionTransaction)block.Transactions[0];
 
-            Assert.AreEqual(102061222, tx.Deadline.GetInstant());
+            Assert.AreEqual(102061222, tx.Deadline.TimeStamp);
             Assert.AreEqual((ulong)150000, tx.Fee);
             Assert.AreEqual(0x98, tx.NetworkType.GetNetwork());
             Assert.AreEqual("b6adf94d3d54cf9e2c88cf1c668bb102f019f1c6f1dc569885668862603802dc5edeae964a3a72cbd19a930145b7d803dc3f0f259370f2ab8f900e15ad1dd704", tx.Signature);
@@ -197,7 +198,7 @@ namespace IntegrationTest.infrastructure.HttpTests
 
             var tx = (SupplyChangeTransaction)block.Transactions[0];
 
-            Assert.AreEqual(102046580, tx.Deadline.GetInstant());
+            Assert.AreEqual(102046580, tx.Deadline.TimeStamp);
             Assert.AreEqual((ulong)150000, tx.Fee);
             Assert.AreEqual(0x98, tx.NetworkType.GetNetwork());
             Assert.AreEqual("e3974d7ccea1f620dd79b950fa32da9b8f09f79a5859d97e4758e6cda5c32bc33fd7ff229986bc04384cb5b0568b500eb4418dc57f7f04e04a83127fc9620701", tx.Signature);
@@ -225,7 +226,7 @@ namespace IntegrationTest.infrastructure.HttpTests
 
             var tx = (MosaicDefinitionTransaction)block.Transactions[0];
 
-            Assert.AreEqual(102042046, tx.Deadline.GetInstant());
+            Assert.AreEqual(102042046, tx.Deadline.TimeStamp);
             Assert.AreEqual((ulong)150000, tx.Fee);
             Assert.AreEqual(0x98, tx.NetworkType.GetNetwork());
             Assert.AreEqual("6f2cf6a00120e58b48f13a7f38d4c16ca1dc089b775b91b5213fbe4286dddeef1cf4a7e0e9f7f0c32b254532e5b0f270e47f1676d6096519db93972c10f63000", tx.Signature);
@@ -257,14 +258,14 @@ namespace IntegrationTest.infrastructure.HttpTests
 
             var tx = (MultisigTransaction)block.Transactions[0];
 
-            Assert.AreEqual(101136504, tx.Deadline.GetInstant());
+            Assert.AreEqual(101136504, tx.Deadline.TimeStamp);
             Assert.AreEqual((ulong)150000, tx.Fee);
             Assert.AreEqual(0x98, tx.NetworkType.GetNetwork());
             Assert.AreEqual("8c3abfd275c72fae0042d9a92959ae53c6282a34afca39b637a53fd73092b02e72d5860549cd697884e5c9ec7c04f3beb7a702fee74f646a0e107656cdae320a", tx.Signature);
             Assert.AreEqual("9d7ea57169a56a1bb821e1abf744610c639d7545f976f09808b68a6ad1415eb0", tx.Signer.PublicKey);
             Assert.AreEqual(TransactionTypes.Types.Multisig, tx.TransactionType);
 
-            Assert.AreEqual(101136504, ((TransferTransaction)tx.InnerTransaction).Deadline.GetInstant());
+            Assert.AreEqual(101136504, ((TransferTransaction)tx.InnerTransaction).Deadline.TimeStamp);
             Assert.AreEqual(2, ((TransferTransaction)tx.InnerTransaction).Version);
             Assert.AreEqual(TransactionTypes.Types.Transfer, ((TransferTransaction)tx.InnerTransaction).TransactionType);
             Assert.AreEqual((ulong)50000, ((TransferTransaction)tx.InnerTransaction).Fee);

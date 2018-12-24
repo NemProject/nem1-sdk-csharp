@@ -21,7 +21,7 @@ namespace io.nem1.sdk.Model.Node
         /// Gets the network.
         /// </summary>
         /// <value>The network.</value>
-        public NetworkType.Types Network { get; }
+        public NetworkType.Types Networktype { get; }
         /// <summary>
         /// Gets the version.
         /// </summary>
@@ -63,7 +63,7 @@ namespace io.nem1.sdk.Model.Node
         /// </summary>
         /// <param name="features">The features.</param>
         /// <param name="application">The application.</param>
-        /// <param name="network">The network.</param>
+        /// <param name="networktype">The networktype.</param>
         /// <param name="version">The version.</param>
         /// <param name="platform">The platform.</param>
         /// <param name="protocol">The protocol.</param>
@@ -71,11 +71,11 @@ namespace io.nem1.sdk.Model.Node
         /// <param name="host">The host.</param>
         /// <param name="publicKey">The public key.</param>
         /// <param name="name">The name.</param>
-        public NodeInfo(int features, string application, NetworkType.Types network, string version, string platform, string protocol, string port, string host, string publicKey, string name)
+        public NodeInfo(int features, string application, NetworkType.Types networktype, string version, string platform, string protocol, string port, string host, string publicKey, string name)
         {
             Features = features;
             Application = application;
-            Network = network;
+            Networktype= networktype;
             Version = version;
             Platform = platform;
             Protocol = protocol;

@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly         : nem2-sdk
+// Assembly         : nem1-sdk-csharp
 // Author           : kailin
 // Created          : 06-01-2018
 //
@@ -26,6 +26,7 @@
 using System;
 using System.Reactive.Linq;
 using io.nem1.sdk.Infrastructure.Imported.Api;
+using io.nem1.sdk.Model.Network;
 using io.nem1.sdk.Model.Transactions;
 
 namespace io.nem1.sdk.Infrastructure.HttpRepositories

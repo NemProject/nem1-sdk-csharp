@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly         : nem2-sdk
+// Assembly         : nem1-sdk-csharp
 // Author           : kailin
 // Created          : 06-01-2018
 //
@@ -33,7 +33,7 @@ using io.nem1.sdk.Model.Accounts;
 using io.nem1.sdk.Model.Blockchain;
 using io.nem1.sdk.Model.Mosaics;
 using io.nem1.sdk.Model.Network;
-using io.nem1.sdk.Model.Transactions.Messages;
+using io.nem1.sdk.Model.Network.Messages;
 
 namespace io.nem1.sdk.Model.Transactions
 {
@@ -79,16 +79,17 @@ namespace io.nem1.sdk.Model.Transactions
             Version = version;
             Deadline = deadline;
             Message = message ?? EmptyMessage.Create();
-            Mosaics = mosaics ?? new List<Mosaic>(); ;
+            Mosaics = mosaics ?? new List<Mosaic>();
             NetworkType = networkType;
             Fee = fee == 0 ? CalculateFee() : fee;          
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransferTransaction"/> class.
+        /// Initializes a new signed instance of the <see cref="TransferTransaction"/> class.
         /// </summary>
         /// <param name="networkType">Type of the network.</param>
         /// <param name="version">The version.</param>
+        /// <param name="networkTime">The networkTime.</param>
         /// <param name="deadline">The deadline.</param>
         /// <param name="fee">The fee.</param>
         /// <param name="recipient">The recipient.</param>
@@ -98,12 +99,13 @@ namespace io.nem1.sdk.Model.Transactions
         /// <param name="signer">The signer.</param>
         /// <param name="transactionInfo">The transaction information.</param>
         /// <exception cref="System.ArgumentNullException">recipient</exception>
-        internal TransferTransaction(NetworkType.Types networkType, int version, Deadline deadline, ulong fee, Address recipient, List<Mosaic> mosaics, IMessage message, string signature, PublicAccount signer, TransactionInfo transactionInfo)
+        internal TransferTransaction(NetworkType.Types networkType, int version, NetworkTime networkTime, Deadline deadline, ulong fee, Address recipient, List<Mosaic> mosaics, IMessage message, string signature, PublicAccount signer, TransactionInfo transactionInfo)
         {
             Address = recipient ?? throw new ArgumentNullException(nameof(recipient));
             Mosaics = mosaics ?? new List<Mosaic>();
             TransactionType = TransactionTypes.Types.Transfer;
             Version = version;
+            NetworkTime = networkTime;
             Deadline = deadline;
             Message = message ?? EmptyMessage.Create();
             NetworkType = networkType;    
@@ -201,7 +203,7 @@ namespace io.nem1.sdk.Model.Transactions
             TransferTransactionBuffer.AddPublicKeyLen(builder, 32);
             TransferTransactionBuffer.AddPublicKey(builder, signer);
             TransferTransactionBuffer.AddFee(builder, Fee);
-            TransferTransactionBuffer.AddDeadline(builder, Deadline.Ticks);        
+            TransferTransactionBuffer.AddDeadline(builder, Deadline.TimeStamp);        
             TransferTransactionBuffer.AddRecipientLen(builder, 40);
             TransferTransactionBuffer.AddRecipient(builder, recipientVector);
             TransferTransactionBuffer.AddAmount(builder, 1000000);          

@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly         : nem2-sdk
+// Assembly         : nem1-sdk-csharp
 // Author           : kailin
 // Created          : 06-01-2018
 //
@@ -89,7 +89,7 @@ namespace io.nem1.sdk.Model.Accounts
         {
             Address = address;
             KeyPair = keyPair;
-            PublicAccount = new PublicAccount(keyPair.PublicKeyString, address.NetworkByte);
+            PublicAccount = new PublicAccount(keyPair.PublicKeyString, address.Networktype);
         }
 
         /// <summary>

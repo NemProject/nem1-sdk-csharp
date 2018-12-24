@@ -124,9 +124,9 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
                 new ExtendedNodeInfo(
                     new NodeInfoMapping().MapNode(i["node"]),
                     new NisInfo(
-                        ulong.Parse(i["nisInfo"]["currentTime"].ToString()),
+                        int.Parse(i["nisInfo"]["currentTime"].ToString()),
                         i["nisInfo"]["application"].ToString(),
-                        ulong.Parse(i["nisInfo"]["startTime"].ToString()),
+                        int.Parse(i["nisInfo"]["startTime"].ToString()),
                         i["nisInfo"]["version"].ToString(),
                         i["nisInfo"]["signer"]?.ToString()
                     )));

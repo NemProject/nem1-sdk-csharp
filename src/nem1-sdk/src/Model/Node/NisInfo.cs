@@ -1,4 +1,6 @@
-﻿namespace io.nem1.sdk.Model.Node
+﻿using io.nem1.sdk.Model.Network;
+
+namespace io.nem1.sdk.Model.Node
 {
     /// <summary>
     /// Class NisInfo.
@@ -8,35 +10,35 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="NisInfo"/> class.
         /// </summary>
-        /// <param name="currentTime">The current time.</param>
+        /// <param name="currentTimeStamp">The current timestamp.</param>
         /// <param name="application">The application.</param>
-        /// <param name="startTime">The start time.</param>
+        /// <param name="startTimeStamp">The start timestamp.</param>
         /// <param name="version">The version.</param>
         /// <param name="signer">The signer.</param>
-        public NisInfo(ulong currentTime, string application, ulong startTime, string version, string signer)
+        public NisInfo(int currentTimeStamp, string application, int startTimeStamp, string version, string signer)
         {
-            CurrentTime = currentTime;
+            CurrentTime = new NetworkTime(currentTimeStamp);
             Application = application;
-            StartTime = startTime;
+            StartTime = new NetworkTime(startTimeStamp);
             Version = version;
             Signer = signer;
         }
 
         /// <summary>
-        /// Gets the current time.
+        /// Gets the current time of the NIS.
         /// </summary>
         /// <value>The current time.</value>
-        public ulong CurrentTime { get; }
+        public NetworkTime CurrentTime { get; }
         /// <summary>
         /// Gets the application.
         /// </summary>
         /// <value>The application.</value>
         public string Application { get; }
         /// <summary>
-        /// Gets the start time.
+        /// Gets the start time of the NIS.
         /// </summary>
         /// <value>The start time.</value>
-        public ulong StartTime { get; }
+        public NetworkTime StartTime { get; }
         /// <summary>
         /// Gets the version.
         /// </summary>

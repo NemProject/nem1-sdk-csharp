@@ -7,8 +7,9 @@ using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 using io.nem1.sdk.Model.Accounts;
 using io.nem1.sdk.Model.Blockchain;
 using io.nem1.sdk.Model.Mosaics;
+using io.nem1.sdk.Model.Network;
+using io.nem1.sdk.Model.Network.Messages;
 using io.nem1.sdk.Model.Transactions;
-using io.nem1.sdk.Model.Transactions.Messages;
 using Newtonsoft.Json.Linq;
 
 namespace io.nem1.sdk.Infrastructure.Mapping
@@ -68,22 +69,17 @@ namespace io.nem1.sdk.Infrastructure.Mapping
             return Convert.ToInt32(netBytes.Substring(0, 2), 16);
         }
 
-        protected TransactionInfo CreateTransactionInfo(JObject jsonObject)
+        protected TransactionInfo CreateTransactionInfo(JObject metaJsonObject)
         {   
-            var metaJsonObject = jsonObject["meta"].ToObject<JObject>();
-
-            if (metaJsonObject["hash"] != null && metaJsonObject["id"] != null && metaJsonObject["innerHash"].ToString() == "{}")
+            if (metaJsonObject["innerHash"].ToString() == "{}") // Not a Multisig
             {
                 return TransactionInfo.Create(ulong.Parse(metaJsonObject["height"].ToString()),
                         int.Parse(metaJsonObject["id"].ToString()),
-                        metaJsonObject["hash"]["data"].ToString(),
-                        int.Parse(jsonObject["transaction"]["timeStamp"].ToString()));
+                        metaJsonObject["hash"]["data"].ToString());
             }
-            
             return TransactionInfo.CreateMultisig(ulong.Parse(metaJsonObject["height"].ToString()),
                         int.Parse(metaJsonObject["id"].ToString()),
                         metaJsonObject["hash"]["data"].ToString(),
-                        int.Parse(jsonObject["transaction"]["timeStamp"].ToString()),
                         metaJsonObject["innerHash"]["data"].ToString());
         }
 
@@ -109,6 +105,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
             return new TransferTransaction(
                 ExtractNetworkType(int.Parse(tx["version"].ToString())),
                 ExtractVersion(int.Parse(tx["version"].ToString())),
+                new NetworkTime(int.Parse(tx["timeStamp"].ToString())),
                 new Deadline(int.Parse(tx["deadline"].ToString())),
                 ulong.Parse(tx["fee"].ToString()),
                 Address.CreateFromEncoded(tx["recipient"].ToString()),
@@ -127,6 +124,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
             return new ImportanceTransferTransaction(
                 ExtractNetworkType(int.Parse(tx["version"].ToString())),
                 ExtractVersion(int.Parse(tx["version"].ToString())),
+                new NetworkTime(int.Parse(tx["timeStamp"].ToString())),
                 new Deadline(int.Parse(tx["deadline"].ToString())),
                 ulong.Parse(tx["fee"].ToString()),
                 ImportanceTransferMode.GetRawValue(int.Parse(tx["mode"].ToString())),
@@ -142,6 +140,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
             return new MultisigTransaction(
                 ExtractNetworkType(int.Parse(tx["version"].ToString())),
                 ExtractVersion(int.Parse(tx["version"].ToString())),
+                new NetworkTime(int.Parse(tx["timeStamp"].ToString())),
                 new Deadline(int.Parse(tx["deadline"].ToString())),
                 ulong.Parse(tx["fee"].ToString()),
                 new TransactionMapping().Apply(tx["otherTrans"].ToString()),
@@ -157,6 +156,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
             return new CosignatureTransaction(
                 ExtractNetworkType(int.Parse(tx["version"].ToString())),
                 ExtractVersion(int.Parse(tx["version"].ToString())),
+                new NetworkTime(int.Parse(tx["timeStamp"].ToString())),
                 new Deadline(int.Parse(tx["deadline"].ToString())),
                 ulong.Parse(tx["fee"].ToString()),
                 tx["otherHash"]["data"].ToString(),
@@ -172,6 +172,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
             return new MosaicDefinitionTransaction(
                 ExtractNetworkType(int.Parse(tx["version"].ToString())),
                 ExtractVersion(int.Parse(tx["version"].ToString())),
+                new NetworkTime(int.Parse(tx["timeStamp"].ToString())),
                 new Deadline(int.Parse(tx["deadline"].ToString())),
                 ulong.Parse(tx["fee"].ToString()),
                 new MosaicProperties(
@@ -201,6 +202,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
             return new MultisigAggregateModificationTransaction(
                 ExtractNetworkType(int.Parse(tx["version"].ToString())),
                 ExtractVersion(int.Parse(tx["version"].ToString())),
+                new NetworkTime(int.Parse(tx["timeStamp"].ToString())),
                 new Deadline(int.Parse(tx["deadline"].ToString())),
                 ulong.Parse(tx["fee"].ToString()),
                 tx["minCosignatories"].ToString() != "{}" ? int.Parse(tx["minCosignatories"]["relativeChange"].ToString()) : 0, // missing from transaction data 
@@ -222,6 +224,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
             return new SupplyChangeTransaction(
                 ExtractNetworkType(int.Parse(tx["version"].ToString())),
                 ExtractVersion(int.Parse(tx["version"].ToString())),
+                new NetworkTime(int.Parse(tx["timeStamp"].ToString())),
                 new Deadline(int.Parse(tx["deadline"].ToString())),
                 ulong.Parse(tx["fee"].ToString()),
                 ulong.Parse(tx["delta"].ToString()),
@@ -238,6 +241,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
             return new ProvisionNamespaceTransaction(
                 ExtractNetworkType(int.Parse(tx["version"].ToString())),
                 ExtractVersion(int.Parse(tx["version"].ToString())),
+                new NetworkTime(int.Parse(tx["timeStamp"].ToString())),
                 new Deadline(int.Parse(tx["deadline"].ToString())),
                 ulong.Parse(tx["fee"].ToString()),
                 tx["newPart"].ToString(),
@@ -254,7 +258,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
         internal new SupplyChangeTransaction Apply(string input)
         {
             var tx = JObject.Parse(input)["transaction"] ?? JObject.Parse(input);
-            var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)) : null;
+            var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)["meta"].ToObject<JObject>()) : null;
             return ToSupplyChangeTransaction(tx.ToObject<JObject>(), txInfo);
         }
     }
@@ -264,7 +268,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
         internal new TransferTransaction Apply(string input)
         {
              var tx = JObject.Parse(input)["transaction"] ?? JObject.Parse(input);           
-             var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)) : null;
+             var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)["meta"].ToObject<JObject>()) : null;
              return ToTransferTransaction(tx.ToObject<JObject>(), txInfo);
         }
     }
@@ -274,7 +278,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
         internal new ImportanceTransferTransaction Apply(string input)
         {
             var tx = JObject.Parse(input)["transaction"] ?? JObject.Parse(input);
-            var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)) : null;
+            var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)["meta"].ToObject<JObject>()) : null;
             return ToImportanceTransfer(tx.ToObject<JObject>(), txInfo);
         }
     }
@@ -284,7 +288,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
         internal new MultisigTransaction Apply(string input)
         {
             var tx = JObject.Parse(input)["transaction"] ?? JObject.Parse(input);
-            var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)) : null;
+            var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)["meta"].ToObject<JObject>()) : null;
             return ToMultisigTransaction(tx.ToObject<JObject>(), txInfo);
         }
     }
@@ -294,7 +298,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
         internal new CosignatureTransaction Apply(string input)
         {
             var tx = JObject.Parse(input)["transaction"] ?? JObject.Parse(input);
-            var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)) : null;
+            var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)["meta"].ToObject<JObject>()) : null;
             return ToSignatureTransaction(tx.ToObject<JObject>(), txInfo);
         }
     }
@@ -304,7 +308,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
         internal new MultisigAggregateModificationTransaction Apply(string input)
         {
             var tx = JObject.Parse(input)["transaction"] ?? JObject.Parse(input);
-            var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)) : null;
+            var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)["meta"].ToObject<JObject>()) : null;
             return ToMultisigModificationTransaction(tx.ToObject<JObject>(), txInfo);
         }
     }
@@ -314,7 +318,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
         internal new MosaicDefinitionTransaction Apply(string input)
         {
             var tx = JObject.Parse(input)["transaction"] ?? JObject.Parse(input);
-            var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)) : null;
+            var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)["meta"].ToObject<JObject>()) : null;
             return ToMosaicDefinitionTransaction(tx.ToObject<JObject>(), txInfo);
         }
     }
@@ -324,7 +328,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
         internal new ProvisionNamespaceTransaction Apply(string input)
         {
             var tx = JObject.Parse(input)["transaction"] ?? JObject.Parse(input);
-            var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)) : null;
+            var txInfo = JObject.Parse(input)["meta"] != null ? CreateTransactionInfo(JObject.Parse(input)["meta"].ToObject<JObject>()) : null;
             return ToProvisionNamespaceTransaction(tx.ToObject<JObject>(), txInfo);
         }
     }

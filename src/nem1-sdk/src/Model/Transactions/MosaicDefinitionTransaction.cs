@@ -1,4 +1,29 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : nem1-sdk-csharp
+// Author           : kailin
+// Created          : 06-01-2018
+//
+// Last Modified By : kailin
+// Last Modified On : 02-01-2018
+// ***********************************************************************
+// <copyright file="MosaicDefinitionTransaction.cs" company="Nem.io">
+// Copyright 2018 NEM
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -75,10 +100,11 @@ namespace io.nem1.sdk.Model.Transactions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MosaicDefinitionTransaction"/> class.
+        /// Initializes a new signed instance of the <see cref="MosaicDefinitionTransaction"/> class.
         /// </summary>
         /// <param name="networkType">Type of the network.</param>
         /// <param name="version">The version.</param>
+        /// <param name="networkTime">The networkTime.</param>
         /// <param name="deadline">The deadline.</param>
         /// <param name="fee">The fee.</param>
         /// <param name="properties">The properties.</param>
@@ -96,10 +122,11 @@ namespace io.nem1.sdk.Model.Transactions
         /// or
         /// creator
         /// </exception>
-        public MosaicDefinitionTransaction(NetworkType.Types networkType, int version, Deadline deadline, ulong fee, MosaicProperties properties, MosaicId mosaic, MosaicLevy mosaicLevy, PublicAccount creator, string description, string signature, PublicAccount signer, TransactionInfo transactionInfo)
+        public MosaicDefinitionTransaction(NetworkType.Types networkType, int version, NetworkTime networkTime, Deadline deadline, ulong fee, MosaicProperties properties, MosaicId mosaic, MosaicLevy mosaicLevy, PublicAccount creator, string description, string signature, PublicAccount signer, TransactionInfo transactionInfo)
         {
             TransactionType = TransactionTypes.Types.MosaicDefinition;
             Version = version;
+            NetworkTime = networkTime;
             Deadline = deadline;
             NetworkType = networkType;
             Fee = fee == 0 ? 150000 : fee;
@@ -261,7 +288,7 @@ namespace io.nem1.sdk.Model.Transactions
             MosaicDefinitionTransactionBuffer.AddPublicKeyLen(builder, 32);
             MosaicDefinitionTransactionBuffer.AddPublicKey(builder, signer);
             MosaicDefinitionTransactionBuffer.AddFee(builder, Fee);
-            MosaicDefinitionTransactionBuffer.AddDeadline(builder, Deadline.Ticks);
+            MosaicDefinitionTransactionBuffer.AddDeadline(builder, Deadline.TimeStamp);
             MosaicDefinitionTransactionBuffer.AddMosaicDefinitionStructureLength(builder, definitionStructureLength);
             MosaicDefinitionTransactionBuffer.AddLengthCreatorPublicKey(builder, 32);
             MosaicDefinitionTransactionBuffer.AddCreatorPublicKey(builder, creatorVector);
