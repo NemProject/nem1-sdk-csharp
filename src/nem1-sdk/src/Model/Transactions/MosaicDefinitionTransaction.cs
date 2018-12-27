@@ -211,7 +211,7 @@ namespace io.nem1.sdk.Model.Transactions
             var descriptionVector = MosaicDefinitionTransactionBuffer.CreateDescriptionStringVector(builder, Encoding.UTF8.GetBytes(Description));
             var nammespaceVector = MosaicDefinitionTransactionBuffer.CreateNamespaceIdStringVector(builder, Encoding.UTF8.GetBytes(Mosaic.NamespaceId.Name));
             var mosaicNameVector = MosaicDefinitionTransactionBuffer.CreateMosaicNameStringVector(builder, Encoding.UTF8.GetBytes(Mosaic.Name));
-            var feeSinkVector = MosaicDefinitionTransactionBuffer.CreateFeeSinkAddressVector(builder, Encoding.UTF8.GetBytes(Address.CreateFromPublicKey("53e140b5947f104cabc2d6fe8baedbc30ef9a0609c717d9613de593ec2a266d3", NetworkType).Plain));
+            var feeSinkVector = MosaicDefinitionTransactionBuffer.CreateFeeSinkAddressVector(builder, Encoding.UTF8.GetBytes(new Address("53e140b5947f104cabc2d6fe8baedbc30ef9a0609c717d9613de593ec2a266d3", NetworkType).Plain));
             var definitionStructureLength = 60 + Encoding.UTF8.GetBytes(Mosaic.NamespaceId.Name).Length + Encoding.UTF8.GetBytes(Mosaic.Name).Length + Encoding.UTF8.GetBytes(Description).Length;
 
             var propertiesOffset = new Offset<MosaicPropertyBuffer>[4];

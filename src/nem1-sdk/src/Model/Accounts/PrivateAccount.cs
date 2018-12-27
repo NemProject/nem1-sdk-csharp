@@ -34,14 +34,8 @@ namespace io.nem1.sdk.Model.Accounts
     /// <summary>
     /// Account class.
     /// </summary>
-    public class Account
+    public class PrivateAccount
     {
-        /// <summary>
-        /// Gets the address.
-        /// </summary>
-        /// <value>The address.</value>
-        public Address Address { get; }
-
         /// <summary>
         /// Gets the key pair.
         /// </summary>
@@ -49,22 +43,32 @@ namespace io.nem1.sdk.Model.Accounts
         public KeyPair KeyPair { get; }
 
         /// <summary>
-        /// Gets the private key string.
-        /// </summary>
-        /// <value>The private key.</value>
-        public string PrivateKey => KeyPair.PrivateKeyString;
-
-        /// <summary>
-        /// Gets the public key.
-        /// </summary>
-        /// <value>The public key.</value>
-        public string PublicKey => KeyPair.PublicKeyString;
-
-        /// <summary>
         /// Gets the public account.
         /// </summary>
         /// <value>The public account.</value>
-        public PublicAccount PublicAccount { get; }
+        private PublicAccount _PublicAccount;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PrivateAccount" /> class.
+        /// </summary>
+        /// <param name="privateKey">The private key.</param>
+        /// <param name="networkType">Type of the network.</param>
+        public PrivateAccount(string privateKey, NetworkType.Types networkType)
+        {
+            KeyPair = new KeyPair(privateKey);
+            _PublicAccount = new PublicAccount(KeyPair.PublicKeyString, networkType);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PrivateAccount" /> class.
+        /// </summary>
+        /// <param name="address">The address.</param>
+        /// <param name="keyPair">The key pair.</param>
+        public PrivateAccount(Address address, KeyPair keyPair)
+        {
+            KeyPair = keyPair;
+            _PublicAccount = new PublicAccount(keyPair.PublicKeyString, address.Networktype());
+        }
 
         /// <summary>
         /// Creates an Account from a private key.
@@ -72,46 +76,9 @@ namespace io.nem1.sdk.Model.Accounts
         /// <param name="privateKey">The private key.</param>
         /// <param name="networkType">Type of the network.</param>
         /// <returns>Account.</returns>
-        public static Account CreateFromPrivateKey(string privateKey, NetworkType.Types networkType)
+        public static PrivateAccount CreateFromPrivateKey(string privateKey, NetworkType.Types networkType)
         {
-            var keyPair = KeyPair.CreateFromPrivateKey(privateKey);
-            var address = Address.CreateFromPublicKey(keyPair.PublicKeyString, networkType);
-            
-            return new Account(address, keyPair);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Account" /> class.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <param name="keyPair">The key pair.</param>
-        public Account(Address address, KeyPair keyPair)
-        {
-            Address = address;
-            KeyPair = keyPair;
-            PublicAccount = new PublicAccount(keyPair.PublicKeyString, address.Networktype);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Account" /> class.
-        /// </summary>
-        /// <param name="privateKey">The private key.</param>
-        /// <param name="networkType">Type of the network.</param>
-        public Account(string privateKey, NetworkType.Types networkType)
-        {
-            KeyPair = KeyPair.CreateFromPrivateKey(privateKey);
-            Address = Address.CreateFromPublicKey(KeyPair.PublicKeyString, networkType);
-            PublicAccount = new PublicAccount(KeyPair.PublicKeyString, networkType);
-        }
-
-        /// <summary>
-        /// Signs the specified transaction.
-        /// </summary>
-        /// <param name="transaction">The transaction.</param>
-        /// <returns>SignedTransaction.</returns>
-        public SignedTransaction Sign(Transaction transaction)
-        {
-            return transaction.SignWith(KeyPair);
+            return new PrivateAccount(privateKey, networkType);
         }
 
         /// <summary>
@@ -119,7 +86,7 @@ namespace io.nem1.sdk.Model.Accounts
         /// </summary>
         /// <param name="networkType">Type of the network.</param>
         /// <returns>Account.</returns>
-        public static Account GenerateNewAccount(NetworkType.Types networkType)
+        public static PrivateAccount GenerateNewAccount(NetworkType.Types networkType)
         {
             using (var ng = RandomNumberGenerator.Create())
             {
@@ -131,10 +98,39 @@ namespace io.nem1.sdk.Model.Accounts
                 digestSha3.BlockUpdate(bytes, 0, 32);
                 digestSha3.DoFinal(stepOne, 0);
 
-                var keyPair = KeyPair.CreateFromPrivateKey(stepOne.ToHexLower());
+                var keyPair = new KeyPair(stepOne.ToHexLower());
 
-                return new Account(Address.CreateFromPublicKey(keyPair.PublicKeyString, networkType), keyPair);
-            }         
+                return new PrivateAccount(keyPair.PrivateKeyString, networkType);
+            }
         }
+
+        /// <summary>
+        /// Gets the private key string.
+        /// </summary>
+        /// <value>The private key.</value>
+        public string PrivateKey => KeyPair.PrivateKeyString;
+
+        /// <summary>
+        /// Gets the public key.
+        /// </summary>
+        /// <value>The public key.</value>
+        public string PublicKey => KeyPair.PublicKeyString; // == PublicAccount.PublicKey;
+
+        /// <summary>
+        /// Gets the address.
+        /// </summary>
+        /// <value>The address.</value>
+        public Address Address => _PublicAccount.Address;
+
+        /// <summary>
+        /// Signs the specified transaction.
+        /// </summary>
+        /// <param name="transaction">The transaction.</param>
+        /// <returns>SignedTransaction.</returns>
+        public SignedTransaction Sign(Transaction transaction)
+        {
+            return transaction.SignWith(KeyPair);
+        }
+
     }
 }

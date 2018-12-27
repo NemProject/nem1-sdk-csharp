@@ -32,78 +32,105 @@ namespace io.nem1.sdk.Model.Accounts
     /// </summary>
     public class AccountInfo
     {
-
-        public List<AccountInfo> Cosignatories { get; }
-
         /// <summary>
-        /// Gets the address.
+        /// Gets the public account.
         /// </summary>
-        /// <value>The address.</value>
-        public Address Address { get; }
-
-        /// <summary>
-        /// Gets the public key.
-        /// </summary>
-        /// <value>The public key.</value>
-        public string PublicKey { get; }
-
-        /// <summary>
-        /// Gets the harvested blocks.
-        /// </summary>
-        /// <value>The harvested blocks.</value>
-        public ulong HarvestedBlocks { get; }
-
-        /// <summary>
-        /// Gets the vested balance.
-        /// </summary>
-        /// <value>The vested balance.</value>
-        public ulong VestedBalance { get; }
+        /// <value>The public account.</value>
+        private PublicAccount _PublicAccount { get; }
 
         /// <summary>
         /// Gets the balance.
         /// </summary>
         /// <value>The balance.</value>
         public ulong Balance { get; }
-
         /// <summary>
-        /// Gets the multisig account information.
+        /// Gets the vested balance.
         /// </summary>
-        /// <value>The multisig account information.</value>
-        public MultisigAccountInfo MultisigAccountInfo { get; }
-
+        /// <value>The vested balance.</value>
+        public ulong VestedBalance { get; }
         /// <summary>
         /// Gets the importance.
         /// </summary>
         /// <value>The importance.</value>
         public ulong Importance { get; }
+        /// <summary>
+        /// Gets the harvested blocks.
+        /// </summary>
+        /// <value>The harvested blocks.</value>
+        public ulong HarvestedBlocks { get; }
+        /// <summary>
+        /// Gets the status.
+        /// </summary>
+        /// <value>The Status.</value>
+        public string Status { get; }
+        /// <summary>
+        /// Gets the remote status.
+        /// </summary>
+        /// <value>The Remote Status.</value>
+        public string RemoteStatus { get; }
 
         /// <summary>
-        /// Gets the public account.
+        /// Gets the minCosigners.
         /// </summary>
-        /// <value>The public account.</value>
-        public PublicAccount PublicAccount => new PublicAccount(
-            PublicKey,
-            Address.Networktype
-        );
+        /// <value>The minCosigners.</value>
+        public int MinCosigners { get; }
+        /// <summary>
+        /// Returns multisig account cosigners.
+        /// </summary>
+        /// <value>The cosigners.</value>
+        public List<AccountInfo> Cosigners { get; }
+        /// <summary>
+        /// Returns multisig accounts this account is cosigner of.
+        /// </summary>
+        /// <value>The multisig accounts.</value>
+        public List<AccountInfo> CosginatoryOf { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountInfo"/> class.
         /// </summary>
-        /// <param name="address">The address.</param>
         /// <param name="publicKey">The public key.</param>
+        /// <param name="address">The address.</param>
+        /// <param name="balance">The vbalance.</param>
+        /// <param name="vestedBalance">The vested balance.</param>
         /// <param name="importance">The importance.</param>
         /// <param name="harvestedBlocks">The harvested blocks.</param>
-        /// <param name="vestedBalance">The vested balance.</param>
-        /// <param name="multisigAccountInfo">The multisig account information.</param>
-        public AccountInfo(Address address,  string publicKey, ulong importance, ulong harvestedBlocks, ulong vestedBalance, ulong balance, MultisigAccountInfo multisigAccountInfo)
+        /// <param name="status">The status.</param>
+        /// <param name="remoteStatus">The remoteStatus.</param>
+        /// <param name="minCosigners">The minimum number of Cosigners (less or eqaul than cosigners.Count).</param>
+        /// <param name="cosigners">The cosigners of this multisig account .</param>
+        /// <param name="cosginatoryOf">The account is cosginatoryOf these multisig Accounts.</param>
+        public AccountInfo(string publicKey, Address address, ulong balance, ulong vestedBalance, ulong importance, ulong harvestedBlocks, 
+                            string status = "", string remoteStatus = "", int minCosigners = 0, List<AccountInfo> cosigners = null, List<AccountInfo> cosginatoryOf = null)
         {
-            Address = address;
-            HarvestedBlocks = harvestedBlocks;
-            PublicKey = publicKey;
-            VestedBalance = vestedBalance;
+            _PublicAccount = new PublicAccount(publicKey, address.Networktype());
             Balance = balance;
+            VestedBalance = vestedBalance;
             Importance = importance;
-            MultisigAccountInfo = multisigAccountInfo;          
+            HarvestedBlocks = harvestedBlocks;
+            Status = status;
+            RemoteStatus = remoteStatus;
+            MinCosigners = minCosigners;
+            Cosigners = cosigners;
+            CosginatoryOf = cosginatoryOf;
         }
+
+        /// <summary>
+        /// Gets the public key.
+        /// </summary>
+        /// <value>The public key.</value>
+        public string PublicKey => _PublicAccount.PublicKey;
+
+        /// <summary>
+        /// Gets the address.
+        /// </summary>
+        /// <value>The address.</value>
+        public Address Address => _PublicAccount.Address;
+
+        /// <summary>
+        /// Checks if an account is cosignatory of the multisig account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        /// <returns><c>true</c> if the specified account has cosigners; otherwise, <c>false</c>.</returns>
+        public bool HasCosigner(AccountInfo account) => Cosigners.Contains(account);
     }
 }

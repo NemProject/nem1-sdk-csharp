@@ -190,9 +190,7 @@ namespace io.nem1.sdk.Model.Transactions
 
         private byte[] GetFeeSinkAddress()
         {
-            return Encoding.UTF8.GetBytes(Address
-                .CreateFromPublicKey("3e82e1c1e4a75adaa3cba8c101c3cd31d9817a2eb966eb3b511fb2ed45b8e262", NetworkType)
-                .Plain);
+            return Encoding.UTF8.GetBytes(new Address("3e82e1c1e4a75adaa3cba8c101c3cd31d9817a2eb966eb3b511fb2ed45b8e262", NetworkType).Plain);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace IntegrationTest.infrastructure.Transactions
         [TestMethod]
         public async Task CanModifyMultisigAccount()
         {
-            var keyPair = KeyPair.CreateFromPrivateKey("8db858dcc8e2827074498204b3829154ec4c4f24d13738d3f501003b518ef256");
+            var keyPair = new KeyPair("8db858dcc8e2827074498204b3829154ec4c4f24d13738d3f501003b518ef256");
 
             var transaction = MultisigAggregateModificationTransaction.Create(
                 NetworkType.Types.TEST_NET,
@@ -23,12 +23,12 @@ namespace IntegrationTest.infrastructure.Transactions
                 1,
                 new List<MultisigModification>()
                 {
-                    new MultisigModification(PublicAccount.CreateFromPublicKey("eb100d6b2da10fc5359ab35a5801b0e6f0b6cc18d849c0aa78ba1aab2b945dea", NetworkType.Types.TEST_NET),
+                    new MultisigModification(new PublicAccount("eb100d6b2da10fc5359ab35a5801b0e6f0b6cc18d849c0aa78ba1aab2b945dea", NetworkType.Types.TEST_NET),
                         CosignatoryModificationType.Types.Add)
                 });
 
             var multisigTransaction = MultisigTransaction.Create(NetworkType.Types.TEST_NET, Deadline.CreateHours(1), transaction)
-                    .SignWith(keyPair, PublicAccount.CreateFromPublicKey("29c4a4aa674953749053c8a35399b37b713dedd5d002cb29b3331e56ff1ea65a", NetworkType.Types.TEST_NET));
+                    .SignWith(keyPair, new PublicAccount("29c4a4aa674953749053c8a35399b37b713dedd5d002cb29b3331e56ff1ea65a", NetworkType.Types.TEST_NET));
 
             var response = await new TransactionHttp("http://" + Config.Domain + ":7890").Announce(multisigTransaction);
 

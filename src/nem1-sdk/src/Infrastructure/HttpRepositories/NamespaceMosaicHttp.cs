@@ -94,7 +94,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
                     new NamespaceInfo(
                         e["fqn"].ToString(), 
                         ulong.Parse(e["height"].ToString()), 
-                        Address.CreateFromEncoded(e["owner"].ToString()))
+                        new Address(e["owner"].ToString()))
                     );
         }
 
@@ -160,7 +160,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
                                 int.Parse(i["meta"]["id"].ToString()),
                                 i["namespace"]["fqn"].ToString(),
                                 ulong.Parse(i["namespace"]["height"].ToString()),
-                                Address.CreateFromEncoded(i["namespace"]["owner"].ToString()))
+                                new Address(i["namespace"]["owner"].ToString()))
                         ).ToList());
         }
 
@@ -226,7 +226,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
                 .Select(e =>
                     e.Select(i => new MosaicInfo(
                         int.Parse(i["meta"]["id"].ToString()),
-                        PublicAccount.CreateFromPublicKey(i["mosaic"]["creator"].ToString(), GetNetworkTypeObservable().Wait()),
+                        new PublicAccount(i["mosaic"]["creator"].ToString(), GetNetworkTypeObservable().Wait()),
                         i["mosaic"]["description"].ToString(),
                         MosaicId.CreateFromMosaicIdentifier(i["mosaic"]["id"]["namespaceId"].ToString() + ":" + i["mosaic"]["id"]["name"].ToString()),
                         new MosaicProperties(

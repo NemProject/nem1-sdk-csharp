@@ -108,7 +108,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
                 new NetworkTime(int.Parse(tx["timeStamp"].ToString())),
                 new Deadline(int.Parse(tx["deadline"].ToString())),
                 ulong.Parse(tx["fee"].ToString()),
-                Address.CreateFromEncoded(tx["recipient"].ToString()),
+                new Address(tx["recipient"].ToString()),
                 tx["mosaics"] == null
                     ? new List<Mosaic>() { new Mosaic("nem", "xem", ulong.Parse(tx["amount"].ToString())) }
                     : tx["mosaics"]?.Select(m => new Mosaic(m["mosaicId"]["namespaceId"].ToString(), m["mosaicId"]["name"].ToString(), ulong.Parse(m["quantity"].ToString()))).ToList(),
@@ -160,7 +160,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
                 new Deadline(int.Parse(tx["deadline"].ToString())),
                 ulong.Parse(tx["fee"].ToString()),
                 tx["otherHash"]["data"].ToString(),
-                Address.CreateFromEncoded(tx["otherAccount"].ToString()),
+                new Address(tx["otherAccount"].ToString()),
                 tx["signature"].ToString(),
                 new PublicAccount(tx["signer"].ToString(), ExtractNetworkType(int.Parse(tx["version"].ToString()))),
                 txInfo
@@ -188,7 +188,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
                             (tx["mosaicDefinition"]["levy"]["mosaicId"]["namespaceId"] + ":" + tx["mosaicDefinition"]["levy"]["mosaicId"]["name"]), 
                             ulong.Parse(tx["mosaicDefinition"]["levy"]["fee"].ToString())), 
                         int.Parse(tx["mosaicDefinition"]["levy"]["type"].ToString()),
-                        Address.CreateFromEncoded(tx["mosaicDefinition"]["levy"]["recipient"].ToString())),
+                        new Address(tx["mosaicDefinition"]["levy"]["recipient"].ToString())),
                 new PublicAccount(tx["mosaicDefinition"]["creator"].ToString(), ExtractNetworkType(int.Parse(tx["version"].ToString()))),
                 tx["mosaicDefinition"]["description"].ToString(),
                 tx["signature"].ToString(),
@@ -208,9 +208,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
                 tx["minCosignatories"].ToString() != "{}" ? int.Parse(tx["minCosignatories"]["relativeChange"].ToString()) : 0, // missing from transaction data 
                 tx["modifications"]?.Select(
                     i => new MultisigModification(
-                        PublicAccount.CreateFromPublicKey(
-                            i["cosignatoryAccount"].ToString(), 
-                            NetworkType.Types.TEST_NET ), 
+                        new PublicAccount(i["cosignatoryAccount"].ToString(), NetworkType.Types.TEST_NET ), 
                         CosignatoryModificationType.GetRawValue(
                             int.Parse(i["modificationType"].ToString())))).ToList(), // list of modifications               
                 tx["signature"]?.ToString(),

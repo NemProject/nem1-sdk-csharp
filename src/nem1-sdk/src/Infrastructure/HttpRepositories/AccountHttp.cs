@@ -75,48 +75,51 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         ///     </see>
         ///     method. 
         /// <code>
-        /// var accountHttp = new AccountHttp("<!--insert host like: http://0.0.0.0:7890-->");
-        /// 
-        /// var address = Address.CreateFromEncoded("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
-        /// 
-        /// var accountInfo = await accountHttp.GetAccountInfo(address);
+        ///     var accountHttp = new AccountHttp("<!--insert host like: http://0.0.0.0:7890-->");
+        ///     var address = new Address("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
+        ///     var accountInfo = await accountHttp.GetAccountInfo(address);
         /// </code>
         /// </example>
         public IObservable<AccountInfo> GetAccountInfo(Address address)
         {
             if (address == null) throw new ArgumentNullException(nameof(address));
 
-            return Observable.FromAsync(async ar => await AccountRoutesApi.GetAccountInfoAsync(address.Plain))
-                .Select(accountInfo =>
+            return Observable.FromAsync(async ar => await AccountRoutesApi.GetAccountInfoAsync(address.Plain)).Select(
+                accountInfo =>
                 {
                     return new AccountInfo(
-                        Address.CreateFromEncoded(accountInfo["account"]["address"].ToString()),
                         accountInfo["account"]["publicKey"].ToString(),
+                        new Address(accountInfo["account"]["address"].ToString()),
+                        ulong.Parse(accountInfo["account"]["balance"].ToString()),
+                        ulong.Parse(accountInfo["account"]["vestedBalance"].ToString()),
                         ulong.Parse(accountInfo["account"]["importance"].ToString()),
                         ulong.Parse(accountInfo["account"]["harvestedBlocks"].ToString()),
-                        ulong.Parse(accountInfo["account"]["vestedBalance"].ToString()),
-                        ulong.Parse(accountInfo["account"]["balance"].ToString()),
-                        new MultisigAccountInfo(
-                            PublicAccount.CreateFromPublicKey(
-                                accountInfo["account"]["publicKey"].ToString(), new NodeHttp(Url).GetNetworkType().Wait()),
-                            accountInfo["meta"]["cosignatories"]?.Select(accountInfo2 => new AccountInfo(
-                                Address.CreateFromEncoded(accountInfo["address"].ToString()),
-                                accountInfo["publicKey"].ToString(),
-                                ulong.Parse(accountInfo["importance"].ToString()),
-                                ulong.Parse(accountInfo["harvestedBlocks"].ToString()),
-                                ulong.Parse(accountInfo["vestedBalance"].ToString()),
-                                ulong.Parse(accountInfo["balance"].ToString()),
-                                null)).ToList(),
-                            accountInfo["meta"]["cosignatoryOf"]?.Select(accountInfo2 => new AccountInfo(
-                                Address.CreateFromEncoded(accountInfo["address"].ToString()),
-                                accountInfo["publicKey"].ToString(),
-                                ulong.Parse(accountInfo["importance"].ToString()),
-                                ulong.Parse(accountInfo["harvestedBlocks"].ToString()),
-                                ulong.Parse(accountInfo["vestedBalance"].ToString()),
-                                ulong.Parse(accountInfo["balance"].ToString()),
-                                null)).ToList()
-                        ));
-                });
+                        accountInfo["meta"]["status"].ToString(),
+                        accountInfo["meta"]["remoteStatus"].ToString(),
+                        (accountInfo["account"]["multisigInfo"].HasValues) ? int.Parse(accountInfo["account"]["multisigInfo"]["minCosignatories"].ToString()) : 0,
+                        accountInfo["meta"]["cosignatories"]?.Select(
+                            accountInfo2 => new AccountInfo(
+                                accountInfo2["publicKey"].ToString(),
+                                new Address(accountInfo2["address"].ToString()),
+                                ulong.Parse(accountInfo2["balance"].ToString()),
+                                ulong.Parse(accountInfo2["vestedBalance"].ToString()),
+                                ulong.Parse(accountInfo2["importance"].ToString()),
+                                ulong.Parse(accountInfo2["harvestedBlocks"].ToString())
+                            )
+                        ).ToList(),
+                        accountInfo["meta"]["cosignatoryOf"]?.Select(
+                            accountInfo2 => new AccountInfo(
+                                accountInfo2["publicKey"].ToString(),
+                                new Address(accountInfo2["address"].ToString()),
+                                ulong.Parse(accountInfo2["balance"].ToString()),
+                                ulong.Parse(accountInfo2["vestedBalance"].ToString()),
+                                ulong.Parse(accountInfo2["importance"].ToString()),
+                                ulong.Parse(accountInfo2["harvestedBlocks"].ToString())
+                            )
+                        ).ToList()
+                    );
+                }
+            );
         }
 
         /// <summary>
@@ -146,40 +149,44 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
                 .Select(accountInfo =>
                 {
                     return new AccountInfo(
-                        Address.CreateFromEncoded(accountInfo["account"]["address"].ToString()),
                         accountInfo["account"]["publicKey"].ToString(),
+                        new Address(accountInfo["account"]["address"].ToString()),
+                        ulong.Parse(accountInfo["account"]["balance"].ToString()),
+                        ulong.Parse(accountInfo["account"]["vestedBalance"].ToString()),
                         ulong.Parse(accountInfo["account"]["importance"].ToString()),
                         ulong.Parse(accountInfo["account"]["harvestedBlocks"].ToString()),
-                        ulong.Parse(accountInfo["account"]["vestedBalance"].ToString()),
-                        ulong.Parse(accountInfo["account"]["balance"].ToString()),
-                        new MultisigAccountInfo(
-                            PublicAccount.CreateFromPublicKey(
-                                accountInfo["account"]["publicKey"].ToString(), new NodeHttp(Url).GetNetworkType().Wait()),
-                            accountInfo["meta"]["cosignatories"]?.Select(accountInfo2 => new AccountInfo(
-                                Address.CreateFromEncoded(accountInfo["address"].ToString()),
-                                accountInfo["publicKey"].ToString(),
-                                ulong.Parse(accountInfo["importance"].ToString()),
-                                ulong.Parse(accountInfo["harvestedBlocks"].ToString()),
-                                ulong.Parse(accountInfo["vestedBalance"].ToString()),
-                                ulong.Parse(accountInfo["balance"].ToString()),
-                                null)).ToList(),
-                            accountInfo["meta"]["cosignatoryOf"]?.Select(accountInfo2 => new AccountInfo(
-                                Address.CreateFromEncoded(accountInfo["address"].ToString()),
-                                accountInfo["publicKey"].ToString(),
-                                ulong.Parse(accountInfo["importance"].ToString()),
-                                ulong.Parse(accountInfo["harvestedBlocks"].ToString()),
-                                ulong.Parse(accountInfo["vestedBalance"].ToString()),
-                                ulong.Parse(accountInfo["balance"].ToString()),
-                                null)).ToList()
-                        ));
-                });
+                        accountInfo["meta"]["status"].ToString(),
+                        accountInfo["meta"]["remoteStatus"].ToString(),
+                        (accountInfo["account"]["multisigInfo"].HasValues) ? int.Parse(accountInfo["account"]["multisigInfo"]["minCosignatories"].ToString()) : 0,
+                        accountInfo["meta"]["cosignatories"]?.Select(
+                            accountInfo2 => new AccountInfo(
+                                accountInfo2["publicKey"].ToString(),
+                                new Address(accountInfo2["address"].ToString()),
+                                ulong.Parse(accountInfo2["balance"].ToString()),
+                                ulong.Parse(accountInfo2["vestedBalance"].ToString()),
+                                ulong.Parse(accountInfo2["importance"].ToString()),
+                                ulong.Parse(accountInfo2["harvestedBlocks"].ToString())
+                            )
+                        ).ToList(),
+                        accountInfo["meta"]["cosignatoryOf"]?.Select(
+                            accountInfo2 => new AccountInfo(
+                                accountInfo2["publicKey"].ToString(),
+                                new Address(accountInfo2["address"].ToString()),
+                                ulong.Parse(accountInfo2["balance"].ToString()),
+                                ulong.Parse(accountInfo2["vestedBalance"].ToString()),
+                                ulong.Parse(accountInfo2["importance"].ToString()),
+                                ulong.Parse(accountInfo2["harvestedBlocks"].ToString())
+                            )
+                        ).ToList()
+                    );
+                }
+            );
         }
 
         /// <summary>
         /// Get mosaics owned.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <param name="query">The query.</param>
         /// <returns>An <see cref="IObservable"/> list of <see cref="Mosaic"/>.</returns>
         /// <exception cref="ArgumentNullException">
         /// account
@@ -208,7 +215,6 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// Get mosaics owned.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <param name="query">The query.</param>
         /// <returns>An <see cref="IObservable"/> list of <see cref="Mosaic"/>.</returns>
         /// <exception cref="ArgumentNullException">
         /// account
@@ -223,7 +229,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// <code>
         /// var accountHttp = new AccountHttp("<!--insert host like: http://0.0.0.0:7890-->");
         /// 
-        /// var address = Address.CreateFromEncoded("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
+        /// var address = new Address("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
         /// 
         /// var accountInfo = await accountHttp.MosaicsOwned(address);
         /// </code>
@@ -249,7 +255,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// <code>
         /// var accountHttp = new AccountHttp("<!--insert host like: http://0.0.0.0:7890-->");
         /// 
-        /// var address = Address.CreateFromEncoded("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
+        /// var address = new Address("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
         ///
         /// var transactions = await accountHttp().IncomingTransactions(address);
         /// </code>
@@ -326,7 +332,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// <code>
         /// var accountHttp = new AccountHttp("<!--insert host like: http://0.0.0.0:7890-->");
         /// 
-        /// var address = Address.CreateFromEncoded("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
+        /// var address = new Address("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
         ///
         /// var transactions = await accountHttp().IncomingTransactions(address, new TransactionQueryParams("hash","id"));
         /// </code>
@@ -352,7 +358,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// <code>
         /// var accountHttp = new AccountHttp("<!--insert host like: http://0.0.0.0:7890-->");
         /// 
-        /// var address = Address.CreateFromEncoded("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
+        /// var address = new Address("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
         ///
         /// var transactions = await accountHttp().OutgoingTransactions(address);
         /// </code>
@@ -402,7 +408,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// <code>
         /// var accountHttp = new AccountHttp("<!--insert host like: http://0.0.0.0:7890-->");
         /// 
-        /// var address = Address.CreateFromEncoded("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
+        /// var address = new Address("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
         ///
         /// var transactions = await accountHttp().OutgoingTransactions(address, new TransactionQueryParams("hash","id"));
         /// </code>
@@ -432,7 +438,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// <code>
         /// var accountHttp = new AccountHttp("<!--insert host like: http://0.0.0.0:7890-->");
         /// 
-        /// var address = Address.CreateFromEncoded("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
+        /// var address = new Address("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
         ///
         /// var transactions = await accountHttp().UnconfirmedTransactions(address);
         /// </code>
@@ -484,7 +490,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// <code>
         /// var accountHttp = new AccountHttp("<!--insert host like: http://0.0.0.0:7890-->");
         /// 
-        /// var address = Address.CreateFromEncoded("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
+        /// var address = new Address("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
         ///
         /// var transactions = await accountHttp().Transactions(address);
         /// </code>
@@ -534,7 +540,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// <code>
         /// var accountHttp = new AccountHttp("<!--insert host like: http://0.0.0.0:7890-->");
         /// 
-        /// var address = Address.CreateFromEncoded("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
+        /// var address = new Address("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR");
         ///
         /// var transactions = await accountHttp().Transactions(address, new TransactionQueryParams("hash","id"));
         /// </code>

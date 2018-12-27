@@ -85,7 +85,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         ///  var transaction = TransferTransaction.Create(
         ///      NetworkType.Types.TEST_NET,
         ///      Deadline.CreateHours(2),
-        ///      Address.CreateFromEncoded(""<!--insert address-->""),
+        ///      new Address(""<!--insert address-->""),
         ///      new List<Mosaic> { Mosaic.CreateFromIdentifier("nem:xem", 1000000)},
         ///      PlainMessage.Create("hello")
         ///  ).SignWith(keyPair);

@@ -67,19 +67,8 @@ namespace io.nem1.sdk.Model.Accounts
                 throw new InvalidEnumArgumentException(nameof(networkType), (int) networkType,
                     typeof(NetworkType.Types));
 
-            Address = Address.CreateFromPublicKey(publicKey, networkType);
+            Address = new Address(publicKey, networkType);
             PublicKey = publicKey;
-        }
-
-        /// <summary>
-        /// Create a PublicAccount from a public key and network type.
-        /// </summary>
-        /// <param name="publicKey">The account public key.</param>
-        /// <param name="networkType">The network type.</param>
-        /// <returns>PublicAccount.</returns>
-        public static PublicAccount CreateFromPublicKey(string publicKey, NetworkType.Types networkType)
-        {
-            return new PublicAccount(publicKey, networkType);
         }
 
         /// <summary>
@@ -98,7 +87,7 @@ namespace io.nem1.sdk.Model.Accounts
         /// <returns>The hash code.</returns>
         public override int GetHashCode()
         {
-            unchecked
+            unchecked  // to suppress overflow-checking for integral-type arithmetic operations and conversions.
             {
                 return ((Address != null ? Address.GetHashCode() : 0) * 397) ^ (PublicKey != null ? PublicKey.GetHashCode() : 0);
             }

@@ -10,18 +10,18 @@ namespace Tests.Model.AccountTest
         [TestMethod]
         public void CreateNewAccount()
         {
-            var acc = Account.GenerateNewAccount(NetworkType.Types.MIJIN_TEST);
+            var acc = PrivateAccount.GenerateNewAccount(NetworkType.Types.MIJIN_TEST);
 
-            Assert.AreEqual(64, acc.PublicAccount.PublicKey.Length);
+            Assert.AreEqual(64, acc.PublicKey.Length);
 
         }
 
         [TestMethod]
         public void CreateNewAccountFromKey()
         {
-            var acc = Account.CreateFromPrivateKey("52b62ec8fafe1d5b7dc2896749f979d5c9ec852a4d37cff9f10656629f4efbf7", NetworkType.Types.MIJIN_TEST);
+            var acc = PrivateAccount.CreateFromPrivateKey("52b62ec8fafe1d5b7dc2896749f979d5c9ec852a4d37cff9f10656629f4efbf7", NetworkType.Types.MIJIN_TEST);
 
-            Assert.AreEqual(64, acc.PublicAccount.PublicKey.Length);
+            Assert.AreEqual(64, acc.PublicKey.Length);
 
         }
     }

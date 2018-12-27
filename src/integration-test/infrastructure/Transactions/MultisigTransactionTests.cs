@@ -19,9 +19,12 @@ namespace IntegrationTest.infrastructure.HttpTests
         [TestMethod]
         public async Task AnnounceMultisigTransaction()
         {
-            var cosignatory = KeyPair.CreateFromPrivateKey("8db858dcc8e2827074498204b3829154ec4c4f24d13738d3f501003b518ef256");
-            var multisigAccount = PublicAccount.CreateFromPublicKey("29c4a4aa674953749053c8a35399b37b713dedd5d002cb29b3331e56ff1ea65a", NetworkType.Types.TEST_NET);
-            var recipient = new Account("E45030D2A22D97FDC4C78923C4BBF7602BBAC3B018FFAD2ED278FB49CD6F218C", NetworkType.Types.TEST_NET);
+            const string recipientPrivKey = "E45030D2A22D97FDC4C78923C4BBF7602BBAC3B018FFAD2ED278FB49CD6F218C";
+            const string cosignerPrivKey = "8db858dcc8e2827074498204b3829154ec4c4f24d13738d3f501003b518ef256";
+            const string multisigPubKey = "29c4a4aa674953749053c8a35399b37b713dedd5d002cb29b3331e56ff1ea65a";
+            var cosignatory = new KeyPair(cosignerPrivKey);
+            var multisigAccount = new PublicAccount(multisigPubKey, NetworkType.Types.TEST_NET);
+            var recipient = new PrivateAccount(recipientPrivKey, NetworkType.Types.TEST_NET);
 
             var transaction = TransferTransaction.Create(
                 NetworkType.Types.TEST_NET,

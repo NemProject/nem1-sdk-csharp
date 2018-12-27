@@ -17,7 +17,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
             {
                 PreviousBlockHash = jobject["prevBlockHash"]["data"].ToString(),
                 Height = ulong.Parse(jobject["height"].ToString()),
-                Signer = PublicAccount.CreateFromPublicKey(jobject["signer"].ToString(), ExtractNetworkType(Int32.Parse(jobject["version"].ToString()))),
+                Signer = new PublicAccount(jobject["signer"].ToString(), ExtractNetworkType(Int32.Parse(jobject["version"].ToString()))),
                 Signature = jobject["signature"].ToString(),
                 TimeStamp = int.Parse(jobject["timeStamp"].ToString()),
                 Transactions = jobject["transactions"].ToList().Select(e => new TransactionMapping().Apply(e.ToString())).ToList(),

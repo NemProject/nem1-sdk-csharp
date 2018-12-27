@@ -169,7 +169,7 @@ namespace io.nem1.sdk.Model.Transactions
             if (cosignatory == null) throw new ArgumentNullException(nameof(cosignatory));
             if (multisigAccount == null) throw new ArgumentNullException(nameof(multisigAccount));
 
-            Signer = PublicAccount.CreateFromPublicKey(cosignatory.PublicKeyString, NetworkType);
+            Signer = new PublicAccount(cosignatory.PublicKeyString, NetworkType);
             InnerTransaction.Signer = multisigAccount;
             Bytes = GenerateBytes();
             var sig = TransactionExtensions.SignTransaction(cosignatory, Bytes);

@@ -18,13 +18,13 @@ namespace IntegrationTest.infrastructure.Transactions
         [TestMethod]
         public async Task CanDelegateImportanceUsingImportanceTransfer()
         {
-            var keyPair = KeyPair.CreateFromPrivateKey(Config.PrivateKeyMain);
+            var keyPair = new KeyPair(Config.PrivateKeyMain);
 
             var importanceTransfer = ImportanceTransferTransaction.Create(
                     NetworkType.Types.TEST_NET,
                     Deadline.CreateHours(1),
                     ImportanceTransferMode.Mode.Add,
-                    PublicAccount.CreateFromPublicKey("6ea3fd5f2cf4fbeb54cd96a48d11cd2ff0b4106472c6a97c7e4e5736243cb2db", NetworkType.Types.TEST_NET))
+                    new PublicAccount("6ea3fd5f2cf4fbeb54cd96a48d11cd2ff0b4106472c6a97c7e4e5736243cb2db", NetworkType.Types.TEST_NET))
                 .SignWith(keyPair);
 
             var response = await new TransactionHttp("http://" + Config.Domain + ":7890").Announce(importanceTransfer);

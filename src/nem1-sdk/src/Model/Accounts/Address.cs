@@ -70,87 +70,9 @@ namespace io.nem1.sdk.Model.Accounts
         }
 
         /// <summary>
-        /// Gets the address.
+        /// Gets the address in plain format ex: SB3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3.
         /// </summary>
-        /// <value>The address.</value>
-        private string _Address { get; }
-
-        /// <summary>
-        /// The network type of the account
-        /// </summary>
-        /// <value>The network byte.</value>
-        public NetworkType.Types Networktype { get; }
-
-        /// <summary>
-        /// Get address in plain format ex: SB3KUBHATFCPV7UZQLWAQ2EUR6SIHBSBEOEDDDF3.
-        /// </summary>
-        /// <returns>The address in plain format</returns>
-        public string Plain => _Address;
-
-        /// <summary>
-        /// Get address in pretty format ex: SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3.
-        /// </summary>
-        /// <returns>The address in pretty format</returns>
-        public string Pretty => Regex.Replace(_Address, ".{6}", "$0-");
-
-        /// <summary>
-        /// Create an Address from a given encoded (plain or pretty) address.
-        /// </summary>
-        /// <param name="address">The Address</param>
-        /// <returns>Address.</returns>
-        /// <exception cref="System.Exception">
-        /// Address has to be 40 characters long 
-        /// or
-        /// Address Network unsupported
-        /// </exception>
-        public static Address CreateFromEncoded(string address)
-        {
-            NetworkType.Types networktype;
-
-            var addressTrimAndUpperCase = address
-                .Trim()
-                .ToUpper()
-                .Replace("-", "");
-
-            if (addressTrimAndUpperCase.Length != 40)
-            {
-                throw new Exception("Address " + addressTrimAndUpperCase + " has to be 40 characters long");
-            }
-
-            switch (addressTrimAndUpperCase.ToCharArray()[0])
-            {
-                case 'S':
-                    networktype = NetworkType.Types.MIJIN_TEST;
-                    break;
-                case 'M':
-                    networktype = NetworkType.Types.MIJIN;
-                    break;
-                case 'T':
-                    networktype = NetworkType.Types.TEST_NET;
-                    break;
-                case 'N':
-                    networktype = NetworkType.Types.MAIN_NET;
-                    break;
-                default:
-                    throw new Exception("Address Network unsupported");
-            }
-            return new Address(addressTrimAndUpperCase, networktype);
-        }
-
-        /// <summary>
-        /// Create an Address from a given hexadecimal address.
-        /// </summary>
-        /// <param name="address">The hexadecimal Address</param>
-        /// <returns>Address.</returns>
-        /// <exception cref="System.Exception">
-        /// Address has to be 40 characters long 
-        /// or
-        /// Address Network unsupported
-        /// </exception>
-        public static Address CreateFromHex(string address)
-        {
-            return CreateFromEncoded(address.FromHex().ToBase32String());
-        }
+        public string Plain { get; private set; }
 
         /// <summary>
         /// Create an Address from a given public key and network type.
@@ -158,7 +80,7 @@ namespace io.nem1.sdk.Model.Accounts
         /// <param name="publicKey">The public key.</param>
         /// <param name="networkType">The network type</param>
         /// <returns>Address.</returns>
-        public static Address CreateFromPublicKey(string publicKey, NetworkType.Types networkType)
+        public Address(string publicKey, NetworkType.Types networkType)
         {
             // step 1) sha-3(256) public key
             var digestSha3 = new KeccakDigest(256);
@@ -174,7 +96,7 @@ namespace io.nem1.sdk.Model.Accounts
             digestRipeMd160.DoFinal(stepTwo, 0);
 
             // step3) prepend network byte    
-            var stepThree = new []{networkType.GetNetwork()}.Concat(stepTwo).ToArray();
+            var stepThree = new[] { networkType.GetNetwork() }.Concat(stepTwo).ToArray();
 
             // step 4) perform sha3 on previous step
             var stepFour = new byte[Constants.Key];
@@ -191,18 +113,74 @@ namespace io.nem1.sdk.Model.Accounts
             Array.Copy(stepFive, 0, stepSix, Constants.Ripemd160 + 1, Constants.Checksum);
 
             // step 7) return base 32 encode address byte array
-            return CreateFromEncoded(stepSix.ToBase32String());
+            Initialize(stepSix.ToBase32String());
+        }
+
+        // Private method to be used in two constructors 
+        private void Initialize(string addressPlainOrPretty)
+        {
+            addressPlainOrPretty = Regex.Replace(addressPlainOrPretty.Replace("-", ""), @"\s+", "").ToUpper();
+            if (addressPlainOrPretty.Length != 40)
+                throw new Exception("Address " + addressPlainOrPretty + " has to be 40 characters long");
+
+            switch (addressPlainOrPretty.ToCharArray()[0])
+            {
+                case 'S': case 'M': case 'T': case 'N': break;
+                default: throw new Exception("Address Network unsupported");
+            }
+            Plain = addressPlainOrPretty;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="address">The address of the account</param>
-        /// <param name="network">The network type of the account</param>
-        public Address(string address, NetworkType.Types networktype)
+        /// <param name="addressPlainOrPretty">The address (plain or pretty) of the account.</param>
+        /// <exception cref="System.Exception">
+        /// Address has to be 40 characters long 
+        /// or
+        /// Address Network unsupported
+        /// </exception>
+        public Address(string addressPlainOrPretty)
         {
-            _Address = Regex.Replace(address.Replace("-", ""), @"\s+", "").ToUpper();
-            Networktype = networktype;
-        }  
+            Initialize(addressPlainOrPretty);
+        }
+
+        /// <summary>
+        /// Get the address in pretty format ex: SB3KUB-HATFCP-V7UZQL-WAQ2EU-R6SIHB-SBEOED-DDF3.
+        /// </summary>
+        /// <returns>The address in pretty format</returns>
+        public string Pretty => Regex.Replace(Plain, ".{6}", "$0-");
+
+        /// <summary>
+        /// The network type of the address
+        /// </summary>
+        /// <returns>The NetworkType.</returns>
+        public NetworkType.Types Networktype()
+        {
+            switch (Plain.ToCharArray()[0])
+            {
+                case 'S': return NetworkType.Types.MIJIN_TEST;
+                case 'M': return NetworkType.Types.MIJIN;
+                case 'T': return NetworkType.Types.TEST_NET;
+                case 'N': return NetworkType.Types.MAIN_NET;
+                default: return NetworkType.Types.UNDETERMINED_NET;
+            }
+        }
+
+        /// <summary>
+        /// Create an Address from a given hexadecimal address.
+        /// </summary>
+        /// <param name="addressHex">The hexadecimal Address</param>
+        /// <returns>Address.</returns>
+        /// <exception cref="System.Exception">
+        /// Address has to be 40 characters long 
+        /// or
+        /// Address Network unsupported
+        /// </exception>
+        public static Address CreateFromHex(string addressHex)
+        {
+            return new Address(addressHex.FromHex().ToBase32String());
+        }
+
     }
 }

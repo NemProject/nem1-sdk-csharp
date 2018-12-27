@@ -29,47 +29,154 @@ namespace IntegrationTest.infrastructure.HttpTests
     [TestClass]
     public class AccountHttpTests
     {
+        // Regular account (not a multisig account)
+        const string pubkey = "856f39436e33129afff95b89aca998fa23cd751a6f4d79ce4fb9da9641ecb59c";
+        const string plain = "TACOPEXRLZTUWBQA3UXV66R455L76ENWK6OYITBJ";    // see http://104.128.226.60:7890/account/get?address=TACOPEXRLZTUWBQA3UXV66R455L76ENWK6OYITBJ
+        const string pretty = "TACOPE-XRLZTU-WBQA3U-XV66R4-55L76E-NWK6OY-ITBJ";
+        // Multisig Account with 2 cosigners
+        const string pubkeyMs = "29c4a4aa674953749053c8a35399b37b713dedd5d002cb29b3331e56ff1ea65a";
+        const string plainMs = "TBDJXUULP2BRYNS7MWHY2WAFWKQNAF273KYBPFY5";  // see http://104.128.226.60:7890/account/get?address=TBDJXUULP2BRYNS7MWHY2WAFWKQNAF273KYBPFY5
+        const string prettyMs = "TBDJXU-ULP2BR-YNS7MW-HY2WAF-WKQNAF-273KYB-PFY5";
+        // Cosigner1 of Multisig Account
+        const string pubkeyCs1 = "fbe95048d0325e2553a5e2aa88b9e12ed59f7c8c0fb8f84a638f43a390116c22";
+        const string plainCs1 = "TBPAMOPRIATPT76TAZZWERHOK72FIKN4YCD4VJMJ"; // see http://104.128.226.60:7890/account/get?address=TBPAMOPRIATPT76TAZZWERHOK72FIKN4YCD4VJMJ
+        const string prettyCs1 = "TBPAMO-PRIATP-T76TAZ-ZWERHO-K72FIK-N4YCD4-VJMJ";
+        // Cosigner2 of Multisig Account
+        const string pubkeyCs2 = "9d7ea57169a56a1bb821e1abf744610c639d7545f976f09808b68a6ad1415eb0";
+        const string plainCs2 = "TATFWN33FARG365IXE3CSKQI7KZZA4OJAVFSZ66D"; // see http://104.128.226.60:7890/account/get?address=TATFWN33FARG365IXE3CSKQI7KZZA4OJAVFSZ66D
+        const string prettyCs2 = "TATFWN-33FARG-365IXE-3CSKQI-7KZZA4-OJAVFS-Z66D";
+
         readonly string host = "http://" + Config.Domain + ":7890";
 
         [TestMethod, Timeout(20000)]
         public async Task GetAccountInfoFromAddress()
         {
-            const string plain = "TACOPEXRLZTUWBQA3UXV66R455L76ENWK6OYITBJ";
-
-            var acctInfo = await new AccountHttp(host).GetAccountInfo(Address.CreateFromEncoded(plain));
+            var acctInfo = await new AccountHttp(host).GetAccountInfo(new Address(plain));
             AssertAcctInfo(acctInfo);
         }
 
         [TestMethod, Timeout(20000)]
         public async Task GetAccountInfoFromPublicKey()
         {
-            const string pubkey = "856f39436e33129afff95b89aca998fa23cd751a6f4d79ce4fb9da9641ecb59c";
-
             var acctInfo = await new AccountHttp(host).GetAccountInfo(new PublicAccount(pubkey, NetworkType.Types.TEST_NET));
             AssertAcctInfo(acctInfo);
         }
 
-        private void AssertAcctInfo(AccountInfo acctInfo)
+        [TestMethod, Timeout(20000)]
+        public async Task GetAccountInfoFromAddressMultisig()
         {
-            const string plain = "TACOPEXRLZTUWBQA3UXV66R455L76ENWK6OYITBJ";
-            const string pretty = "TACOPE-XRLZTU-WBQA3U-XV66R4-55L76E-NWK6OY-ITBJ";
-            const string pubkey = "856f39436e33129afff95b89aca998fa23cd751a6f4d79ce4fb9da9641ecb59c";
+            var acctInfo = await new AccountHttp(host).GetAccountInfo(new Address(plainMs));
+            AssertAcctInfo(acctInfo);
+        }
 
-            Assert.AreEqual(NetworkType.Types.TEST_NET, acctInfo.Address.Networktype);
-            Assert.AreEqual(plain, acctInfo.Address.Plain);
-            Assert.AreEqual(pretty, acctInfo.Address.Pretty);
-            Assert.AreNotEqual((ulong)0, acctInfo.Balance);
-            Assert.IsNull(acctInfo.Cosignatories);
-            Assert.AreEqual((ulong)0, acctInfo.HarvestedBlocks);
-            Assert.AreEqual((ulong)0, acctInfo.Importance);
-            Assert.AreEqual(0, acctInfo.MultisigAccountInfo.CosginatoryOf.Count);
-            Assert.AreEqual(0, acctInfo.MultisigAccountInfo.Cosignatories.Count);
-            Assert.AreEqual(NetworkType.Types.TEST_NET, acctInfo.PublicAccount.Address.Networktype);
-            Assert.AreEqual(plain, acctInfo.PublicAccount.Address.Plain);
-            Assert.AreEqual(pretty, acctInfo.PublicAccount.Address.Pretty);
-            Assert.AreEqual(pubkey, acctInfo.PublicAccount.PublicKey);
-            Assert.AreEqual(pubkey, acctInfo.PublicKey);
-            Assert.AreNotEqual((ulong)0, acctInfo.VestedBalance);
+        [TestMethod, Timeout(20000)]
+        public async Task GetAccountInfoFromAddressCosign1()
+        {
+            var acctInfo = await new AccountHttp(host).GetAccountInfo(new Address(prettyCs1));
+            AssertAcctInfo(acctInfo);
+        }
+
+        [TestMethod, Timeout(20000)]
+        public async Task GetAccountInfoFromAddressCosign2()
+        {
+            var acctInfo = await new AccountHttp(host).GetAccountInfo(new Address(prettyCs2));
+            AssertAcctInfo(acctInfo);
+        }
+
+        private void AssertAcctInfo(AccountInfo acctInfo)  
+        {
+            if (acctInfo.PublicKey == pubkey)
+            {
+                AssertAcct(acctInfo);
+                Assert.AreEqual("LOCKED", acctInfo.Status);
+                Assert.AreEqual("INACTIVE", acctInfo.RemoteStatus);
+                Assert.AreEqual(0, acctInfo.MinCosigners);
+                Assert.IsNotNull(acctInfo.Cosigners);
+                Assert.AreEqual(0, acctInfo.Cosigners.Count);
+                Assert.IsNotNull(acctInfo.CosginatoryOf);
+                Assert.AreEqual(0, acctInfo.CosginatoryOf.Count);
+            }
+            else if (acctInfo.PublicKey == pubkeyMs)
+            {
+                AssertAcct(acctInfo);
+                Assert.AreEqual("LOCKED", acctInfo.Status);
+                Assert.AreEqual("ACTIVE", acctInfo.RemoteStatus);
+                Assert.AreEqual(2, acctInfo.MinCosigners);
+                Assert.IsNotNull(acctInfo.Cosigners);
+                Assert.AreEqual(2, acctInfo.Cosigners.Count);
+                AssertAcct(acctInfo.Cosigners[0]);
+                AssertAcct(acctInfo.Cosigners[1]);
+                Assert.IsNotNull(acctInfo.CosginatoryOf);
+                Assert.AreEqual(0, acctInfo.CosginatoryOf.Count);
+            }
+            else if (acctInfo.PublicKey == pubkeyCs1)
+            {
+                AssertAcct(acctInfo);
+                Assert.AreEqual("LOCKED", acctInfo.Status);
+                Assert.AreEqual("INACTIVE", acctInfo.RemoteStatus);
+                Assert.AreEqual(0, acctInfo.MinCosigners);
+                Assert.IsNotNull(acctInfo.Cosigners);
+                Assert.AreEqual(0, acctInfo.Cosigners.Count);
+                Assert.IsNotNull(acctInfo.CosginatoryOf);
+                Assert.AreEqual(1, acctInfo.CosginatoryOf.Count);
+                AssertAcct(acctInfo.CosginatoryOf[0]);
+            }
+            else if (acctInfo.PublicKey == pubkeyCs2)
+            {
+                AssertAcct(acctInfo);
+                Assert.AreEqual("LOCKED", acctInfo.Status);
+                Assert.AreEqual("INACTIVE", acctInfo.RemoteStatus);
+                Assert.AreEqual(0, acctInfo.MinCosigners);
+                Assert.IsNotNull(acctInfo.Cosigners);
+                Assert.AreEqual(0, acctInfo.Cosigners.Count);
+                Assert.IsNotNull(acctInfo.CosginatoryOf);
+                Assert.AreEqual(1, acctInfo.CosginatoryOf.Count);
+                AssertAcct(acctInfo.CosginatoryOf[0]);
+            }
+        }
+
+        private void AssertAcct(AccountInfo acct)
+        {
+            if (acct.PublicKey == pubkey)
+            {
+                Assert.AreEqual(NetworkType.Types.TEST_NET, acct.Address.Networktype());
+                Assert.AreEqual(plain, acct.Address.Plain);
+                Assert.AreEqual(pretty, acct.Address.Pretty);
+                Assert.AreNotEqual((ulong)0, acct.Balance);
+                Assert.AreNotEqual((ulong)0, acct.VestedBalance);
+                Assert.AreEqual((ulong)0, acct.Importance);
+                Assert.AreEqual((ulong)0, acct.HarvestedBlocks);
+            }
+            else if (acct.PublicKey == pubkeyMs)
+            {
+                Assert.AreEqual(NetworkType.Types.TEST_NET, acct.Address.Networktype());
+                Assert.AreEqual(plainMs, acct.Address.Plain);
+                Assert.AreEqual(prettyMs, acct.Address.Pretty);
+                Assert.IsTrue((ulong)1000000 < acct.Balance);
+                Assert.IsTrue((ulong)1000000 < acct.VestedBalance);
+                Assert.AreEqual((ulong)0, acct.Importance);
+                Assert.AreEqual((ulong)0, acct.HarvestedBlocks);
+            }
+            else if (acct.PublicKey == pubkeyCs1)
+            {
+                Assert.AreEqual(NetworkType.Types.TEST_NET, acct.Address.Networktype());
+                Assert.AreEqual(plainCs1, acct.Address.Plain);
+                Assert.AreEqual(prettyCs1, acct.Address.Pretty);
+                Assert.IsTrue((ulong)1000000 < acct.Balance);
+                Assert.IsTrue((ulong)1000000 < acct.VestedBalance);
+                Assert.AreEqual((ulong)0, acct.Importance);
+                Assert.AreEqual((ulong)0, acct.HarvestedBlocks);
+            }
+            else if (acct.PublicKey == pubkeyCs2)
+            {
+                Assert.AreEqual(NetworkType.Types.TEST_NET, acct.Address.Networktype());
+                Assert.AreEqual(plainCs2, acct.Address.Plain);
+                Assert.AreEqual(prettyCs2, acct.Address.Pretty);
+                Assert.IsTrue((ulong)900000 <= acct.Balance);
+                Assert.IsTrue((ulong)900000 <= acct.VestedBalance);
+                Assert.AreEqual((ulong)0, acct.Importance);
+                Assert.AreEqual((ulong)0, acct.HarvestedBlocks);
+            }
         }
 
         [TestMethod]
@@ -124,7 +231,7 @@ namespace IntegrationTest.infrastructure.HttpTests
                 Assert.AreEqual(NetworkType.Types.TEST_NET, tx.NetworkType);
                 Assert.AreEqual(signerAddress, tx.Signer.Address.Pretty);
                 Assert.AreEqual(signerPubKey, tx.Signer.PublicKey);
-                Assert.AreEqual(signerAddress, Address.CreateFromPublicKey(tx.Signer.PublicKey, NetworkType.Types.TEST_NET).Pretty);
+                Assert.AreEqual(signerAddress, new Address(tx.Signer.PublicKey, NetworkType.Types.TEST_NET).Pretty);
                 Assert.AreEqual(TransactionTypes.Types.Multisig, tx.TransactionType);
                 Assert.AreEqual(1, tx.Version);
 
@@ -164,8 +271,8 @@ namespace IntegrationTest.infrastructure.HttpTests
                 Assert.AreEqual(0, ttx.Message.GetLength());
                 Assert.IsNotNull(ttx.Mosaics);
                 Assert.AreEqual(1, ttx.Mosaics.Count);
-                Assert.AreEqual("nem", ttx.Mosaics[0].NamespaceName);
-                Assert.AreEqual("xem", ttx.Mosaics[0].MosaicName);
+                Assert.AreEqual(Xem.NamespaceName, ttx.Mosaics[0].NamespaceName);
+                Assert.AreEqual(Xem.MosaicName, ttx.Mosaics[0].MosaicName);
                 Assert.AreEqual((ulong)1000, ttx.Mosaics[0].Amount);
                 Assert.IsNull(ttx.TransactionInfo);
                 Assert.AreEqual(NetworkType.Types.TEST_NET, ttx.NetworkType);
@@ -191,7 +298,7 @@ namespace IntegrationTest.infrastructure.HttpTests
                 Assert.AreEqual(NetworkType.Types.TEST_NET, tx.NetworkType);
                 Assert.AreEqual(signerAddress, tx.Signer.Address.Pretty);
                 Assert.AreEqual(signerpubkey, tx.Signer.PublicKey);
-                Assert.AreEqual(signerAddress, Address.CreateFromPublicKey(tx.Signer.PublicKey, NetworkType.Types.TEST_NET).Pretty);
+                Assert.AreEqual(signerAddress, new Address(tx.Signer.PublicKey, NetworkType.Types.TEST_NET).Pretty);
                 Assert.AreEqual(TransactionTypes.Types.Multisig, tx.TransactionType);
                 Assert.AreEqual(1, tx.Version);
 
@@ -223,8 +330,8 @@ namespace IntegrationTest.infrastructure.HttpTests
                 Assert.AreEqual(0, ttx.Message.GetLength());
                 Assert.IsNotNull(ttx.Mosaics);
                 Assert.AreEqual(1, ttx.Mosaics.Count);
-                Assert.AreEqual("nem", ttx.Mosaics[0].NamespaceName);
-                Assert.AreEqual("xem", ttx.Mosaics[0].MosaicName);
+                Assert.AreEqual(Xem.NamespaceName, ttx.Mosaics[0].NamespaceName);
+                Assert.AreEqual(Xem.MosaicName, ttx.Mosaics[0].MosaicName);
                 Assert.AreEqual((ulong)1000000, ttx.Mosaics[0].Amount);
                 Assert.IsNull(ttx.TransactionInfo);
                 Assert.AreEqual(NetworkType.Types.TEST_NET, ttx.NetworkType);
@@ -236,11 +343,11 @@ namespace IntegrationTest.infrastructure.HttpTests
         public async Task GetMosaicsOwned()
         {
             const String pretty = "TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR";
-            var mosaics = await new AccountHttp(host).MosaicsOwned(Address.CreateFromEncoded(pretty));
+            var mosaics = await new AccountHttp(host).MosaicsOwned(new Address(pretty));
 
             Assert.AreEqual(4, mosaics.Count);
-            Assert.AreEqual("nem", mosaics[0].NamespaceName);
-            Assert.AreEqual("xem", mosaics[0].MosaicName);
+            Assert.AreEqual(Xem.NamespaceName, mosaics[0].NamespaceName);
+            Assert.AreEqual(Xem.MosaicName, mosaics[0].MosaicName);
             Assert.IsTrue(1000000 < mosaics[0].Amount);
             Assert.AreEqual("nis1porttest", mosaics[1].NamespaceName);
             Assert.AreEqual("test", mosaics[1].MosaicName);
@@ -251,20 +358,6 @@ namespace IntegrationTest.infrastructure.HttpTests
             Assert.AreEqual("myspace", mosaics[3].NamespaceName);
             Assert.AreEqual("subspace", mosaics[3].MosaicName);
             Assert.IsTrue(10001000000000 >= mosaics[3].Amount);
-        }
-
-        [TestMethod, Timeout(20000)]
-        public async Task GetOutgoingTransactionsWithTransfer()
-        {
-            const string expected = "9d7ea57169a56a1bb821e1abf744610c639d7545f976f09808b68a6ad1415eb0";
-
-            var response = await new AccountHttp(host).OutgoingTransactions(new PublicAccount("eb100d6b2da10fc5359ab35a5801b0e6f0b6cc18d849c0aa78ba1aab2b945dea", NetworkType.Types.TEST_NET));
-            
-          
-            var tx = (MultisigTransaction)response[5];
-            Assert.AreEqual(((TransferTransaction)tx.InnerTransaction).Mosaics[0].MosaicName, Xem.MosaicName);
-            Assert.AreEqual(expected, tx.Signer.PublicKey);
-            Assert.AreEqual("b41462f6b28bd8446f45fd90b6bda6d8eb33174b7b0c168b618d63472a815fd2", tx.TransactionInfo.InnerHash);
         }
 
         [TestMethod, Timeout(20000)]
@@ -282,12 +375,26 @@ namespace IntegrationTest.infrastructure.HttpTests
             Assert.AreEqual("c48c267efe736e8950da4a6ea9fcdc5d7c48f03a3e30965552a4dc51883da486", tx.TransactionInfo.InnerHash);
         }
 
+        [TestMethod, Timeout(20000)]
+        public async Task GetOutgoingTransactionsWithTransfer()
+        {
+            const string expected = "9d7ea57169a56a1bb821e1abf744610c639d7545f976f09808b68a6ad1415eb0";
+
+            var response = await new AccountHttp(host).OutgoingTransactions(new PublicAccount("eb100d6b2da10fc5359ab35a5801b0e6f0b6cc18d849c0aa78ba1aab2b945dea", NetworkType.Types.TEST_NET));
+
+
+            var tx = (MultisigTransaction)response[5];
+            Assert.AreEqual(((TransferTransaction)tx.InnerTransaction).Mosaics[0].MosaicName, Xem.MosaicName);
+            Assert.AreEqual(expected, tx.Signer.PublicKey);
+            Assert.AreEqual("b41462f6b28bd8446f45fd90b6bda6d8eb33174b7b0c168b618d63472a815fd2", tx.TransactionInfo.InnerHash);
+        }
+
         [TestMethod]
         public async Task GetTransactionWithEncryptedMessage()
         {
             const string expected = "57786d3560ae151ec9790c73713379524700bc6a2b34888b26b736c35c8c5e14";
 
-            var response = await new AccountHttp(host).IncomingTransactions(Address.CreateFromEncoded("NB2GO2-AAZDWU-YHG3HM-VC4DHI-X6HBMD-FZXDNE-5FYZ"));
+            var response = await new AccountHttp(host).IncomingTransactions(new Address("NB2GO2-AAZDWU-YHG3HM-VC4DHI-X6HBMD-FZXDNE-5FYZ"));
 
             var tx = (TransferTransaction)response[2];
 

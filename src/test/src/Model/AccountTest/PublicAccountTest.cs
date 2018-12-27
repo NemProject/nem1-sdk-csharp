@@ -35,7 +35,7 @@ namespace Tests.Model.AccountTest
         [TestMethod]
         public void ShouldCreatePublicAccountViaStaticConstructor()
         {
-            var publicAccount = PublicAccount.CreateFromPublicKey(publicKey, NetworkType.Types.TEST_NET);
+            var publicAccount = new PublicAccount(publicKey, NetworkType.Types.TEST_NET);
             Assert.AreEqual(publicKey, publicAccount.PublicKey);
             Assert.AreEqual("TBDJXUULP2BRYNS7MWHY2WAFWKQNAF273KYBPFY5", publicAccount.Address.Plain);
         }
@@ -55,7 +55,7 @@ namespace Tests.Model.AccountTest
             var publicAccount2 = new PublicAccount(publicKey, NetworkType.Types.MAIN_NET);
             Assert.AreNotEqual(publicAccount.Address.Plain, publicAccount2.Address.Plain);
             Assert.AreNotEqual(publicAccount.Address.Pretty, publicAccount2.Address.Pretty);
-            Assert.AreNotEqual(publicAccount.Address.Networktype, publicAccount2.Address.Networktype);
+            Assert.AreNotEqual(publicAccount.Address.Networktype(), publicAccount2.Address.Networktype());
         }
     }
 }

@@ -40,7 +40,7 @@ namespace io.nem1.sdk.Model.Blockchain
             /// <summary>
             /// Unsupported net
             /// </summary>
-            UNSUPPORTED_NET = 0x00, // To detect networkId 0, occasionaly received in the TESTNET NisInfo
+            UNDETERMINED_NET = 0x00, // To detect networkId 0, occasionaly received in the TESTNET NisInfo
             /// <summary>
             /// The main net
             /// </summary>
@@ -80,7 +80,7 @@ namespace io.nem1.sdk.Model.Blockchain
             switch (name)
             {
                 case "":
-                    return Types.UNSUPPORTED_NET;
+                    return Types.UNDETERMINED_NET;
                 case "mijinTest":
                     return Types.MIJIN_TEST;
                 case "mijin":
@@ -102,7 +102,7 @@ namespace io.nem1.sdk.Model.Blockchain
             switch (value)
             {
                 case 0x00:
-                    return Types.UNSUPPORTED_NET;
+                    return Types.UNDETERMINED_NET;
                 case 0x90:
                     return Types.MIJIN_TEST;
                 case 0x60:

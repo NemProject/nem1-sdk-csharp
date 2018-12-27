@@ -14,7 +14,7 @@ namespace IntegrationTest.infrastructure.Transactions
         [TestMethod]
         public async Task CreateRootNamespace()
         {
-            var keyPair = KeyPair.CreateFromPrivateKey(Config.PrivateKeyMain);
+            var keyPair = new KeyPair(Config.PrivateKeyMain);
 
             var transaction = ProvisionNamespaceTransaction
                 .CreateRootnamespace(
@@ -31,7 +31,7 @@ namespace IntegrationTest.infrastructure.Transactions
         [TestMethod]
         public async Task CreateSubNamespace()
         {
-            var keyPair = KeyPair.CreateFromPrivateKey(Config.PrivateKeyMain);
+            var keyPair = new KeyPair(Config.PrivateKeyMain);
 
             var transaction = ProvisionNamespaceTransaction
                 .CreateSubNamespace(

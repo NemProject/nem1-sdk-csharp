@@ -16,13 +16,13 @@ namespace IntegrationTest.infrastructure.Transactions
         [TestMethod]
         public async Task CanCreateMosaicWithoutLevy()
         {
-            var keyPair = KeyPair.CreateFromPrivateKey(Config.PrivateKeyMain);
+            var keyPair = new KeyPair(Config.PrivateKeyMain);
             var transaction = MosaicDefinitionTransaction.CreateWithoutLevy(
                 NetworkType.Types.TEST_NET,
                 Deadline.CreateHours(1),
                 new MosaicProperties(4, 1000000000, true, true),
                 MosaicId.CreateFromMosaicIdentifier("myspace:subspace"),
-                PublicAccount.CreateFromPublicKey(keyPair.PublicKeyString, NetworkType.Types.TEST_NET),
+                new PublicAccount(keyPair.PublicKeyString, NetworkType.Types.TEST_NET),
                 "new mosaic test"
             ).SignWith(keyPair);
 
@@ -34,14 +34,14 @@ namespace IntegrationTest.infrastructure.Transactions
         [TestMethod]
         public async Task CanCreateMosaicWithLevy()
         {
-            var keyPair = KeyPair.CreateFromPrivateKey(Config.PrivateKeyMain);
+            var keyPair = new KeyPair(Config.PrivateKeyMain);
             var transaction = MosaicDefinitionTransaction.CreateWithLevy(
                 NetworkType.Types.TEST_NET,
                 Deadline.CreateHours(1),
                 new MosaicProperties(4, 1000000000, true, true),
                 MosaicId.CreateFromMosaicIdentifier("myspace:subspacewithlevy"),
-                new MosaicLevy(Mosaic.CreateFromIdentifier("myspace:subspace", 100), 1, Address.CreateFromEncoded("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR") ),
-                PublicAccount.CreateFromPublicKey(keyPair.PublicKeyString, NetworkType.Types.TEST_NET),
+                new MosaicLevy(Mosaic.CreateFromIdentifier("myspace:subspace", 100), 1, new Address("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR") ),
+                new PublicAccount(keyPair.PublicKeyString, NetworkType.Types.TEST_NET),
                 "new mosaic test"
             ).SignWith(keyPair);
 

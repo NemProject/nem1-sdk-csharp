@@ -115,7 +115,7 @@ namespace io.nem1.sdk.Model.Transactions
         {
             if (keyPair == null) throw new ArgumentNullException(nameof(keyPair));
 
-            Signer = PublicAccount.CreateFromPublicKey(keyPair.PublicKeyString, NetworkType);
+            Signer = new PublicAccount(keyPair.PublicKeyString, NetworkType);
 
             Bytes = GenerateBytes();
 

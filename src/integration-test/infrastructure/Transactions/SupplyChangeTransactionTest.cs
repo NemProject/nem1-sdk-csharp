@@ -15,7 +15,7 @@ namespace IntegrationTest.infrastructure.Transactions
         [TestMethod]
         public async Task CanIncreaseSupply()
         {
-            var keyPair = KeyPair.CreateFromPrivateKey(Config.PrivateKeyMain);
+            var keyPair = new KeyPair(Config.PrivateKeyMain);
 
             var transaction = SupplyChangeTransaction.CreateIncrease(
                     NetworkType.Types.TEST_NET,
@@ -32,7 +32,7 @@ namespace IntegrationTest.infrastructure.Transactions
         [TestMethod]
         public async Task CanDecreaseSupply()
         {
-            var keyPair = KeyPair.CreateFromPrivateKey(Config.PrivateKeyMain);
+            var keyPair = new KeyPair(Config.PrivateKeyMain);
 
             var transaction = SupplyChangeTransaction.CreateDecrease(
                     NetworkType.Types.TEST_NET,

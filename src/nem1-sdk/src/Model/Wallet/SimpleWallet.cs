@@ -73,7 +73,7 @@ namespace io.nem1.sdk.Model.Wallet
         /// <returns>SimpleWallet.</returns>
         public static SimpleWallet CreateNewSimpleWallet(string name, Password password, string privateKey, NetworkType.Types network)
         {
-            var account = Account.CreateFromPrivateKey(privateKey, network);
+            var account = PrivateAccount.CreateFromPrivateKey(privateKey, network);
 
             return CreateNewSimpleWallet(name, password, account, network);
         }
@@ -87,12 +87,12 @@ namespace io.nem1.sdk.Model.Wallet
         /// <returns>SimpleWallet.</returns>
         public static SimpleWallet CreateNewSimpleWallet(string name, Password password, NetworkType.Types network)
         {
-            var Acc = Account.GenerateNewAccount(network);
+            var Acc = PrivateAccount.GenerateNewAccount(network);
 
             return CreateNewSimpleWallet(name, password, Acc, network);
         }
 
-        internal static SimpleWallet CreateNewSimpleWallet(string name, Password password, Account account, NetworkType.Types network)
+        internal static SimpleWallet CreateNewSimpleWallet(string name, Password password, PrivateAccount account, NetworkType.Types network)
         {
             var encKey = new EncryptedPrivateKey(CryptoUtils.EncodePrivateKey(account.PrivateKey, password.Value));
 
@@ -138,7 +138,7 @@ namespace io.nem1.sdk.Model.Wallet
         /// <returns>System.String.</returns>
         public string UnlockPrivateKey(Password password)
         {
-            return Account.CreateFromPrivateKey(EncryptedPrivateKey.Decrypt(password), Network)
+            return PrivateAccount.CreateFromPrivateKey(EncryptedPrivateKey.Decrypt(password), Network)
                 .PrivateKey;
         }
 
@@ -147,9 +147,9 @@ namespace io.nem1.sdk.Model.Wallet
         /// </summary>
         /// <param name="password">The password.</param>
         /// <returns>Account.</returns>
-        public Account Open(Password password)
+        public PrivateAccount Open(Password password)
         {
-            return Account.CreateFromPrivateKey(EncryptedPrivateKey.Decrypt(password), Network);
+            return PrivateAccount.CreateFromPrivateKey(EncryptedPrivateKey.Decrypt(password), Network);
         }
 
         private static WalletObject WalletAdapter(string json)

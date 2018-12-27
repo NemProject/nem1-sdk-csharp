@@ -29,10 +29,9 @@ using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 namespace io.nem1.sdk.Model.Accounts
 {
     /// <summary>
-    /// The KeyPair structure describes a private key and public key in two formats, and contains static classes from creating the structure from raw data.
+    /// The KeyPair structure describes a private key and public key in two formats created from raw data.
     /// </summary>
-    /// <seealso cref="IKeyPair" />
-    public class KeyPair : IKeyPair
+    public class KeyPair
     {
 
         /// <inheritdoc />
@@ -54,45 +53,20 @@ namespace io.nem1.sdk.Model.Accounts
         public string PublicKeyString => PublicKey.ToHexLower().ToUpper();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KeyPair"/> class.
-        /// </summary>
-        /// <param name="privateKey">The private key.</param>
-        /// <param name="publicKey">The public key.</param>
-        /// <exception cref="ArgumentNullException">
-        /// privateKey
-        /// or
-        /// publicKey
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// privateKey
-        /// or
-        /// publicKey
-        /// </exception>
-        internal KeyPair(string privateKey, string publicKey)
-        {
-            if (publicKey == null) throw new ArgumentNullException(nameof(publicKey));
-            if (publicKey.Length != 64) throw new ArgumentException(nameof(publicKey));
-
-            PrivateKey = privateKey.FromHex();
-
-            PublicKey = publicKey.FromHex();
-        }
-
-        /// <summary>
         /// Creates a KeyPair from a private key.
         /// </summary>
-        /// <param name="privateKey">The private key.</param>
+        /// <param name="privateKeystring">The private key in string format.</param>
         /// <returns>KeyPair.</returns>
         /// <exception cref="ArgumentNullException">privateKey</exception>
         /// <exception cref="ArgumentException">privateKey</exception>
-        public static KeyPair CreateFromPrivateKey(string privateKey)
+        public KeyPair(string privateKeystring)
         {
-            if (privateKey == null) throw new ArgumentNullException(nameof(privateKey));
-            if (privateKey.Length != 64) throw new ArgumentException(nameof(privateKey));
+            if (privateKeystring == null) throw new ArgumentNullException(nameof(privateKeystring));
+            if (privateKeystring.Length != 64) throw new ArgumentException(nameof(privateKeystring));
 
-            var privateKeyArray = privateKey.FromHex();
-            Array.Reverse(privateKeyArray);
-            return new KeyPair(privateKey, Ed25519.PublicKeyFromSeed(privateKeyArray).ToHexLower());
+            PrivateKey = privateKeystring.FromHex();
+            Array.Reverse(PrivateKey);
+            PublicKey =  Ed25519.PublicKeyFromSeed(PrivateKey);
         }
 
         /// <summary>
@@ -108,13 +82,9 @@ namespace io.nem1.sdk.Model.Accounts
             var sk = new byte[64];
 
             Array.Copy(PrivateKey, sk, 32);
-
             Array.Copy(PublicKey, 0, sk, 32, 32);
-
             Ed25519.crypto_sign2(sig, data, sk, 32);
-
             CryptoBytes.Wipe(sk);
-
             return sig;
         }      
     }
