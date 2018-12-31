@@ -13,7 +13,7 @@
 // limitations under the License.
 // 
 
-using io.nem1.sdk.Model.Blockchain;
+using io.nem1.sdk.Model.Network;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Model.BlockchainTests

@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using io.nem1.sdk.Infrastructure.Imported.Api;
 using io.nem1.sdk.Infrastructure.Mapping;
-using io.nem1.sdk.Model.Blockchain;
-using io.nem1.sdk.Model.Node;
+using io.nem1.sdk.Model.Network;
 using Newtonsoft.Json.Linq;
 
 namespace io.nem1.sdk.Infrastructure.HttpRepositories

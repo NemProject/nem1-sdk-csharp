@@ -19,9 +19,9 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using io.nem1.sdk.Infrastructure.HttpRepositories;
 using io.nem1.sdk.Model.Accounts;
-using io.nem1.sdk.Model.Blockchain;
+using io.nem1.sdk.Model.Network;
 using io.nem1.sdk.Model.Mosaics;
-using io.nem1.sdk.Model.Network.Messages;
+using io.nem1.sdk.Model.Transactions.Messages;
 using io.nem1.sdk.Model.Transactions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -30,6 +30,8 @@ namespace IntegrationTest.infrastructure.Transactions
     [TestClass]
     public class TransferTransactionTests
     {
+        readonly string host = "http://" + Config.Domain + ":3000";
+
         [TestMethod, Timeout(20000)]
         public async Task AnnounceTransferTransactionWithMosaicWithMessage()
         {
@@ -46,7 +48,7 @@ namespace IntegrationTest.infrastructure.Transactions
             SignedTransaction signedTransaction = transaction.SignWith(keyPair);
             Console.WriteLine(signedTransaction.Hash);
             Console.WriteLine(transaction.Fee);
-            TransactionResponse response = await new TransactionHttp("http://" + Config.Domain + ":7890").Announce(signedTransaction);
+            TransactionResponse response = await new TransactionHttp(host).Announce(signedTransaction);
            
             Assert.AreEqual("SUCCESS", response.Message);
         }
@@ -64,7 +66,7 @@ namespace IntegrationTest.infrastructure.Transactions
                 SecureMessage.Create("hello2", Config.PrivateKeyMain, "4cc7409929a72019240065c9e53aa339f87ba889238ff9fbe978251fdbb05d9f")
             ).SignWith(keyPair);
       
-            var response = await new TransactionHttp("http://" + Config.Domain + ":7890").Announce(transaction);
+            var response = await new TransactionHttp(host).Announce(transaction);
 
             Assert.AreEqual("SUCCESS", response.Message);
         }
@@ -87,7 +89,7 @@ namespace IntegrationTest.infrastructure.Transactions
                 SecureMessage.Create("hello2", Config.PrivateKeyMain, "5D8BEBBE80D7EA3B0088E59308D8671099781429B449A0BBCA6D950A709BA068")               
             ).SignWith(keyPair);
        
-            var response = await new TransactionHttp("http://" + Config.Domain + ":7890").Announce(transaction);
+            var response = await new TransactionHttp(host).Announce(transaction);
 
             Assert.AreEqual("SUCCESS", response.Message);
         }
@@ -109,7 +111,7 @@ namespace IntegrationTest.infrastructure.Transactions
                 EmptyMessage.Create()        
             ).SignWith(keyPair);
             
-            var response = await new TransactionHttp("http://" + Config.Domain + ":7890").Announce(transaction);
+            var response = await new TransactionHttp(host).Announce(transaction);
                
             Assert.AreEqual("SUCCESS", response.Message);
         }

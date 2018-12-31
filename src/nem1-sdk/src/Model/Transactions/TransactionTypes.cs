@@ -39,42 +39,42 @@ namespace io.nem1.sdk.Model.Transactions
         public enum Types
         {
             /// <summary>
-            /// Transfer transaction
+            /// Transfer transaction (257)
             /// </summary>
             Transfer = 0x0101,
 
             /// <summary>
-            /// Multisig transaction
-            /// </summary>
-            Multisig = 0x1004,
-
-            /// <summary>
-            /// Multisig aggregate modification transaction
-            /// </summary>
-            MultisigAggregateModification = 0x1001,
-
-            /// <summary>
-            /// Importance transfer transaction
+            /// Importance transfer transaction (2049)
             /// </summary>
             ImportanceTransfer = 0x0801,
 
             /// <summary>
-            /// Signature transaction
+            /// Multisig aggregate modification transaction (4097)
+            /// </summary>
+            MultisigAggregateModification = 0x1001,
+
+            /// <summary>
+            /// Signature transaction (4098)
             /// </summary>
             SignatureTransaction = 0x1002,
 
             /// <summary>
-            /// Provision namespace transaction
+            /// Multisig transaction (4100)
+            /// </summary>
+            Multisig = 0x1004,
+
+            /// <summary>
+            /// Provision namespace transaction (8193)
             /// </summary>
             ProvisionNamespace = 0x2001,
 
             /// <summary>
-            /// Mosaic definition transaction
+            /// Mosaic definition transaction (16385)
             /// </summary>
             MosaicDefinition = 0x4001,
 
             /// <summary>
-            /// Supply change transaction
+            /// Supply change transaction (16386)
             /// </summary>
             SupplyChange = 0x4002
         }
@@ -82,26 +82,26 @@ namespace io.nem1.sdk.Model.Transactions
         /// <summary>
         /// Gets the integer value of the transaction type.
         /// </summary>
-        /// <param name="type">The type.</param>
+        /// <param name="transactionType">The TransactionTypes.Types type.</param>
         /// <returns>System.Int32.</returns>
         /// <exception cref="InvalidEnumArgumentException">type</exception>
-        public static int GetValue(this Types type)
+        public static int GetValue(this Types transactionType)
         {
-            if (!Enum.IsDefined(typeof(Types), type))
-                throw new InvalidEnumArgumentException(nameof(type), (int) type, typeof(Types));
+            if (!Enum.IsDefined(typeof(Types), transactionType))
+                throw new InvalidEnumArgumentException(nameof(transactionType), (int) transactionType, typeof(Types));
 
-            return (int)type;
+            return (int)transactionType;
         }
 
         /// <summary>
-        /// Gets the raw value of the transaction type integer.
+        /// Gets the transaction Type.
         /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns>Types.</returns>
+        /// <param name="value">The value.</param>
+        /// <returns>TransactionTypes.Types</returns>
         /// <exception cref="System.ArgumentException">invalid transaction type.</exception>
-        public static Types GetRawValue(this int type)
+        public static TransactionTypes.Types GetType(int value)
         {
-            switch (type)
+            switch (value)
             {
                 case 0x0101:
                     return Types.Transfer;
@@ -120,7 +120,7 @@ namespace io.nem1.sdk.Model.Transactions
                 case 0x4002:
                     return Types.SupplyChange;
                 default:
-                    throw new ArgumentException("invalid transaction type.");
+                    throw new ArgumentException("invalid transaction type value.");
             }
         }
     }

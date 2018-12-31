@@ -13,12 +13,10 @@
 // limitations under the License.
 // 
 
-using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 using io.nem1.sdk.Infrastructure.HttpRepositories;
-using io.nem1.sdk.Model.Blockchain;
 using io.nem1.sdk.Model.Network;
 using io.nem1.sdk.Model.Transactions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

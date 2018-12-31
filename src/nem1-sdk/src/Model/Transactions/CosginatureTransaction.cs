@@ -30,7 +30,6 @@ using io.nem1.sdk.Infrastructure.Buffers;
 using io.nem1.sdk.Infrastructure.Buffers.Schema;
 using io.nem1.sdk.Infrastructure.Imported.FlatBuffers;
 using io.nem1.sdk.Model.Accounts;
-using io.nem1.sdk.Model.Blockchain;
 using io.nem1.sdk.Model.Network;
 
 namespace io.nem1.sdk.Model.Transactions

@@ -1,6 +1,6 @@
 ﻿using io.nem1.sdk.Model.Network;
 
-namespace io.nem1.sdk.Model.Node
+namespace io.nem1.sdk.Model.Network
 {
     /// <summary>
     /// Class NisInfo.

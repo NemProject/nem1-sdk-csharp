@@ -5,10 +5,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 using io.nem1.sdk.Model.Accounts;
-using io.nem1.sdk.Model.Blockchain;
-using io.nem1.sdk.Model.Mosaics;
 using io.nem1.sdk.Model.Network;
-using io.nem1.sdk.Model.Network.Messages;
+using io.nem1.sdk.Model.Mosaics;
+using io.nem1.sdk.Model.Transactions.Messages;
 using io.nem1.sdk.Model.Transactions;
 using Newtonsoft.Json.Linq;
 
@@ -127,7 +126,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
                 new NetworkTime(int.Parse(tx["timeStamp"].ToString())),
                 new Deadline(int.Parse(tx["deadline"].ToString())),
                 ulong.Parse(tx["fee"].ToString()),
-                ImportanceTransferMode.GetRawValue(int.Parse(tx["mode"].ToString())),
+                ImportanceTransferMode.GetMode(int.Parse(tx["mode"].ToString())),
                 new PublicAccount(tx["remoteAccount"].ToString(), ExtractNetworkType(int.Parse(tx["version"].ToString()))),
                 tx["signature"]?.ToString(),
                 new PublicAccount(tx["signer"].ToString(), ExtractNetworkType(int.Parse(tx["version"].ToString()))),

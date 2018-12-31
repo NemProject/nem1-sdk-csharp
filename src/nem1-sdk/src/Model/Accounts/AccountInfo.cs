@@ -32,6 +32,30 @@ namespace io.nem1.sdk.Model.Accounts
     /// </summary>
     public class AccountInfo
     {
+        public struct StatusValue
+        {
+            /// <summary>
+            /// LOCKED accounts cannot harvest.
+            /// </summary>
+            public const string LOCKED = "LOCKED";
+            /// <summary>
+            /// UNLOCKED accounts can harvest.
+            /// </summary>
+            public const string UNLOCKED = "UNLOCKED";
+        }
+
+        public struct RemoteStatusValue
+        {
+            /// <summary>
+            /// Remote harvesting is not active.
+            /// </summary>
+            public const string INACTIVE = "INACTIVE";
+            /// <summary>
+            /// Remote harvesting is active.
+            /// </summary>
+            public const string ACTIVE = "ACTIVE";
+        }
+
         /// <summary>
         /// Gets the public account.
         /// </summary>
@@ -99,8 +123,9 @@ namespace io.nem1.sdk.Model.Accounts
         /// <param name="minCosigners">The minimum number of Cosigners (less or eqaul than cosigners.Count).</param>
         /// <param name="cosigners">The cosigners of this multisig account .</param>
         /// <param name="cosginatoryOf">The account is cosginatoryOf these multisig Accounts.</param>
-        public AccountInfo(string publicKey, Address address, ulong balance, ulong vestedBalance, ulong importance, ulong harvestedBlocks, 
-                            string status = "", string remoteStatus = "", int minCosigners = 0, List<AccountInfo> cosigners = null, List<AccountInfo> cosginatoryOf = null)
+        public AccountInfo(string publicKey, Address address, ulong balance, ulong vestedBalance, ulong importance, ulong harvestedBlocks,
+                            string status = "", string remoteStatus = "", 
+                            int minCosigners = 0, List<AccountInfo> cosigners = null, List<AccountInfo> cosginatoryOf = null)
         {
             _PublicAccount = new PublicAccount(publicKey, address.Networktype());
             Balance = balance;

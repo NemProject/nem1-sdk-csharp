@@ -24,7 +24,7 @@
 // ***********************************************************************
 
 using System;
-using io.nem1.sdk.Model.Blockchain;
+using io.nem1.sdk.Model.Network;
 
 namespace io.nem1.sdk.Infrastructure.HttpRepositories
 {

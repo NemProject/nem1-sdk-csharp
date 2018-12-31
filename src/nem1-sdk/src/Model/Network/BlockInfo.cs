@@ -2,7 +2,7 @@
 using io.nem1.sdk.Model.Accounts;
 using io.nem1.sdk.Model.Transactions;
 
-namespace io.nem1.sdk.Model.Blockchain
+namespace io.nem1.sdk.Model.Network
 {
     /// <summary>
     /// BlockInfo 

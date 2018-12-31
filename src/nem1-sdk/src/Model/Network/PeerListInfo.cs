@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace io.nem1.sdk.Model.Node
+namespace io.nem1.sdk.Model.Network
 {
     /// <summary>
     /// Class PeerListInfo.

@@ -69,7 +69,7 @@ namespace io.nem1.sdk.Model.Transactions
         /// <param name="type">The type.</param>
         /// <returns>Mode.</returns>
         /// <exception cref="System.ArgumentException">invalid importance transfer mode.</exception>
-        public static Mode GetRawValue(this int type)
+        public static Mode GetMode(this int type)
         {
             switch (type)
             {

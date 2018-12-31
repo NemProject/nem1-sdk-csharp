@@ -25,7 +25,7 @@
 
 using System.Security.Cryptography;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
-using io.nem1.sdk.Model.Blockchain;
+using io.nem1.sdk.Model.Network;
 using io.nem1.sdk.Model.Transactions;
 using Org.BouncyCastle.Crypto.Digests;
 

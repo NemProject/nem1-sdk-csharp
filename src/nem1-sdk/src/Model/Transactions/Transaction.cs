@@ -26,7 +26,6 @@
 using System;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 using io.nem1.sdk.Model.Accounts;
-using io.nem1.sdk.Model.Blockchain;
 using io.nem1.sdk.Model.Network;
 
 namespace io.nem1.sdk.Model.Transactions

@@ -320,6 +320,7 @@ namespace io.nem1.sdk.Infrastructure.Imported.Api
         /// <param name="address">Account address</param>
         /// <returns>Task of ApiResponse (Transactions.All)</returns>
         System.Threading.Tasks.Task<ApiResponse<List<object>>> TransactionsUnconfirmedAsyncWithHttpInfo (string address);
+
         #endregion Asynchronous Operations
     }
 
@@ -368,11 +369,11 @@ namespace io.nem1.sdk.Infrastructure.Imported.Api
         /// Sets the base path of the API client.
         /// </summary>
         /// <value>The base path</value>
-        [Obsolete("SetBasePath is deprecated, please do 'Configuration.ApiClient = new ApiClient(\"http://new-path\")' instead.")]
-        public void SetBasePath(String basePath)
-        {
-            // do nothing
-        }
+        //[Obsolete("SetBasePath is deprecated, please do 'Configuration.ApiClient = new ApiClient(\"http://new-path\")' instead.")]
+        //public void SetBasePath(String basePath)
+        //{
+        //   // do nothing
+        //}
 
         /// <summary>
         /// Gets or sets the configuration object
@@ -1593,7 +1594,6 @@ namespace io.nem1.sdk.Infrastructure.Imported.Api
         {
              ApiResponse<List<object>> localVarResponse = await TransactionsAllAsyncWithHttpInfo(address, hash, id);
              return localVarResponse.Data.Select(e => new TransactionMapping().Apply(e.ToString())).ToList();
-
         }
 
         /// <summary>

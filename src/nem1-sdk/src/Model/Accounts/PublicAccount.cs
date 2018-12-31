@@ -26,7 +26,7 @@
 using System;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
-using io.nem1.sdk.Model.Blockchain;
+using io.nem1.sdk.Model.Network;
 
 namespace io.nem1.sdk.Model.Accounts
 {

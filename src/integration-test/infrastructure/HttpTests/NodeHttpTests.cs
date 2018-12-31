@@ -1,8 +1,7 @@
 ﻿using System.Reactive.Linq;
 using System.Threading.Tasks;
 using io.nem1.sdk.Infrastructure.HttpRepositories;
-using io.nem1.sdk.Model.Blockchain;
-using io.nem1.sdk.Model.Node;
+using io.nem1.sdk.Model.Network;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IntegrationTest.infrastructure.HttpTests

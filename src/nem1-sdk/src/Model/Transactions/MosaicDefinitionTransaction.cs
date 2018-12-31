@@ -24,7 +24,6 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
@@ -32,9 +31,8 @@ using io.nem1.sdk.Infrastructure.Buffers;
 using io.nem1.sdk.Infrastructure.Buffers.Schema;
 using io.nem1.sdk.Infrastructure.Imported.FlatBuffers;
 using io.nem1.sdk.Model.Accounts;
-using io.nem1.sdk.Model.Blockchain;
-using io.nem1.sdk.Model.Mosaics;
 using io.nem1.sdk.Model.Network;
+using io.nem1.sdk.Model.Mosaics;
 
 namespace io.nem1.sdk.Model.Transactions
 {

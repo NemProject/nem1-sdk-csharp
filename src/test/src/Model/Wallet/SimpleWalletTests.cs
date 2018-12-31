@@ -1,4 +1,4 @@
-﻿using io.nem1.sdk.Model.Blockchain;
+﻿using io.nem1.sdk.Model.Network;
 using io.nem1.sdk.Model.Wallet;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

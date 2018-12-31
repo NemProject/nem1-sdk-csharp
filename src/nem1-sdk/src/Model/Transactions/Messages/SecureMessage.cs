@@ -26,7 +26,7 @@
 using io.nem1.sdk.Core.Crypto;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 
-namespace io.nem1.sdk.Model.Network.Messages
+namespace io.nem1.sdk.Model.Transactions.Messages
 {
     /// <summary>
     /// Class SecureMessage.

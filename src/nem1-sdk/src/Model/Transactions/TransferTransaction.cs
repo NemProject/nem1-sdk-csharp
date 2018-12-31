@@ -30,10 +30,9 @@ using io.nem1.sdk.Infrastructure.Buffers;
 using io.nem1.sdk.Infrastructure.Buffers.Schema;
 using io.nem1.sdk.Infrastructure.Imported.FlatBuffers;
 using io.nem1.sdk.Model.Accounts;
-using io.nem1.sdk.Model.Blockchain;
-using io.nem1.sdk.Model.Mosaics;
 using io.nem1.sdk.Model.Network;
-using io.nem1.sdk.Model.Network.Messages;
+using io.nem1.sdk.Model.Mosaics;
+using io.nem1.sdk.Model.Transactions.Messages;
 
 namespace io.nem1.sdk.Model.Transactions
 {
@@ -222,9 +221,9 @@ namespace io.nem1.sdk.Model.Transactions
         {
             switch (NetworkType)
             {
-                case Blockchain.NetworkType.Types.MIJIN:
+                case Network.NetworkType.Types.MIJIN:
                     return 0;
-                case Blockchain.NetworkType.Types.MIJIN_TEST:
+                case Network.NetworkType.Types.MIJIN_TEST:
                     return 0;
             }
 

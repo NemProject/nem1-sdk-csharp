@@ -28,7 +28,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 using io.nem1.sdk.Core.Utils;
-using io.nem1.sdk.Model.Blockchain;
+using io.nem1.sdk.Model.Network;
 using Org.BouncyCastle.Crypto.Digests;
 
 namespace io.nem1.sdk.Model.Accounts
@@ -126,7 +126,7 @@ namespace io.nem1.sdk.Model.Accounts
             switch (addressPlainOrPretty.ToCharArray()[0])
             {
                 case 'S': case 'M': case 'T': case 'N': break;
-                default: throw new Exception("Address Network unsupported");
+                default: throw new Exception("Address " + addressPlainOrPretty + " Network unsupported");
             }
             Plain = addressPlainOrPretty;
         }

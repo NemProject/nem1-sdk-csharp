@@ -1,4 +1,4 @@
-﻿namespace io.nem1.sdk.Model.Nis
+﻿namespace io.nem1.sdk.Model.Network
 {
     /// <summary>
     /// Class NisStatus.

@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using io.nem1.sdk.Core.Crypto;
 using io.nem1.sdk.Model.Accounts;
-using io.nem1.sdk.Model.Blockchain;
+using io.nem1.sdk.Model.Network;
 using Newtonsoft.Json;
 
 namespace io.nem1.sdk.Model.Wallet

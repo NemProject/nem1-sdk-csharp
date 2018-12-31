@@ -13,7 +13,7 @@
 // limitations under the License.
 // 
 
-using io.nem1.sdk.Model.Network.Messages;
+using io.nem1.sdk.Model.Transactions.Messages;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Model.Transactions

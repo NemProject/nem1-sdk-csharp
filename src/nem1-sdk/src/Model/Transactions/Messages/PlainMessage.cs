@@ -26,7 +26,7 @@
 using System;
 using System.Text;
 
-namespace io.nem1.sdk.Model.Network.Messages
+namespace io.nem1.sdk.Model.Transactions.Messages
 {
     /// <summary>
     /// Class PlainMessage.

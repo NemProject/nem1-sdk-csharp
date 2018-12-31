@@ -2,7 +2,7 @@
 using System.Linq;
 using io.nem1.sdk.Core.Crypto.Chaso.NaCl;
 using io.nem1.sdk.Model.Accounts;
-using io.nem1.sdk.Model.Blockchain;
+using io.nem1.sdk.Model.Network;
 using Newtonsoft.Json.Linq;
 
 namespace io.nem1.sdk.Infrastructure.Mapping

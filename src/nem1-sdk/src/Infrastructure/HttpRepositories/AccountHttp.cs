@@ -425,7 +425,6 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// Get unconfirmed transactions.
         /// </summary>
         /// <param name="account">The account for which transactions should be returned.</param>
-        /// <param name="query">The query parameters.</param>
         /// <returns>An <see cref="IObservable"/> list of <see cref="Transaction"/>.</returns>
         /// <exception cref="ArgumentNullException">account
         /// or
@@ -454,7 +453,6 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// Get unconfirmed transactions.
         /// </summary>
         /// <param name="account">The account for which transactions should be returned.</param>
-        /// <param name="query">The query parameters.</param>
         /// <returns>An <see cref="IObservable"/> list of <see cref="Transaction"/>.</returns>
         /// <exception cref="ArgumentNullException">account
         /// or
@@ -480,7 +478,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// <summary>
         /// Get all transactions.
         /// </summary>
-        /// <param name="account">The account for which transactions should be returned.</param>
+        /// <param name="address">The account for which transactions should be returned.</param>
         /// <returns>An <see cref="IObservable"/> list of <see cref="Transaction"/>.</returns>
         /// <example> 
         /// This sample shows how to use the <see>
@@ -495,9 +493,9 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// var transactions = await accountHttp().Transactions(address);
         /// </code>
         /// </example>
-        public IObservable<List<Transaction>> Transactions(Address account)
+        public IObservable<List<Transaction>> Transactions(Address address)
         {            
-            return Transactions(account, new TransactionQueryParams(null, null));
+            return Transactions(address, new TransactionQueryParams(null, null));
         }
 
         /// <summary>
@@ -552,5 +550,6 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
 
             return Observable.FromAsync(async ar => await AccountRoutesApi.TransactionsAllAsync(account.Plain, query.GetHash(), query.GetId()));
         }
+
     }
 }

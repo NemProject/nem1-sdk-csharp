@@ -14,7 +14,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using io.nem1.sdk.Infrastructure.Imported.Client;
 using io.nem1.sdk.Infrastructure.Mapping;
-using io.nem1.sdk.Model.Blockchain;
+using io.nem1.sdk.Model.Network;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 

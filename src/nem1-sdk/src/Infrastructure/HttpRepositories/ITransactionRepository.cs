@@ -24,6 +24,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using io.nem1.sdk.Model.Transactions;
 
 namespace io.nem1.sdk.Infrastructure.HttpRepositories
@@ -33,7 +34,6 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
     /// </summary>
     interface ITransactionRepository
     {
-
         /// <summary>
         /// Announces the transaction.
         /// </summary>
@@ -41,8 +41,12 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// <returns>IObservable&lt;TransactionAnnounceResponse&gt;.</returns>
         IObservable<TransactionResponse> Announce(SignedTransaction payload);
 
-
-
+        /// <summary>
+        /// Gets a transaction for the provided hash.
+        /// </summary>
+        /// <param name="hash">The hash.</param>
+        /// <returns>IObservable Transaction.</returns>
+        IObservable<Transaction> GetTransaction(string hash);
 
     }
 }

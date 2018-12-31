@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using io.nem1.sdk.Infrastructure.Imported.Client;
+using io.nem1.sdk.Infrastructure.Mapping;
 using io.nem1.sdk.Model.Transactions;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -45,6 +46,23 @@ namespace io.nem1.sdk.Infrastructure.Imported.Api
         /// <param name="body">The transaction payload to send</param>
         /// <returns>Task of ApiResponse (TransactionAnnounceResponseDTO)</returns>
         System.Threading.Tasks.Task<ApiResponse<string>> SendTransactionAsyncWithHttpInfo (JObject body);
+
+        /// <summary>
+        /// Get a transaction for a given hash
+        /// </summary>
+        /// <exception cref="ApiException">Thrown when fails to make API call</exception>
+        /// <param name="hash">The hash of the transaction to return</param>
+        /// <returns>Task of ApiResponse (Transaction)</returns>
+        System.Threading.Tasks.Task<Transaction> GetTransactionAsync(string hash);
+
+        /// <summary>
+        /// Get a transaction for a given hash
+        /// </summary>
+        /// <exception cref="ApiException">Thrown when fails to make API call</exception>
+        /// <param name="hash">The hash of the transaction to return</param>
+        /// <returns>Task of ApiResponse (Transaction)</returns>
+        System.Threading.Tasks.Task<ApiResponse<string>> GetTransactionAsyncWithHttpInfo(string hash);
+
         #endregion Asynchronous Operations
     }
 
@@ -224,6 +242,77 @@ namespace io.nem1.sdk.Infrastructure.Imported.Api
                 localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
                 (string) Configuration.ApiClient.Deserialize(localVarResponse, typeof(string)));
         }
+
+        /// <summary>
+        /// Broadcast a transaction Broadcasts a transaction and returns the transaction status
+        /// </summary>
+        /// <exception cref="ApiException">Thrown when fails to make API call</exception>
+        /// <param name="hash">The transaction payload to send</param>
+        /// <returns>Task of TransactionAnnounceResponseDTO</returns>
+        public async System.Threading.Tasks.Task<Transaction> GetTransactionAsync(string hash)
+        {
+            ApiResponse<string> localVarResponse = await GetTransactionAsyncWithHttpInfo(hash);
+            //return localVarResponse.Data.Select(e => new TransactionMapping().Apply(e.ToString())).ToList();
+            return new TransactionMapping().Apply(localVarResponse.Data);
+        }
+
+        /// <summary>
+        /// Get a transaction for a given hash
+        /// </summary>
+        /// <exception cref="ApiException">Thrown when fails to make API call</exception>
+        /// <param name="hash">The hash of the transaction to return</param>
+        /// <returns>Task of ApiResponse (Transaction)</returns>
+        public async System.Threading.Tasks.Task<ApiResponse<string>> GetTransactionAsyncWithHttpInfo(string hash)
+        {
+            // verify the required parameter 'address' is set
+            if (hash == null)
+                throw new ApiException(400, "Missing required parameter 'hash' when calling TransactionRoutesApi->GetTransaction");
+
+            var localVarPath = "/transaction/get";
+            var localVarPathParams = new Dictionary<String, String>();
+            var localVarQueryParams = new List<KeyValuePair<String, String>>();
+            var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
+            var localVarFormParams = new Dictionary<String, String>();
+            var localVarFileParams = new Dictionary<String, FileParameter>();
+            Object localVarPostBody = null;
+
+            // to determine the Content-Type header
+            String[] localVarHttpContentTypes = new String[] {
+            };
+            String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+
+            // to determine the Accept header
+            String[] localVarHttpHeaderAccepts = new String[] {
+                "application/json"
+            };
+            String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+            if (localVarHttpHeaderAccept != null)
+                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
+
+            if (hash != null) localVarQueryParams.AddRange(new List<KeyValuePair<String, String>>()
+            {
+                new KeyValuePair<string, string>("hash", hash)
+            }); // query parameter
+
+            // make the HTTP request
+            IRestResponse localVarResponse = (IRestResponse)await Configuration.ApiClient.CallApiAsync(localVarPath,
+                Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
+                localVarPathParams, localVarHttpContentType);
+
+            int localVarStatusCode = (int)localVarResponse.StatusCode;
+
+            if (ExceptionFactory != null)
+            {
+                Exception exception = ExceptionFactory("GetTransaction", localVarResponse);
+                if (exception != null) throw exception;
+            }
+
+            return new ApiResponse<string>(localVarStatusCode,
+                localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+                (string)Configuration.ApiClient.Deserialize(localVarResponse, typeof(string)));
+
+        }
+
 
     }
 }

@@ -25,7 +25,7 @@
 
 using System;
 
-namespace io.nem1.sdk.Model.Blockchain
+namespace io.nem1.sdk.Model.Network
 {
     /// <summary>
     /// Static class containing network type constants enum and helper functions.

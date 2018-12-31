@@ -13,79 +13,65 @@
 // limitations under the License.
 // 
 
+using System.Threading.Tasks;
+using io.nem1.sdk.Infrastructure.HttpRepositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Reactive.Linq;
+using io.nem1.sdk.Model.Network;
+using io.nem1.sdk.Model.Transactions.Messages;
+using io.nem1.sdk.Model.Transactions;
+using io.nem1.sdk.Model.Mosaics;
 
 namespace IntegrationTest.infrastructure.HttpTests
 {
     [TestClass]
     public class TransactionHttpTests
     {
-        readonly string host = "http://" + Config.Domain + ":3000";
+        const string PUBKEYMESS = "7b1a93132b8c5b8001a07f973307bee2b37bcd6dc279a59ea98179b238d44e2d";
+        readonly string host = "http://" + Config.Domain + ":7890";
 
-       // [TestMethod, Timeout(20000)]
-       // public async Task GetTransaction()
-       // {
-       //     var expected = "72B4DC358676BFED48DA63AF13727377E55DB5072FC6150D4A101367E93A78FA";
-       //    
-       //     var a = await new TransactionHttp(host).GetTransaction("5AFB147D88336A00015C7E0A");
-       //
-       //     Assert.AreEqual(expected, a.TransactionInfo.Hash);
-       // }
-       //
-       // [TestMethod, Timeout(20000)]
-       // public async Task GetTransactions()
-       // {
-       //     var expected = "72B4DC358676BFED48DA63AF13727377E55DB5072FC6150D4A101367E93A78FA";
-       //
-       //     var a = await new TransactionHttp(host).GetTransactions(new TransactionIds { transactionIds = new[] { "5AFB147D88336A00015C7E0A" } });
-       //    
-       //     Assert.AreEqual(expected, a[0].TransactionInfo.Hash);
-       // }
-       //
-       // [TestMethod, Timeout(20000)]
-       // public async Task GetTransactionStatus()
-       // {
-       //     var expected = "72B4DC358676BFED48DA63AF13727377E55DB5072FC6150D4A101367E93A78FA";
-       //
-       //     var a = await new TransactionHttp(host).GetTransactionStatus("72B4DC358676BFED48DA63AF13727377E55DB5072FC6150D4A101367E93A78FA");
-       //
-       //     Assert.AreEqual(expected, a.Hash);
-       // }
-       //
-       // [TestMethod, Timeout(20000)]
-       // public async Task GetTransactionStatuses()
-       // {
-       //     var expected = "72B4DC358676BFED48DA63AF13727377E55DB5072FC6150D4A101367E93A78FA";
-       //
-       //     var a = await new TransactionHttp(host).GetTransactionStatuses(new TransactionHashes { hashes = new[] { "72B4DC358676BFED48DA63AF13727377E55DB5072FC6150D4A101367E93A78FA" } });
-       //
-       //     Assert.AreEqual(expected, a[0].Hash);
-       // }
+        [TestMethod]
+        public async Task GetTransaction()
+        {
+            const string hash = "5853eaebe86307bf8a5dbddb5248490cb1f9ca6cb76c4733dab8eea157988f7a";
+            var tx = await new TransactionHttp(host).GetTransaction(hash);
+            Assert.AreEqual(tx.NetworkType, NetworkType.Types.TEST_NET);
+            Assert.AreEqual(tx.Version, 1);
+            Assert.IsNotNull(tx.TransactionInfo);
+            Assert.AreEqual(tx.TransactionInfo.Hash, hash);
+        }
 
-       // [TestMethod, Timeout(20000)]
-       // public async Task Map()
-       // {
-       //     var transactionHttp = new TransactionHttp(host);
-       //     transactionHttp.GetTransaction("")
-       //            .Select(ar => ar.Transaction.)
-       // }
+        [TestMethod]
+        public async Task GetTransactionWithHexidecimalMessage()
+        {
+            const string HASH = "5853eaebe86307bf8a5dbddb5248490cb1f9ca6cb76c4733dab8eea157988f7a";
 
-       // [TestMethod, Timeout(20000)]
-       // public async Task AnnounceTransaction(TransactionPayload payload)
-       // {
-       //
-       // }
-       //
-       // [TestMethod, Timeout(20000)]
-       // public async Task AnnoucnePartialTransaction(TransactionPayload payload)
-       // {
-       //
-       // }
-       //
-       // [TestMethod, Timeout(20000)]
-       // public async Task AnnoucneCosignatureTransaction(TransactionPayload payload)
-       // {
-       //
-       // }
+            var tx = await new TransactionHttp(host).GetTransaction(HASH);
+
+            Assert.AreEqual(tx.Signer.PublicKey, PUBKEYMESS);
+            Assert.AreEqual(tx.TransactionInfo.Hash, HASH);
+            var ttx = (TransferTransaction)tx;
+            Assert.AreEqual(ttx.Mosaics[0].MosaicName, Xem.MosaicName);
+            Assert.AreEqual(ttx.Mosaics[0].Amount, (ulong)10000000);
+            Assert.AreEqual(ttx.Message.GetMessageType() , MessageType.Type.UNENCRYPTED);
+            Assert.AreEqual(((HexMessage)ttx.Message).GetStringPayload(), "abcd1234");
+        }
+
+        [TestMethod]
+        public async Task GetTransactionWithEncryptedMessage()
+        {
+            const string HASH = "fc60dbe36b99769261b86dc562e7dd2189a440cf878511e2e310208335bc5e9d";
+
+            var tx = await new TransactionHttp(host).GetTransaction(HASH);
+
+            Assert.AreEqual(tx.Signer.PublicKey, PUBKEYMESS);
+            Assert.AreEqual(tx.TransactionType, TransactionTypes.Types.Transfer);
+            var ttx = (TransferTransaction)tx;
+            Assert.AreEqual(HASH, ttx.TransactionInfo.Hash);
+            Assert.AreEqual(ttx.Message.GetMessageType(), MessageType.Type.ENCRYPTED);
+            SecureMessage smsg = (SecureMessage)ttx.Message;
+            //Assert.AreEqual("Decrypted message", smsg.GetDecodedPayload("PRIVATE KEY", PUBKEYMESS));
+        }
+
     }
 }

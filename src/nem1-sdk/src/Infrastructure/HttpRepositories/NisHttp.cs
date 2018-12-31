@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using io.nem1.sdk.Infrastructure.Imported.Api;
-using io.nem1.sdk.Model.Nis;
+using io.nem1.sdk.Model.Network;
 
 namespace io.nem1.sdk.Infrastructure.HttpRepositories
 {

@@ -3,11 +3,9 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using io.nem1.sdk.Infrastructure.HttpRepositories;
 using io.nem1.sdk.Model.Accounts;
-using io.nem1.sdk.Model.Blockchain;
-using io.nem1.sdk.Model.Mosaics;
 using io.nem1.sdk.Model.Network;
-using io.nem1.sdk.Model.Network.Messages;
-using IntegrationTest;
+using io.nem1.sdk.Model.Transactions.Messages;
+using io.nem1.sdk.Model.Mosaics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using io.nem1.sdk.Model.Transactions;
 

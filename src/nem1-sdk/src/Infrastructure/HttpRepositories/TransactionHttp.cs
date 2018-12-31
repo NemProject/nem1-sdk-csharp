@@ -24,9 +24,10 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using io.nem1.sdk.Infrastructure.Imported.Api;
-using io.nem1.sdk.Model.Network;
+using io.nem1.sdk.Infrastructure.Mapping;
 using io.nem1.sdk.Model.Transactions;
 
 namespace io.nem1.sdk.Infrastructure.HttpRepositories
@@ -37,8 +38,8 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
     /// <seealso cref="HttpRouter" />
     /// <seealso cref="ITransactionRepository" />
     /// <inheritdoc />
-    /// <seealso cref="T:io.nem1.sdk.Infrastructure.HttpRepositories.HttpRouter" />
-    /// <seealso cref="T:io.nem1.sdk.Infrastructure.HttpRepositories.ITransactionRepository" />
+    /// <seealso cref="HttpRouter" />
+    /// <seealso cref="ITransactionRepository" />
     public class TransactionHttp : HttpRouter, ITransactionRepository
     {
         /// <summary>
@@ -98,6 +99,26 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
             if (signedTransaction == null) throw new ArgumentNullException(nameof(signedTransaction));
 
             return Observable.FromAsync(async ar => await TransactionRoutesApi.SendTransactionAsync(signedTransaction.TransactionPacket));
+        }
+
+        /// <summary>
+        /// Get a transaction.
+        /// </summary>
+        /// <param name="hash">The hash for the transaction to be returned.</param>
+        /// <returns>An <see cref="IObservable"/> <see cref="Transaction"/>.</returns>
+        /// <exception cref="ArgumentNullException">account
+        /// or
+        /// query</exception>
+        /// <example> 
+        /// This sample shows how to use the <see><cref>Transaction</cref></see>method. 
+        /// <code>00
+        /// var transactionHttp = new TransactionHttp("<!--insert host like: http://0.0.0.0:7890-->");
+        /// var transaction = await TransactionHttp().GetTransaction("hash");
+        /// </code>
+        /// </example>
+        public IObservable<Transaction> GetTransaction(string hash)
+        {
+            return Observable.FromAsync(async ar => await TransactionRoutesApi.GetTransactionAsync(hash));
         }
 
     }
