@@ -154,9 +154,10 @@ namespace io.nem1.sdk.Infrastructure.Imported.Api
         {
              ApiResponse<string> localVarResponse = await SendTransactionAsyncWithHttpInfo(body);
              var data = JObject.Parse(localVarResponse.Data);
-             return new TransactionResponse(int.Parse(data["type"].ToString()),
+
+             return new TransactionResponse(
                  int.Parse(data["type"].ToString()),
-                 data["code"].ToString(),
+                 int.Parse(data["code"].ToString()),
                  data["message"].ToString(),
                  data["transactionHash"]["data"].ToString(),
                  data["innerTransactionHash"]?["data"]?.ToString());
