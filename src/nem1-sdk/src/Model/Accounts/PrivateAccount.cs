@@ -67,7 +67,7 @@ namespace io.nem1.sdk.Model.Accounts
         public PrivateAccount(Address address, KeyPair keyPair)
         {
             KeyPair = keyPair;
-            _PublicAccount = new PublicAccount(keyPair.PublicKeyString, address.Networktype());
+            _PublicAccount = new PublicAccount(keyPair.PublicKeyString, address.GetNetworktype());
         }
 
         /// <summary>

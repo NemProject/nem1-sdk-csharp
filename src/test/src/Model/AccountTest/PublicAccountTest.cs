@@ -55,7 +55,7 @@ namespace Tests.Model.AccountTest
             var publicAccount2 = new PublicAccount(publicKey, NetworkType.Types.MAIN_NET);
             Assert.AreNotEqual(publicAccount.Address.Plain, publicAccount2.Address.Plain);
             Assert.AreNotEqual(publicAccount.Address.Pretty, publicAccount2.Address.Pretty);
-            Assert.AreNotEqual(publicAccount.Address.Networktype(), publicAccount2.Address.Networktype());
+            Assert.AreNotEqual(publicAccount.Address.GetNetworktype(), publicAccount2.Address.GetNetworktype());
         }
     }
 }

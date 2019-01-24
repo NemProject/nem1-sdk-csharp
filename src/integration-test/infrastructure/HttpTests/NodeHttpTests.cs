@@ -52,77 +52,79 @@ namespace IntegrationTest.infrastructure.HttpTests
 
         private void AssertNodeInfo(NodeInfo nodeInfo)
         {
-            if (nodeInfo.Host == "37.61.200.170")
+            const string PROTOCOL = "http";
+            const string PORT = "7890";
+
+            switch (nodeInfo.Host)
             {
-                Assert.AreEqual(1, nodeInfo.Features);
-                Assert.AreEqual("", nodeInfo.Application);
-                Assert.AreEqual("TCSTORZFCDEPBSHVG3IYJB2YBQR2CPJXESSISB5N", nodeInfo.Name);
-                Assert.AreEqual(NetworkType.Types.TEST_NET, nodeInfo.Networktype);
-                Assert.AreEqual("Oracle Corporation (1.8.0_161) on Windows Server 2012 R2", nodeInfo.Platform);
-                Assert.AreEqual("7890", nodeInfo.Port);
-                Assert.AreEqual("http", nodeInfo.Protocol);
-                Assert.AreEqual("e927d00de512e9de70097b31752a65b54deab3fff51b891a1efedb8af0320525", nodeInfo.PublicKey);
-                Assert.AreEqual("0.6.93-BETA", nodeInfo.Version);
-            }
-            else if (nodeInfo.Host == "188.68.50.161")
-            {
-                Assert.AreEqual(1, nodeInfo.Features);
-                Assert.AreEqual("", nodeInfo.Application);
-                Assert.AreEqual("TA6TEX5NDFXIJGKPDY64RLWA5TXUZ4NPORVJZIF5", nodeInfo.Name);
-                Assert.AreEqual(NetworkType.Types.TEST_NET, nodeInfo.Networktype);
-                Assert.AreEqual("Oracle Corporation (1.8.0_121) on Linux", nodeInfo.Platform);
-                Assert.AreEqual("7890", nodeInfo.Port);
-                Assert.AreEqual("http", nodeInfo.Protocol);
-                Assert.AreEqual("40515e7039dde3336134c8826be921a6e419b18b1a6c9bee27d90ac2aca90dd2", nodeInfo.PublicKey);
-                Assert.AreEqual("0.6.93-BETA", nodeInfo.Version);
-            }
-            else if (nodeInfo.Host == "80.93.182.146")
-            {
-                Assert.AreEqual(1, nodeInfo.Features);
-                Assert.AreEqual("", nodeInfo.Application);
-                Assert.AreEqual("hxr.team", nodeInfo.Name);
-                Assert.AreEqual(NetworkType.Types.TEST_NET, nodeInfo.Networktype);
-                Assert.AreEqual("Oracle Corporation (1.8.0_144) on Linux", nodeInfo.Platform);
-                Assert.AreEqual("7890", nodeInfo.Port);
-                Assert.AreEqual("http", nodeInfo.Protocol);
-                Assert.AreEqual("1e412cb4dda9d33cafaa0c8b575e8d073824b0b7a3073c98d1f17314a357350a", nodeInfo.PublicKey);
-                Assert.AreEqual("0.6.95-BETA", nodeInfo.Version);
-            }
-            else if (nodeInfo.Host == "117.52.172.103")
-            {
-                Assert.AreEqual(1, nodeInfo.Features);
-                Assert.AreEqual("", nodeInfo.Application);
-                Assert.AreEqual("TATOG2NMBV56ZXBI6F2W34253AMXHLKOZCXLU6LB", nodeInfo.Name);
-                Assert.AreEqual(NetworkType.Types.TEST_NET, nodeInfo.Networktype);
-                Assert.AreEqual("Oracle Corporation (1.8.0_162) on Linux", nodeInfo.Platform);
-                Assert.AreEqual("7890", nodeInfo.Port);
-                Assert.AreEqual("http", nodeInfo.Protocol);
-                Assert.AreEqual("2ed4ff1855b49060a5a293391ac68a87ed03b3d391dd66c6692f2d0dcd42c968", nodeInfo.PublicKey);
-                Assert.AreEqual("0.6.95-BETA", nodeInfo.Version);
-            }
-            else if (nodeInfo.Host == "104.128.226.60")
-            {
-                Assert.IsTrue(0 <= nodeInfo.Features);
-                Assert.AreEqual("", nodeInfo.Application);
-                Assert.IsTrue("bigalice2" == nodeInfo.Name || "Hi, I am BigAlice2" == nodeInfo.Name);
-                Assert.IsTrue(NetworkType.Types.UNDETERMINED_NET == nodeInfo.Networktype || NetworkType.Types.TEST_NET == nodeInfo.Networktype);
-                Assert.IsTrue("" == nodeInfo.Platform || "Oracle Corporation (1.8.0_40) on Linux" == nodeInfo.Platform);
-                Assert.AreEqual("7890", nodeInfo.Port);
-                Assert.AreEqual("http", nodeInfo.Protocol);
-                Assert.AreEqual("147eb3e4fccb655c03f4b6b12fc145f6a740c9334a8f3c59131dffd1fd42a996", nodeInfo.PublicKey);
-                Assert.IsTrue("0.0.0" == nodeInfo.Version || "0.6.95-BETA" == nodeInfo.Version);
-            }
-            else if (nodeInfo.Host == "110.134.77.58")
-            {
-                Assert.AreEqual(1, nodeInfo.Features);
-                Assert.AreEqual("", nodeInfo.Application);
-                Assert.AreEqual("planethouki.ddns.net", nodeInfo.Name);
-                Assert.AreEqual(NetworkType.Types.TEST_NET, nodeInfo.Networktype);
-                Assert.AreEqual("Oracle Corporation (1.8.0_144) on Linux", nodeInfo.Platform);
-                Assert.AreEqual("7890", nodeInfo.Port);
-                Assert.AreEqual("http", nodeInfo.Protocol);
-                Assert.AreEqual("127e7db84be0d297cb03e856e3923bc5ea61a385c2dd4ec41f157dcc877d01af", nodeInfo.PublicKey);
-                Assert.AreEqual("0.6.96-BETA", nodeInfo.Version);
+                case "37.61.200.170":
+                    Assert.AreEqual(1, nodeInfo.Features);
+                    Assert.AreEqual("", nodeInfo.Application);
+                    Assert.AreEqual("TCSTORZFCDEPBSHVG3IYJB2YBQR2CPJXESSISB5N", nodeInfo.Name);
+                    Assert.AreEqual(NetworkType.Types.TEST_NET, nodeInfo.Networktype);
+                    Assert.AreEqual("Oracle Corporation (1.8.0_161) on Windows Server 2012 R2", nodeInfo.Platform);
+                    Assert.AreEqual(PORT, nodeInfo.Port);
+                    Assert.AreEqual(PROTOCOL, nodeInfo.Protocol);
+                    Assert.AreEqual("e927d00de512e9de70097b31752a65b54deab3fff51b891a1efedb8af0320525", nodeInfo.PublicKey);
+                    Assert.AreEqual("0.6.93-BETA", nodeInfo.Version);
+                    break;
+                case "188.68.50.161":
+                    Assert.AreEqual(1, nodeInfo.Features);
+                    Assert.AreEqual("", nodeInfo.Application);
+                    Assert.AreEqual("Pretestnet2", nodeInfo.Name);
+                    Assert.AreEqual(NetworkType.Types.TEST_NET, nodeInfo.Networktype);
+                    Assert.AreEqual("Oracle Corporation (1.8.0_121) on Linux", nodeInfo.Platform);
+                    Assert.AreEqual(PORT, nodeInfo.Port);
+                    Assert.AreEqual(PROTOCOL, nodeInfo.Protocol);
+                    Assert.AreEqual("40515e7039dde3336134c8826be921a6e419b18b1a6c9bee27d90ac2aca90dd2", nodeInfo.PublicKey);
+                    Assert.AreEqual("0.6.93-BETA", nodeInfo.Version);
+                    break;
+                case "80.93.182.146":
+                    Assert.AreEqual(1, nodeInfo.Features);
+                    Assert.AreEqual("", nodeInfo.Application);
+                    Assert.AreEqual("hxr.team", nodeInfo.Name);
+                    Assert.AreEqual(NetworkType.Types.TEST_NET, nodeInfo.Networktype);
+                    Assert.AreEqual("Oracle Corporation (1.8.0_144) on Linux", nodeInfo.Platform);
+                    Assert.AreEqual(PORT, nodeInfo.Port);
+                    Assert.AreEqual(PROTOCOL, nodeInfo.Protocol);
+                    Assert.AreEqual("1e412cb4dda9d33cafaa0c8b575e8d073824b0b7a3073c98d1f17314a357350a", nodeInfo.PublicKey);
+                    Assert.AreEqual("0.6.95-BETA", nodeInfo.Version);
+                    break;
+                case "117.52.172.103":
+                    Assert.AreEqual(1, nodeInfo.Features);
+                    Assert.AreEqual("", nodeInfo.Application);
+                    Assert.AreEqual("TATOG2NMBV56ZXBI6F2W34253AMXHLKOZCXLU6LB", nodeInfo.Name);
+                    Assert.AreEqual(NetworkType.Types.TEST_NET, nodeInfo.Networktype);
+                    Assert.AreEqual("Oracle Corporation (1.8.0_162) on Linux", nodeInfo.Platform);
+                    Assert.AreEqual(PORT, nodeInfo.Port);
+                    Assert.AreEqual(PROTOCOL, nodeInfo.Protocol);
+                    Assert.AreEqual("2ed4ff1855b49060a5a293391ac68a87ed03b3d391dd66c6692f2d0dcd42c968", nodeInfo.PublicKey);
+                    Assert.AreEqual("0.6.95-BETA", nodeInfo.Version);
+                    break;
+                case "104.128.226.60":
+                    Assert.IsTrue(0 <= nodeInfo.Features);
+                    Assert.AreEqual("", nodeInfo.Application);
+                    Assert.IsTrue("bigalice2" == nodeInfo.Name || "Hi, I am BigAlice2" == nodeInfo.Name);
+                    Assert.IsTrue(NetworkType.Types.UNDETERMINED_NET == nodeInfo.Networktype || NetworkType.Types.TEST_NET == nodeInfo.Networktype);
+                    Assert.IsTrue("" == nodeInfo.Platform || "Oracle Corporation (1.8.0_40) on Linux" == nodeInfo.Platform);
+                    Assert.AreEqual(PORT, nodeInfo.Port);
+                    Assert.AreEqual(PROTOCOL, nodeInfo.Protocol);
+                    Assert.AreEqual("147eb3e4fccb655c03f4b6b12fc145f6a740c9334a8f3c59131dffd1fd42a996", nodeInfo.PublicKey);
+                    Assert.IsTrue("0.0.0" == nodeInfo.Version || "0.6.95-BETA" == nodeInfo.Version);
+                    break;
+                case "110.134.77.58":
+                    Assert.AreEqual(1, nodeInfo.Features);
+                    Assert.AreEqual("", nodeInfo.Application);
+                    Assert.AreEqual("planethouki.ddns.net", nodeInfo.Name);
+                    Assert.AreEqual(NetworkType.Types.TEST_NET, nodeInfo.Networktype);
+                    Assert.AreEqual("Oracle Corporation (1.8.0_144) on Linux", nodeInfo.Platform);
+                    Assert.AreEqual(PORT, nodeInfo.Port);
+                    Assert.AreEqual(PROTOCOL, nodeInfo.Protocol);
+                    Assert.AreEqual("127e7db84be0d297cb03e856e3923bc5ea61a385c2dd4ec41f157dcc877d01af", nodeInfo.PublicKey);
+                    Assert.AreEqual("0.6.96-BETA", nodeInfo.Version);
+                    break;
+                default:
+                    break;
             }
         }
     }

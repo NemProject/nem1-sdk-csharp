@@ -101,7 +101,6 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// <summary>
         /// Gets newest root namespaces registered.
         /// </summary>
-        /// <param name="nameSpace">The name space.</param>
         /// <returns>An IObservable List of NamespaceRootInfo.</returns>
         ///  <example> 
         /// This sample shows how to use the <see>
@@ -109,7 +108,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         ///     </see>
         ///     method. 
         /// <code>
-        /// List&lt;NamespaceRootInfo&gt; namespaceInfo = await new NamespaceMosaicHttp("<!--insert host like: http://0.0.0.0:7890-->").NamespaceInfo("test");
+        /// List&lt;NamespaceRootInfo&gt; namespaceInfo = await new NamespaceMosaicHttp("<!--insert host like: http://0.0.0.0:7890-->").NamespaceRootInfoPage();
         /// </code>
         /// </example>
         public IObservable<List<NamespaceRootInfo>> NamespaceRootInfoPage()

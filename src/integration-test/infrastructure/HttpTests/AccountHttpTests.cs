@@ -104,112 +104,112 @@ namespace IntegrationTest.infrastructure.HttpTests
             switch (acctInfo.PublicKey)
             {
             case PUBKEY:
-                AssertAcct(acctInfo);
-                Assert.AreEqual(acctInfo.Status, AccountInfo.StatusValue.LOCKED);
-                Assert.AreEqual(acctInfo.RemoteStatus, AccountInfo.RemoteStatusValue.INACTIVE);
-                Assert.AreEqual(acctInfo.MinCosigners, 0);
+                AssertCosigAcctInfo(acctInfo);
+                Assert.AreEqual(AccountInfo.StatusValue.LOCKED, acctInfo.Status);
+                Assert.AreEqual(AccountInfo.RemoteStatusValue.INACTIVE, acctInfo.RemoteStatus);
+                Assert.AreEqual(0, acctInfo.MinCosigners);
                 Assert.IsNotNull(acctInfo.Cosigners);
-                Assert.AreEqual(acctInfo.Cosigners.Count, 0);
-                Assert.IsNotNull(acctInfo.CosginatoryOf);
-                Assert.AreEqual(acctInfo.CosginatoryOf.Count, 0);
+                Assert.AreEqual(0, acctInfo.Cosigners.Count);
+                Assert.IsNotNull(acctInfo.CosignatoryOf);
+                Assert.AreEqual(0, acctInfo.CosignatoryOf.Count);
                 break;
             case PUBKEYMS:
-                AssertAcct(acctInfo);
-                Assert.AreEqual(acctInfo.Status, AccountInfo.StatusValue.LOCKED);
-                Assert.AreEqual(acctInfo.RemoteStatus, AccountInfo.RemoteStatusValue.ACTIVE);
-                Assert.AreEqual(acctInfo.MinCosigners, 2);
+                AssertCosigAcctInfo(acctInfo);
+                Assert.AreEqual(AccountInfo.StatusValue.LOCKED, acctInfo.Status);
+                Assert.AreEqual(AccountInfo.RemoteStatusValue.ACTIVE, acctInfo.RemoteStatus);
+                Assert.AreEqual(2, acctInfo.MinCosigners);
                 Assert.IsNotNull(acctInfo.Cosigners);
-                Assert.AreEqual(acctInfo.Cosigners.Count, 2);
-                AssertAcct(acctInfo.Cosigners[0]);
-                AssertAcct(acctInfo.Cosigners[1]);
-                Assert.IsNotNull(acctInfo.CosginatoryOf);
-                Assert.AreEqual(acctInfo.CosginatoryOf.Count, 0);
+                Assert.AreEqual(2, acctInfo.Cosigners.Count);
+                AssertCosigAcctInfo(acctInfo.Cosigners[0]);
+                AssertCosigAcctInfo(acctInfo.Cosigners[1]);
+                Assert.IsNotNull(acctInfo.CosignatoryOf);
+                Assert.AreEqual(0, acctInfo.CosignatoryOf.Count);
                 break;
             case PUBKEYCS1:
-                AssertAcct(acctInfo);
-                Assert.AreEqual(acctInfo.Status, AccountInfo.StatusValue.LOCKED);
-                Assert.AreEqual(acctInfo.RemoteStatus, AccountInfo.RemoteStatusValue.INACTIVE);
-                Assert.AreEqual(acctInfo.MinCosigners, 0);
+                AssertCosigAcctInfo(acctInfo);
+                Assert.AreEqual(AccountInfo.StatusValue.LOCKED, acctInfo.Status);
+                Assert.AreEqual(AccountInfo.RemoteStatusValue.INACTIVE, acctInfo.RemoteStatus);
+                Assert.AreEqual(0, acctInfo.MinCosigners);
                 Assert.IsNotNull(acctInfo.Cosigners);
-                Assert.AreEqual(acctInfo.Cosigners.Count, 0);
-                Assert.IsNotNull(acctInfo.CosginatoryOf);
-                Assert.AreEqual(acctInfo.CosginatoryOf.Count, 1);
-                AssertAcct(acctInfo.CosginatoryOf[0]);
+                Assert.AreEqual(0, acctInfo.Cosigners.Count);
+                Assert.IsNotNull(acctInfo.CosignatoryOf);
+                Assert.AreEqual(1, acctInfo.CosignatoryOf.Count);
+                AssertCosigAcctInfo(acctInfo.CosignatoryOf[0]);
                 break;
             case PUBKEYCS2:
-                AssertAcct(acctInfo);
-                Assert.AreEqual(acctInfo.Status, AccountInfo.StatusValue.LOCKED);
-                Assert.AreEqual(acctInfo.RemoteStatus, AccountInfo.RemoteStatusValue.INACTIVE);
-                Assert.AreEqual(acctInfo.MinCosigners, 0);
+                AssertCosigAcctInfo(acctInfo);
+                Assert.AreEqual(AccountInfo.StatusValue.LOCKED, acctInfo.Status);
+                Assert.AreEqual(AccountInfo.RemoteStatusValue.INACTIVE, acctInfo.RemoteStatus);
+                Assert.AreEqual(0, acctInfo.MinCosigners);
                 Assert.IsNotNull(acctInfo.Cosigners);
-                Assert.AreEqual(acctInfo.Cosigners.Count, 0);
-                Assert.IsNotNull(acctInfo.CosginatoryOf);
-                Assert.AreEqual(acctInfo.CosginatoryOf.Count, 1);
-                AssertAcct(acctInfo.CosginatoryOf[0]);
+                Assert.AreEqual(0, acctInfo.Cosigners.Count);
+                Assert.IsNotNull(acctInfo.CosignatoryOf);
+                Assert.AreEqual(1, acctInfo.CosignatoryOf.Count);
+                AssertCosigAcctInfo(acctInfo.CosignatoryOf[0]);
                 break;
             case PUBKEYCSA:
-                AssertAcct(acctInfo);
-                Assert.AreEqual(acctInfo.Status, AccountInfo.StatusValue.LOCKED);
-                Assert.AreEqual(acctInfo.RemoteStatus, AccountInfo.RemoteStatusValue.INACTIVE);
-                Assert.AreEqual(acctInfo.MinCosigners, 0);
+                AssertCosigAcctInfo(acctInfo);
+                Assert.AreEqual(AccountInfo.StatusValue.LOCKED, acctInfo.Status);
+                Assert.AreEqual(AccountInfo.RemoteStatusValue.INACTIVE, acctInfo.RemoteStatus);
+                Assert.AreEqual(0, acctInfo.MinCosigners);
                 Assert.IsNotNull(acctInfo.Cosigners);
-                Assert.AreEqual(acctInfo.Cosigners.Count, 0);
-                Assert.IsNotNull(acctInfo.CosginatoryOf);
-                Assert.AreEqual(acctInfo.CosginatoryOf.Count, 0);
+                Assert.AreEqual(0, acctInfo.Cosigners.Count);
+                Assert.IsNotNull(acctInfo.CosignatoryOf);
+                Assert.AreEqual(0, acctInfo.CosignatoryOf.Count);
                 break;
             default:
                 throw new Exception("AssertAcctInfo: Unsupported Public Key");
             }
         }
 
-        private void AssertAcct(AccountInfo acct)
+        private void AssertCosigAcctInfo(AccountInfo cosigAcctInfo)
         {
-            switch (acct.PublicKey)
+            switch (cosigAcctInfo.PublicKey)
             {
             case PUBKEY:
-                Assert.AreEqual(acct.Address.Networktype(), NetworkType.Types.TEST_NET);
-                Assert.AreEqual(acct.Address.Plain, PLAIN);
-                Assert.AreEqual(acct.Address.Pretty, PRETTY);
-                Assert.AreNotEqual(acct.Balance, (ulong)0);
-                Assert.AreNotEqual(acct.VestedBalance, (ulong)0);
-                Assert.AreEqual(acct.Importance, (ulong)0);
-                Assert.AreEqual(acct.HarvestedBlocks, (ulong)0);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, cosigAcctInfo.Address.GetNetworktype());
+                Assert.AreEqual(PLAIN, cosigAcctInfo.Address.Plain);
+                Assert.AreEqual(PRETTY, cosigAcctInfo.Address.Pretty);
+                Assert.AreNotEqual((ulong)0, cosigAcctInfo.Balance);
+                Assert.AreNotEqual((ulong)0, cosigAcctInfo.VestedBalance);
+                Assert.AreEqual((ulong)0, cosigAcctInfo.Importance);
+                Assert.AreEqual((ulong)0, cosigAcctInfo.HarvestedBlocks);
                 break;
             case PUBKEYMS:
-                Assert.AreEqual(NetworkType.Types.TEST_NET, acct.Address.Networktype());
-                Assert.AreEqual(acct.Address.Plain, PLAINMS);
-                Assert.AreEqual(acct.Address.Pretty, PRETTYMS);
-                Assert.IsTrue(acct.Balance > (ulong)1000000);
-                Assert.IsTrue(acct.VestedBalance > (ulong)1000000);
-                Assert.AreEqual(acct.Importance, (ulong)0);
-                Assert.AreEqual(acct.HarvestedBlocks, (ulong)0);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, cosigAcctInfo.Address.GetNetworktype());
+                Assert.AreEqual(PLAINMS, cosigAcctInfo.Address.Plain);
+                Assert.AreEqual(PRETTYMS, cosigAcctInfo.Address.Pretty);
+                Assert.IsTrue(cosigAcctInfo.Balance > (ulong)1000000);
+                Assert.IsTrue(cosigAcctInfo.VestedBalance > (ulong)1000000);
+                Assert.AreEqual((ulong)0, cosigAcctInfo.Importance);
+                Assert.AreEqual((ulong)0, cosigAcctInfo.HarvestedBlocks);
                 break;
             case PUBKEYCS1:
-                Assert.AreEqual(NetworkType.Types.TEST_NET, acct.Address.Networktype());
-                Assert.AreEqual(PLAINCS1, acct.Address.Plain);
-                Assert.AreEqual(PRETTYCS1, acct.Address.Pretty);
-                Assert.IsTrue(acct.Balance > (ulong)1000000);
-                Assert.IsTrue(acct.VestedBalance > (ulong)1000000);
-                Assert.AreEqual(acct.Importance, (ulong)0);
-                Assert.AreEqual(acct.HarvestedBlocks, (ulong)0);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, cosigAcctInfo.Address.GetNetworktype());
+                Assert.AreEqual(PLAINCS1, cosigAcctInfo.Address.Plain);
+                Assert.AreEqual(PRETTYCS1, cosigAcctInfo.Address.Pretty);
+                Assert.IsTrue(cosigAcctInfo.Balance > (ulong)1000000);
+                Assert.IsTrue(cosigAcctInfo.VestedBalance > (ulong)1000000);
+                Assert.AreEqual((ulong)0, cosigAcctInfo.Importance);
+                Assert.AreEqual((ulong)0, cosigAcctInfo.HarvestedBlocks);
                 break;
             case PUBKEYCS2:
-                Assert.AreEqual(NetworkType.Types.TEST_NET, acct.Address.Networktype());
-                Assert.AreEqual(PLAINCS2, acct.Address.Plain);
-                Assert.AreEqual(PRETTYCS2, acct.Address.Pretty);
-                Assert.IsTrue(acct.Balance >= (ulong)900000);
-                Assert.IsTrue(acct.VestedBalance >= (ulong)900000);
-                Assert.AreEqual(acct.Importance, (ulong)0);
-                Assert.AreEqual(acct.HarvestedBlocks, (ulong)0);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, cosigAcctInfo.Address.GetNetworktype());
+                Assert.AreEqual(PLAINCS2, cosigAcctInfo.Address.Plain);
+                Assert.AreEqual(PRETTYCS2, cosigAcctInfo.Address.Pretty);
+                Assert.IsTrue(cosigAcctInfo.Balance >= (ulong)900000);
+                Assert.IsTrue(cosigAcctInfo.VestedBalance >= (ulong)900000);
+                Assert.AreEqual((ulong)0, cosigAcctInfo.Importance);
+                Assert.AreEqual((ulong)0, cosigAcctInfo.HarvestedBlocks);
                 break;
             case PUBKEYCSA:
-                Assert.AreEqual(NetworkType.Types.TEST_NET, acct.Address.Networktype());
-                Assert.AreEqual(PLAINCSA, acct.Address.Plain);
-                Assert.AreEqual(PRETTYCSA, acct.Address.Pretty);
-                Assert.IsTrue(acct.Balance >= (ulong)450000);
-                Assert.IsTrue(acct.VestedBalance >= (ulong)450000);
-                Assert.AreEqual(acct.Importance, (ulong)0);
-                Assert.AreEqual(acct.HarvestedBlocks, (ulong)0);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, cosigAcctInfo.Address.GetNetworktype());
+                Assert.AreEqual(PLAINCSA, cosigAcctInfo.Address.Plain);
+                Assert.AreEqual(PRETTYCSA, cosigAcctInfo.Address.Pretty);
+                Assert.IsTrue(cosigAcctInfo.Balance >= (ulong)450000);
+                Assert.IsTrue(cosigAcctInfo.VestedBalance >= (ulong)450000);
+                Assert.AreEqual((ulong)0, cosigAcctInfo.Importance);
+                Assert.AreEqual((ulong)0, cosigAcctInfo.HarvestedBlocks);
                 break;
             default:
                 throw new Exception("AssertAcct: Unsupported Public Key");
@@ -272,214 +272,217 @@ namespace IntegrationTest.infrastructure.HttpTests
             switch (txinfo.Hash)
             {   
             case hashMS1:   // Multisig transaction with Transfer 
-                Assert.AreEqual(txinfo.Height, (ulong)1503213);
-                Assert.AreEqual(txinfo.IsMultisig, true);
+                Assert.AreEqual((ulong)1503213, txinfo.Height);
+                Assert.AreEqual(true, txinfo.IsMultisig);
 
-                Assert.AreEqual(tx.NetworkType, NetworkType.Types.TEST_NET);
-                Assert.AreEqual(tx.Version, 1);
-                Assert.AreEqual(tx.TransactionType, TransactionTypes.Types.Multisig);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, tx.NetworkType);
+                Assert.AreEqual(1, tx.Version);
+                Assert.AreEqual(TransactionTypes.Types.Multisig, tx.TransactionType);
                 Assert.IsTrue(tx.Deadline.TimeStamp >= tx.NetworkTime.TimeStamp);
-                Assert.AreEqual(tx.NetworkTime.TimeStamp, 101132904);
-                Assert.AreEqual(tx.NetworkTime.GetUtcDateTime(), DateTime.Parse("11/06/2018 12:34:49"));
-                Assert.AreEqual(tx.NetworkTime.GetLocalDateTime(), DateTime.Parse("11/06/2018 14:34:49"));
-                Assert.AreEqual(tx.Deadline.TimeStamp, 101136504);
-                Assert.AreEqual(tx.Deadline.GetUtcDateTime(), DateTime.Parse("11/06/2018 13:34:49"));
-                Assert.AreEqual(tx.Deadline.GetLocalDateTime(), DateTime.Parse("11/06/2018 15:34:49"));
-                Assert.AreEqual(tx.Fee, (ulong)150000);    // Multisig Wrapper fee
+                Assert.AreEqual(101132904, tx.NetworkTime.TimeStamp);
+                Assert.AreEqual(DateTime.Parse("11/06/2018 12:34:49"), tx.NetworkTime.GetUtcDateTime());
+                //Assert.AreEqual(DateTime.Parse("11/06/2018 14:34:49"), tx.NetworkTime.GetLocalDateTime());    // result depends on the OS settings of the machine running the tests
+                Assert.AreEqual(101136504, tx.Deadline.TimeStamp);
+                Assert.AreEqual(DateTime.Parse("11/06/2018 13:34:49"), tx.Deadline.GetUtcDateTime());
+                //Assert.AreEqual(DateTime.Parse("11/06/2018 15:34:49"), tx.Deadline.GetLocalDateTime());    // result depends on the OS settings of the machine running the tests
+                Assert.AreEqual((ulong)150000, tx.Fee);    // Multisig Wrapper fee
                 Assert.IsNotNull(tx.Signer);
-                Assert.AreEqual(tx.Signer.PublicKey, PUBKEYCS2);
+                Assert.AreEqual(PUBKEYCS2, tx.Signer.PublicKey);
                 Assert.IsNotNull(tx.Signer.Address);
-                Assert.AreEqual(tx.Signer.Address.Networktype(), NetworkType.Types.TEST_NET);
-                Assert.AreEqual(tx.Signer.Address.Plain, PLAINCS2);
-                Assert.AreEqual(tx.Signer.Address.Pretty, PRETTYCS2);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, tx.Signer.Address.GetNetworktype());
+                Assert.AreEqual(PLAINCS2, tx.Signer.Address.Plain);
+                Assert.AreEqual(PRETTYCS2, tx.Signer.Address.Pretty);
 
                 mstx = (MultisigTransaction)tx;
-                Assert.AreEqual(mstx.Cosignatures.Count, 1);    //Cosignatures gives the Inner cosigning transaction List
+                Assert.IsNotNull(mstx.Cosignatures);
+                Assert.AreEqual(1, mstx.Cosignatures.Count);    //Cosignatures gives the Inner cosigning transaction List
                 cstx = mstx.Cosignatures[0];
                 Assert.IsNull(cstx.TransactionInfo);
-                Assert.AreEqual(cstx.NetworkType, NetworkType.Types.TEST_NET);
-                Assert.AreEqual(cstx.Version, 1);
-                Assert.AreEqual(cstx.TransactionType, TransactionTypes.Types.SignatureTransaction);
-                Assert.AreEqual(cstx.NetworkTime.TimeStamp, 101133019);
-                Assert.AreEqual(cstx.NetworkTime.GetUtcDateTime(), DateTime.Parse("11/06/2018 12:36:44"));
-                Assert.AreEqual(cstx.NetworkTime.GetLocalDateTime(), DateTime.Parse("11/06/2018 14:36:44"));
-                Assert.AreEqual(cstx.Deadline.TimeStamp, 101136619);
-                Assert.AreEqual(cstx.Deadline.GetUtcDateTime(), DateTime.Parse("11/06/2018 13:36:44"));
-                Assert.AreEqual(cstx.Deadline.GetLocalDateTime(), DateTime.Parse("11/06/2018 15:36:44"));
-                Assert.AreEqual(cstx.Fee, (ulong)150000);   // Cosingning transaction fee
+                Assert.AreEqual(NetworkType.Types.TEST_NET, cstx.NetworkType);
+                Assert.AreEqual(1, cstx.Version);
+                Assert.AreEqual(TransactionTypes.Types.SignatureTransaction, cstx.TransactionType);
+                Assert.AreEqual(101133019, cstx.NetworkTime.TimeStamp);
+                Assert.AreEqual(DateTime.Parse("11/06/2018 12:36:44"), cstx.NetworkTime.GetUtcDateTime());
+                //Assert.AreEqual(DateTime.Parse("11/06/2018 14:36:44"), cstx.NetworkTime.GetLocalDateTime());    // result depends on the OS settings of the machine running the tests
+                Assert.AreEqual(101136619, cstx.Deadline.TimeStamp);
+                Assert.AreEqual(DateTime.Parse("11/06/2018 13:36:44"), cstx.Deadline.GetUtcDateTime());
+                //Assert.AreEqual(DateTime.Parse("11/06/2018 15:36:44"), cstx.Deadline.GetLocalDateTime());    // result depends on the OS settings of the machine running the tests
+                Assert.AreEqual((ulong)150000, cstx.Fee);   // Cosingning transaction fee
                 Assert.IsNotNull(cstx.Signer);
-                Assert.AreEqual(cstx.Signer.PublicKey, PUBKEYCSA);
+                Assert.AreEqual(PUBKEYCSA, cstx.Signer.PublicKey);
                 Assert.IsNotNull(cstx.Signer.Address);
-                Assert.AreEqual(cstx.Signer.Address.Networktype(), NetworkType.Types.TEST_NET);
-                Assert.AreEqual(cstx.Signer.Address.Plain, PLAINCSA);
-                Assert.AreEqual(cstx.Signer.Address.Pretty, PRETTYCSA);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, cstx.Signer.Address.GetNetworktype());
+                Assert.AreEqual(PLAINCSA, cstx.Signer.Address.Plain);
+                Assert.AreEqual(PRETTYCSA, cstx.Signer.Address.Pretty);
                 Assert.IsNotNull(cstx.MultisigAddress);
-                Assert.AreEqual(cstx.MultisigAddress.Networktype(), NetworkType.Types.TEST_NET);
-                Assert.AreEqual(cstx.MultisigAddress.Plain, PLAINMS);
-                Assert.AreEqual(cstx.MultisigAddress.Pretty, PRETTYMS);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, cstx.MultisigAddress.GetNetworktype());
+                Assert.AreEqual(PLAINMS, cstx.MultisigAddress.Plain);
+                Assert.AreEqual(PRETTYMS, cstx.MultisigAddress.Pretty);
 
                 itx = mstx.InnerTransaction;
                 Assert.IsNotNull(itx);
                 Assert.IsNull(itx.TransactionInfo);
-                Assert.AreEqual(itx.NetworkType, NetworkType.Types.TEST_NET);
-                Assert.AreEqual(itx.Version, 2);
-                Assert.AreEqual(itx.TransactionType, TransactionTypes.Types.Transfer);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, itx.NetworkType);
+                Assert.AreEqual(2, itx.Version);
+                Assert.AreEqual(TransactionTypes.Types.Transfer, itx.TransactionType);
                 ttx = (TransferTransaction)itx;
-                Assert.AreEqual(ttx.NetworkTime.TimeStamp, 101132904);
-                Assert.AreEqual(ttx.NetworkTime.GetUtcDateTime(), DateTime.Parse("11/06/2018 12:34:49"));
-                Assert.AreEqual(ttx.NetworkTime.GetLocalDateTime(), DateTime.Parse("11/06/2018 14:34:49"));
-                Assert.AreEqual(ttx.Deadline.TimeStamp, 101136504);
-                Assert.AreEqual(ttx.Deadline.GetUtcDateTime(), DateTime.Parse("11/06/2018 13:34:49"));
-                Assert.AreEqual(ttx.Deadline.GetLocalDateTime(), DateTime.Parse("11/06/2018 15:34:49"));
-                Assert.AreEqual(ttx.Fee, (ulong)50000); // Transfer transaction fee
+                Assert.AreEqual(101132904, ttx.NetworkTime.TimeStamp);
+                Assert.AreEqual(DateTime.Parse("11/06/2018 12:34:49"), ttx.NetworkTime.GetUtcDateTime());
+                //Assert.AreEqual(DateTime.Parse("11/06/2018 14:34:49"), ttx.NetworkTime.GetLocalDateTime());    // result depends on the OS settings of the machine running the tests
+                Assert.AreEqual(101136504, ttx.Deadline.TimeStamp);
+                Assert.AreEqual(DateTime.Parse("11/06/2018 13:34:49"), ttx.Deadline.GetUtcDateTime());
+                //Assert.AreEqual(DateTime.Parse("11/06/2018 15:34:49"), ttx.Deadline.GetLocalDateTime());    // result depends on the OS settings of the machine running the tests
+                Assert.AreEqual((ulong)50000, ttx.Fee); // Transfer transaction fee
                 Assert.IsNotNull(ttx.Signer);   // Sender
-                Assert.AreEqual(ttx.Signer.PublicKey, PUBKEYMS);
+                Assert.AreEqual(PUBKEYMS, ttx.Signer.PublicKey);
                 Assert.IsNotNull(ttx.Signer.Address);
-                Assert.AreEqual(ttx.Signer.Address.Networktype(), NetworkType.Types.TEST_NET);
-                Assert.AreEqual(ttx.Signer.Address.Plain, PLAINMS);
-                Assert.AreEqual(ttx.Signer.Address.Pretty, PRETTYMS);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, ttx.Signer.Address.GetNetworktype());
+                Assert.AreEqual(PLAINMS, ttx.Signer.Address.Plain);
+                Assert.AreEqual(PRETTYMS, ttx.Signer.Address.Pretty);
                 Assert.IsNotNull(ttx.Address);  // Recipient
-                Assert.AreEqual(ttx.Address.Networktype(), NetworkType.Types.TEST_NET);
-                Assert.AreEqual(ttx.Address.Plain, PLAINMS);
-                Assert.AreEqual(ttx.Address.Pretty, PRETTYMS);
-                Assert.AreEqual(ttx.Message.GetMessageType(), MessageType.Type.UNENCRYPTED);
-                Assert.AreEqual(ttx.Message.GetLength(), 0);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, ttx.Address.GetNetworktype());
+                Assert.AreEqual(PLAINMS, ttx.Address.Plain);
+                Assert.AreEqual(PRETTYMS, ttx.Address.Pretty);
+                Assert.AreEqual(MessageType.Type.UNENCRYPTED, ttx.Message.GetMessageType());
+                Assert.AreEqual(0, ttx.Message.GetLength());
                 Assert.IsNotNull(ttx.Mosaics);
-                Assert.AreEqual(ttx.Mosaics.Count, 1);
+                Assert.AreEqual(1, ttx.Mosaics.Count);
                 mosaic = ttx.Mosaics[0];
-                Assert.AreEqual(mosaic.NamespaceName, Xem.NamespaceName);
-                Assert.AreEqual(mosaic.MosaicName, Xem.MosaicName);
-                Assert.AreEqual(mosaic.Amount, (ulong)1000);
+                Assert.AreEqual(Xem.NamespaceName, mosaic.NamespaceName);
+                Assert.AreEqual(Xem.MosaicName, mosaic.MosaicName);
+                Assert.AreEqual((ulong)1000, mosaic.Amount);
                 break;
             case hashMS2:   // Multisig Transaction with Transfer
-                const string plainRecipient = "TALIC35ULCU2PFUIHM6J7WKKMSLKPVZKPK36PP4W";   // Recipient Account
-                const string prettyRecipient = "TALIC3-5ULCU2-PFUIHM-6J7WKK-MSLKPV-ZKPK36-PP4W"; 
+                const string RECIPIENT_PLAIN = "TALIC35ULCU2PFUIHM6J7WKKMSLKPVZKPK36PP4W";   // Recipient Account
+                const string RECIPIENT_PRETTY = "TALIC3-5ULCU2-PFUIHM-6J7WKK-MSLKPV-ZKPK36-PP4W"; 
                 Assert.AreEqual((ulong)1515002, txinfo.Height);
                 Assert.AreEqual(true, txinfo.IsMultisig);
 
-                Assert.AreEqual(tx.NetworkType, NetworkType.Types.TEST_NET);
-                Assert.AreEqual(tx.Version, 1);
-                Assert.AreEqual(tx.TransactionType, TransactionTypes.Types.Multisig);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, tx.NetworkType);
+                Assert.AreEqual(1, tx.Version);
+                Assert.AreEqual(TransactionTypes.Types.Multisig, tx.TransactionType);
                 Assert.IsTrue(tx.Deadline.TimeStamp >= tx.NetworkTime.TimeStamp);
-                Assert.AreEqual(tx.NetworkTime.TimeStamp, 101845918);
-                Assert.AreEqual(tx.Deadline.TimeStamp, 101849518);
-                Assert.AreEqual(tx.Fee, (ulong)150000);   // Multisig Wrapper fee
+                Assert.AreEqual(101845918, tx.NetworkTime.TimeStamp);
+                Assert.AreEqual(101849518, tx.Deadline.TimeStamp);
+                Assert.AreEqual((ulong)150000, tx.Fee);   // Multisig Wrapper fee
                 Assert.IsNotNull(tx.Signer);
-                Assert.AreEqual(tx.Signer.PublicKey, PUBKEYCS2);
+                Assert.AreEqual(PUBKEYCS2, tx.Signer.PublicKey);
                 Assert.IsNotNull(tx.Signer.Address);
-                Assert.AreEqual(tx.Signer.Address.Networktype(), NetworkType.Types.TEST_NET);
-                Assert.AreEqual(tx.Signer.Address.Plain, PLAINCS2);
-                Assert.AreEqual(tx.Signer.Address.Pretty, PRETTYCS2);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, tx.Signer.Address.GetNetworktype());
+                Assert.AreEqual(PLAINCS2, tx.Signer.Address.Plain);
+                Assert.AreEqual(PRETTYCS2, tx.Signer.Address.Pretty);
 
                 mstx = (MultisigTransaction)tx;
-                Assert.AreEqual(mstx.Cosignatures.Count, 1);    //Cosignatures gives the Inner cosigning transaction List
+                Assert.IsNotNull(mstx.Cosignatures);
+                Assert.AreEqual(1, mstx.Cosignatures.Count);    //Cosignatures gives the Inner cosigning transaction List
                 cstx = mstx.Cosignatures[0];
                 Assert.IsNull(cstx.TransactionInfo);
-                Assert.AreEqual(cstx.NetworkType, NetworkType.Types.TEST_NET);
-                Assert.AreEqual(cstx.Version, 1);
-                Assert.AreEqual(cstx.TransactionType, TransactionTypes.Types.SignatureTransaction);
-                Assert.AreEqual(cstx.NetworkTime.TimeStamp, 101845953);
-                Assert.AreEqual(cstx.Deadline.TimeStamp, 101849553);
-                Assert.AreEqual(cstx.Fee, (ulong)150000);   // Cosingning transaction fee
+                Assert.AreEqual(NetworkType.Types.TEST_NET, cstx.NetworkType);
+                Assert.AreEqual(1, cstx.Version);
+                Assert.AreEqual(TransactionTypes.Types.SignatureTransaction, cstx.TransactionType);
+                Assert.AreEqual(101845953, cstx.NetworkTime.TimeStamp);
+                Assert.AreEqual(101849553, cstx.Deadline.TimeStamp);
+                Assert.AreEqual((ulong)150000, cstx.Fee);   // Cosingning transaction fee
                 Assert.IsNotNull(cstx.Signer);
-                Assert.AreEqual(cstx.Signer.PublicKey, PUBKEYCS1);
+                Assert.AreEqual(PUBKEYCS1, cstx.Signer.PublicKey);
                 Assert.IsNotNull(cstx.Signer.Address);
-                Assert.AreEqual(cstx.Signer.Address.Networktype(), NetworkType.Types.TEST_NET);
-                Assert.AreEqual(cstx.Signer.Address.Plain, PLAINCS1);
-                Assert.AreEqual(cstx.Signer.Address.Pretty, PRETTYCS1);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, cstx.Signer.Address.GetNetworktype());
+                Assert.AreEqual(PLAINCS1, cstx.Signer.Address.Plain);
+                Assert.AreEqual(PRETTYCS1, cstx.Signer.Address.Pretty);
                 Assert.IsNotNull(cstx.MultisigAddress);
-                Assert.AreEqual(cstx.MultisigAddress.Networktype(), NetworkType.Types.TEST_NET);
-                Assert.AreEqual(cstx.MultisigAddress.Plain, PLAINMS);
-                Assert.AreEqual(cstx.MultisigAddress.Pretty, PRETTYMS);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, cstx.MultisigAddress.GetNetworktype());
+                Assert.AreEqual(PLAINMS, cstx.MultisigAddress.Plain);
+                Assert.AreEqual(PRETTYMS, cstx.MultisigAddress.Pretty);
 
                 itx = mstx.InnerTransaction;
                 Assert.IsNotNull(itx);
                 Assert.IsNull(itx.TransactionInfo);
-                Assert.AreEqual(itx.NetworkType, NetworkType.Types.TEST_NET);
-                Assert.AreEqual(itx.Version, 1);
-                Assert.AreEqual(itx.TransactionType, TransactionTypes.Types.Transfer);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, itx.NetworkType);
+                Assert.AreEqual(1, itx.Version);
+                Assert.AreEqual(TransactionTypes.Types.Transfer, itx.TransactionType);
                 ttx = (TransferTransaction)mstx.InnerTransaction;
-                Assert.AreEqual(ttx.NetworkTime.TimeStamp, 101845897);
-                Assert.AreEqual(ttx.Deadline.TimeStamp, 101849497);
-                Assert.AreEqual(ttx.Fee, (ulong)50000); // Transfer transaction fee
+                Assert.AreEqual(101845897, ttx.NetworkTime.TimeStamp);
+                Assert.AreEqual(101849497, ttx.Deadline.TimeStamp);
+                Assert.AreEqual((ulong)50000, ttx.Fee); // Transfer transaction fee
                 Assert.IsNotNull(ttx.Signer);
-                Assert.AreEqual(ttx.Signer.PublicKey, PUBKEYMS);
+                Assert.AreEqual(PUBKEYMS, ttx.Signer.PublicKey);
                 Assert.IsNotNull(ttx.Signer.Address);
-                Assert.AreEqual(ttx.Signer.Address.Networktype(), NetworkType.Types.TEST_NET);
-                Assert.AreEqual(ttx.Signer.Address.Plain, PLAINMS);
-                Assert.AreEqual(ttx.Signer.Address.Pretty, PRETTYMS);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, ttx.Signer.Address.GetNetworktype());
+                Assert.AreEqual(PLAINMS, ttx.Signer.Address.Plain);
+                Assert.AreEqual(PRETTYMS, ttx.Signer.Address.Pretty);
                 Assert.IsNotNull(ttx.Address);
-                Assert.AreEqual(ttx.Address.Networktype(), NetworkType.Types.TEST_NET);
-                Assert.AreEqual(ttx.Address.Plain, plainRecipient);
-                Assert.AreEqual(ttx.Address.Pretty, prettyRecipient);
-                Assert.AreEqual(ttx.Message.GetMessageType(), MessageType.Type.UNENCRYPTED);
-                Assert.AreEqual(ttx.Message.GetLength(), 0);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, ttx.Address.GetNetworktype());
+                Assert.AreEqual(RECIPIENT_PLAIN, ttx.Address.Plain);
+                Assert.AreEqual(RECIPIENT_PRETTY, ttx.Address.Pretty);
+                Assert.AreEqual(MessageType.Type.UNENCRYPTED, ttx.Message.GetMessageType());
+                Assert.AreEqual(0, ttx.Message.GetLength());
                 Assert.IsNotNull(ttx.Mosaics);
-                Assert.AreEqual(ttx.Mosaics.Count, 1);
+                Assert.AreEqual(1, ttx.Mosaics.Count);
                 mosaic = ttx.Mosaics[0];
-                Assert.AreEqual(mosaic.NamespaceName, Xem.NamespaceName);
-                Assert.AreEqual(mosaic.MosaicName, Xem.MosaicName);
-                Assert.AreEqual(mosaic.Amount, (ulong)1000000);
+                Assert.AreEqual(Xem.NamespaceName, mosaic.NamespaceName);
+                Assert.AreEqual(Xem.MosaicName, mosaic.MosaicName);
+                Assert.AreEqual((ulong)1000000, mosaic.Amount);
                 break;
             case hashMS3:   // Multisig transaction with Importance Transfer (to remote harvesting account)
-                const string pubkeyRemote = "627b03264e51fa12870a923738506c27a20a3bc50051aeb75f545db7d7725060";
-                const string plainRemote = "TABBQV6ZQZNKQNC646WNET6CPAHTRWIR4HSLAJZC";  // Remote account 
-                const string prettyRemote = "TABBQV-6ZQZNK-QNC646-WNET6C-PAHTRW-IR4HSL-AJZC";
-                Assert.AreEqual(txinfo.Height, (ulong)1511723);
-                Assert.AreEqual(txinfo.IsMultisig, true);
+                const string REMOTE_PUBKEY = "627b03264e51fa12870a923738506c27a20a3bc50051aeb75f545db7d7725060";
+                const string REMOTE_PLAIN = "TABBQV6ZQZNKQNC646WNET6CPAHTRWIR4HSLAJZC";  // Remote account 
+                const string REMOTE_PRETTY = "TABBQV-6ZQZNK-QNC646-WNET6C-PAHTRW-IR4HSL-AJZC";
+                Assert.AreEqual((ulong)1511723, txinfo.Height);
+                Assert.AreEqual(true, txinfo.IsMultisig);
 
-                Assert.AreEqual(tx.NetworkType, NetworkType.Types.TEST_NET);
-                Assert.AreEqual(tx.Version, 1);
-                Assert.AreEqual(tx.TransactionType, TransactionTypes.Types.Multisig);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, tx.NetworkType);
+                Assert.AreEqual(1, tx.Version);
+                Assert.AreEqual(TransactionTypes.Types.Multisig, tx.TransactionType);
                 Assert.IsTrue(tx.Deadline.TimeStamp >= tx.NetworkTime.TimeStamp);
-                Assert.AreEqual(tx.NetworkTime.TimeStamp, 101647249);
-                Assert.AreEqual(tx.Deadline.TimeStamp, 101650849);
-                Assert.AreEqual(tx.Fee, (ulong)150000);
+                Assert.AreEqual(101647249, tx.NetworkTime.TimeStamp);
+                Assert.AreEqual(101650849, tx.Deadline.TimeStamp);
+                Assert.AreEqual((ulong)150000, tx.Fee);
                 Assert.IsNotNull(tx.Signer);
-                Assert.AreEqual(tx.Signer.PublicKey, PUBKEYCS2);
+                Assert.AreEqual(PUBKEYCS2, tx.Signer.PublicKey);
                 Assert.IsNotNull(tx.Signer.Address);
-                Assert.AreEqual(tx.Signer.Address.Networktype(), NetworkType.Types.TEST_NET);
-                Assert.AreEqual(tx.Signer.Address.Plain, PLAINCS2);
-                Assert.AreEqual(tx.Signer.Address.Pretty, PRETTYCS2);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, tx.Signer.Address.GetNetworktype());
+                Assert.AreEqual(PLAINCS2, tx.Signer.Address.Plain);
+                Assert.AreEqual(PRETTYCS2, tx.Signer.Address.Pretty);
 
                 mstx = (MultisigTransaction)tx;
-                Assert.AreEqual(mstx.Cosignatures.Count, 1);    //Cosignatures gives the Inner cosigning transaction List
+                Assert.IsNotNull(mstx.Cosignatures);
+                Assert.AreEqual(1, mstx.Cosignatures.Count);    //Cosignatures gives the Inner cosigning transaction List
                 cstx = mstx.Cosignatures[0];
                 Assert.IsNull(cstx.TransactionInfo);
-                Assert.AreEqual(cstx.NetworkType, NetworkType.Types.TEST_NET);
-                Assert.AreEqual(cstx.Version, 1);
-                Assert.AreEqual(cstx.TransactionType, TransactionTypes.Types.SignatureTransaction);
-                Assert.AreEqual(cstx.NetworkTime.TimeStamp, 101647257);
-                Assert.AreEqual(cstx.Deadline.TimeStamp, 101650857);
-                Assert.AreEqual(cstx.Fee, (ulong)150000);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, cstx.NetworkType);
+                Assert.AreEqual(1, cstx.Version);
+                Assert.AreEqual(TransactionTypes.Types.SignatureTransaction, cstx.TransactionType);
+                Assert.AreEqual(101647257, cstx.NetworkTime.TimeStamp);
+                Assert.AreEqual(101650857, cstx.Deadline.TimeStamp);
+                Assert.AreEqual((ulong)150000, cstx.Fee);
                 Assert.IsNotNull(cstx.Signer);
-                Assert.AreEqual(cstx.Signer.PublicKey, PUBKEYCSA);
+                Assert.AreEqual(PUBKEYCSA, cstx.Signer.PublicKey);
                 Assert.IsNotNull(cstx.Signer.Address);
-                Assert.AreEqual(cstx.Signer.Address.Networktype(), NetworkType.Types.TEST_NET);
-                Assert.AreEqual(cstx.Signer.Address.Plain, PLAINCSA);
-                Assert.AreEqual(cstx.Signer.Address.Pretty, PRETTYCSA);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, cstx.Signer.Address.GetNetworktype());
+                Assert.AreEqual(PLAINCSA, cstx.Signer.Address.Plain);
+                Assert.AreEqual(PRETTYCSA, cstx.Signer.Address.Pretty);
 
                 Assert.AreEqual(PRETTYMS, cstx.MultisigAddress.Pretty);
                 itx = mstx.InnerTransaction;
                 Assert.IsNotNull(itx);
                 Assert.IsNull(itx.TransactionInfo);
-                Assert.AreEqual(itx.NetworkType, NetworkType.Types.TEST_NET);
-                Assert.AreEqual(itx.Version, 1);
-                Assert.AreEqual(itx.TransactionType, TransactionTypes.Types.ImportanceTransfer);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, itx.NetworkType);
+                Assert.AreEqual(1, itx.Version);
+                Assert.AreEqual(TransactionTypes.Types.ImportanceTransfer, itx.TransactionType);
                 ittx = (ImportanceTransferTransaction)itx;
-                Assert.AreEqual(ittx.TransactionInfo, null);
+                Assert.IsNull(ittx.TransactionInfo);
                 Assert.IsNotNull(ittx.Signer);
-                Assert.AreEqual(ittx.Signer.PublicKey, PUBKEYMS);
+                Assert.AreEqual(PUBKEYMS, ittx.Signer.PublicKey);
                 Assert.IsNotNull(ittx.Signer.Address);
-                Assert.IsNotNull(ittx.Signer.Address.Plain, PLAINMS);
-                Assert.IsNotNull(ittx.Signer.Address.Pretty, PRETTYMS);
-                Assert.AreEqual(ittx.Mode, ImportanceTransferMode.Mode.Add);
+                Assert.AreEqual(PLAINMS, ittx.Signer.Address.Plain);
+                Assert.AreEqual(PRETTYMS, ittx.Signer.Address.Pretty);
+                Assert.AreEqual(ImportanceTransferMode.Mode.Add, ittx.Mode);
                 Assert.IsNotNull(ittx.RemoteAccount);
-                Assert.AreEqual(ittx.RemoteAccount.PublicKey, pubkeyRemote);
+                Assert.AreEqual(REMOTE_PUBKEY, ittx.RemoteAccount.PublicKey);
                 Assert.IsNotNull(ittx.RemoteAccount.Address);
-                Assert.AreEqual(ittx.RemoteAccount.Address.Networktype(), NetworkType.Types.TEST_NET);
-                Assert.AreEqual(ittx.RemoteAccount.Address.Plain, plainRemote);
-                Assert.AreEqual(ittx.RemoteAccount.Address.Pretty, prettyRemote);
+                Assert.AreEqual(NetworkType.Types.TEST_NET, ittx.RemoteAccount.Address.GetNetworktype());
+                Assert.AreEqual(REMOTE_PLAIN, ittx.RemoteAccount.Address.Plain);
+                Assert.AreEqual(REMOTE_PRETTY, ittx.RemoteAccount.Address.Pretty);
                 break;
             }
         }
@@ -487,22 +490,30 @@ namespace IntegrationTest.infrastructure.HttpTests
         [TestMethod]
         public async Task GetMosaicsOwned()
         {
-            const string prettyM = "TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR";
-            List<Mosaic> mosaics = await new AccountHttp(host).MosaicsOwned(new Address(prettyM));
+            const string MOSAIC_PRETTY = "TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR";
+            List<Mosaic> mosaics = await new AccountHttp(host).MosaicsOwned(new Address(MOSAIC_PRETTY));
+            Assert.IsNotNull(mosaics);
+            Assert.AreEqual(4, mosaics.Count);
 
-            Assert.AreEqual(mosaics.Count, 4);
-            Assert.AreEqual(mosaics[0].NamespaceName, Xem.NamespaceName);
-            Assert.AreEqual(mosaics[0].MosaicName, Xem.MosaicName);
-            Assert.IsTrue(mosaics[0].Amount > 1000000);
-            Assert.AreEqual(mosaics[1].NamespaceName, "nis1porttest");
-            Assert.AreEqual(mosaics[1].MosaicName, "test");
-            Assert.IsTrue(mosaics[1].Amount <= 100000000000);
-            Assert.AreEqual(mosaics[2].NamespaceName, "myspace");
-            Assert.AreEqual(mosaics[2].MosaicName, "subspacewithlevy");
-            Assert.IsTrue(mosaics[2].Amount <= 10000000000000);
-            Assert.AreEqual(mosaics[3].NamespaceName, "myspace");
-            Assert.AreEqual(mosaics[3].MosaicName, "subspace");
-            Assert.IsTrue(mosaics[3].Amount <= 10001000000000);
+            Mosaic mosaic = mosaics[0];
+            Assert.AreEqual(mosaic.NamespaceName, Xem.NamespaceName);
+            Assert.AreEqual(mosaic.MosaicName, Xem.MosaicName);
+            Assert.IsTrue(mosaic.Amount > 1000000);
+
+            mosaic = mosaics[1];
+            Assert.AreEqual(mosaic.NamespaceName, "nis1porttest");
+            Assert.AreEqual(mosaic.MosaicName, "test");
+            Assert.IsTrue(mosaic.Amount <= 100000000000);
+
+            mosaic = mosaics[2];
+            Assert.AreEqual(mosaic.NamespaceName, "myspace");
+            Assert.AreEqual(mosaic.MosaicName, "subspacewithlevy");
+            Assert.IsTrue(mosaic.Amount <= 10000000000000);
+
+            mosaic = mosaics[3];
+            Assert.AreEqual(mosaic.NamespaceName, "myspace");
+            Assert.AreEqual(mosaic.MosaicName, "subspace");
+            Assert.IsTrue(mosaic.Amount <= 10001000000000);
         }
 
     }

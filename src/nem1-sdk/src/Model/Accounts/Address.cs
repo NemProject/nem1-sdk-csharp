@@ -155,7 +155,7 @@ namespace io.nem1.sdk.Model.Accounts
         /// The network type of the address
         /// </summary>
         /// <returns>The NetworkType.</returns>
-        public NetworkType.Types Networktype()
+        public NetworkType.Types GetNetworktype()
         {
             switch (Plain.ToCharArray()[0])
             {

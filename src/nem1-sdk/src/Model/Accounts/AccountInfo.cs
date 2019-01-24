@@ -107,7 +107,7 @@ namespace io.nem1.sdk.Model.Accounts
         /// Returns multisig accounts this account is cosigner of.
         /// </summary>
         /// <value>The multisig accounts.</value>
-        public List<AccountInfo> CosginatoryOf { get; }
+        public List<AccountInfo> CosignatoryOf { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountInfo"/> class.
@@ -122,12 +122,12 @@ namespace io.nem1.sdk.Model.Accounts
         /// <param name="remoteStatus">The remoteStatus.</param>
         /// <param name="minCosigners">The minimum number of Cosigners (less or eqaul than cosigners.Count).</param>
         /// <param name="cosigners">The cosigners of this multisig account .</param>
-        /// <param name="cosginatoryOf">The account is cosginatoryOf these multisig Accounts.</param>
+        /// <param name="cosignatoryOf">The account is cosignatoryOf these multisig Accounts.</param>
         public AccountInfo(string publicKey, Address address, ulong balance, ulong vestedBalance, ulong importance, ulong harvestedBlocks,
                             string status = "", string remoteStatus = "", 
-                            int minCosigners = 0, List<AccountInfo> cosigners = null, List<AccountInfo> cosginatoryOf = null)
+                            int minCosigners = 0, List<AccountInfo> cosigners = null, List<AccountInfo> cosignatoryOf = null)
         {
-            _PublicAccount = new PublicAccount(publicKey, address.Networktype());
+            _PublicAccount = new PublicAccount(publicKey, address.GetNetworktype());
             Balance = balance;
             VestedBalance = vestedBalance;
             Importance = importance;
@@ -136,7 +136,7 @@ namespace io.nem1.sdk.Model.Accounts
             RemoteStatus = remoteStatus;
             MinCosigners = minCosigners;
             Cosigners = cosigners;
-            CosginatoryOf = cosginatoryOf;
+            CosignatoryOf = cosignatoryOf;
         }
 
         /// <summary>

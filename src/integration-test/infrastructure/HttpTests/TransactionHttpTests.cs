@@ -33,28 +33,34 @@ namespace IntegrationTest.infrastructure.HttpTests
         [TestMethod]
         public async Task GetTransaction()
         {
-            const string hash = "5853eaebe86307bf8a5dbddb5248490cb1f9ca6cb76c4733dab8eea157988f7a";
-            var tx = await new TransactionHttp(host).GetTransaction(hash);
-            Assert.AreEqual(tx.NetworkType, NetworkType.Types.TEST_NET);
-            Assert.AreEqual(tx.Version, 1);
+            const string HASH = "5853eaebe86307bf8a5dbddb5248490cb1f9ca6cb76c4733dab8eea157988f7a";
+            var tx = await new TransactionHttp(host).GetTransaction(HASH);
+            Assert.IsNotNull(tx);
+            Assert.AreEqual(NetworkType.Types.TEST_NET, tx.NetworkType);
+            Assert.AreEqual(1, tx.Version);
             Assert.IsNotNull(tx.TransactionInfo);
-            Assert.AreEqual(tx.TransactionInfo.Hash, hash);
+            Assert.AreEqual(HASH, tx.TransactionInfo.Hash);
         }
 
         [TestMethod]
         public async Task GetTransactionWithHexidecimalMessage()
         {
             const string HASH = "5853eaebe86307bf8a5dbddb5248490cb1f9ca6cb76c4733dab8eea157988f7a";
-
             var tx = await new TransactionHttp(host).GetTransaction(HASH);
-
-            Assert.AreEqual(tx.Signer.PublicKey, PUBKEYMESS);
+            Assert.IsNotNull(tx);
+            Assert.IsNotNull(tx.Signer);
+            Assert.AreEqual(PUBKEYMESS, tx.Signer.PublicKey);
+            Assert.IsNotNull(tx.TransactionInfo);
             Assert.AreEqual(tx.TransactionInfo.Hash, HASH);
+            Assert.AreEqual(tx.TransactionType, TransactionTypes.Types.Transfer);
             var ttx = (TransferTransaction)tx;
-            Assert.AreEqual(ttx.Mosaics[0].MosaicName, Xem.MosaicName);
-            Assert.AreEqual(ttx.Mosaics[0].Amount, (ulong)10000000);
-            Assert.AreEqual(ttx.Message.GetMessageType() , MessageType.Type.UNENCRYPTED);
-            Assert.AreEqual(((HexMessage)ttx.Message).GetStringPayload(), "abcd1234");
+            Assert.IsNotNull(ttx.Mosaics);
+            Assert.IsTrue(ttx.Mosaics.Count > 0);
+            Mosaic mosaic = ttx.Mosaics[0];
+            Assert.AreEqual(Xem.MosaicName, mosaic.MosaicName);
+            Assert.AreEqual((ulong)10000000, mosaic.Amount);
+            Assert.AreEqual(MessageType.Type.UNENCRYPTED, ttx.Message.GetMessageType());
+            Assert.AreEqual("abcd1234", ((HexMessage)ttx.Message).GetStringPayload());
         }
 
         [TestMethod]
@@ -64,11 +70,11 @@ namespace IntegrationTest.infrastructure.HttpTests
 
             var tx = await new TransactionHttp(host).GetTransaction(HASH);
 
-            Assert.AreEqual(tx.Signer.PublicKey, PUBKEYMESS);
-            Assert.AreEqual(tx.TransactionType, TransactionTypes.Types.Transfer);
+            Assert.AreEqual(PUBKEYMESS, tx.Signer.PublicKey);
+            Assert.AreEqual(TransactionTypes.Types.Transfer, tx.TransactionType);
             var ttx = (TransferTransaction)tx;
             Assert.AreEqual(HASH, ttx.TransactionInfo.Hash);
-            Assert.AreEqual(ttx.Message.GetMessageType(), MessageType.Type.ENCRYPTED);
+            Assert.AreEqual(MessageType.Type.ENCRYPTED, ttx.Message.GetMessageType());
             SecureMessage smsg = (SecureMessage)ttx.Message;
             //Assert.AreEqual("Decrypted message", smsg.GetDecodedPayload("PRIVATE KEY", PUBKEYMESS));
         }

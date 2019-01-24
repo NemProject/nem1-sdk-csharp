@@ -4,6 +4,8 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using io.nem1.sdk.Infrastructure.HttpRepositories;
+using io.nem1.sdk.Model.Mosaics;
+using io.nem1.sdk.Model.Namespace;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IntegrationTest.infrastructure.HttpTests
@@ -11,40 +13,53 @@ namespace IntegrationTest.infrastructure.HttpTests
     [TestClass]
     public class NamespaceMosaicHttpTests
     {
-        readonly string host = "http://" + Config.Domain + ":7890";
+        const string NS = "london";
+        const string PRETTY = "TAB27E-DNZN2A-JKYBVW-LK5ERP-5KWUMW-PCKL65-44GX"; // Account owning the london namespace and the london:stock mosaic.
 
-        [TestMethod]
-        public async Task GetNamespaceInfo()
-        {
-            var namespaceMosaicHttp = await new NamespaceMosaicHttp(host).NamespaceInfo("testlevy");
-            
-            Assert.AreEqual("TCTUIF557ZCQOQPW2M6GH4TCDPM2ZYBBL54KGNHR", namespaceMosaicHttp.Owner.Plain);
-            Assert.AreEqual("testlevy", namespaceMosaicHttp.Name);
-            Assert.AreEqual((ulong)1183544, namespaceMosaicHttp.Height);
-        }
+        readonly string host = "http://" + Config.Domain + ":7890";
 
         [TestMethod]
         public async Task GetNamespaceRootInfo()
         {
-            var namespaceMosaicHttp = await new NamespaceMosaicHttp(host).NamespaceRootInfoPage();
+            NamespaceRootInfo namespaceRootInfo;
 
-            Assert.AreEqual(2481, namespaceMosaicHttp[0].Id);
-            Assert.AreEqual("TCJPZUBD5Y5FBZYAZYYUE5ADSF6MCLDGD43V6KVZ", namespaceMosaicHttp[0].Owner.Plain);
-            Assert.AreEqual("kryptosports", namespaceMosaicHttp[0].Name);
-            Assert.AreEqual((ulong)1546124, namespaceMosaicHttp[0].Height);
+            var namespaceRootInfos = await new NamespaceMosaicHttp(host).NamespaceRootInfoPage();   // Gets the last 25 created Namespaces
+
+            for (int i = 0; i<25; i++)
+            {
+                namespaceRootInfo = namespaceRootInfos[i];
+                if (namespaceRootInfo.Name == NS)
+                {
+                    Assert.AreEqual(3745, namespaceRootInfo.Id);
+                    Assert.AreEqual((ulong)1817448, namespaceRootInfo.Height);
+                    Assert.AreEqual(PRETTY, namespaceRootInfo.Owner.Pretty);
+                }
+            }
+        }
+
+        [TestMethod]
+        public async Task GetNamespaceInfo()
+        {
+            NamespaceInfo namespaceInfo = await new NamespaceMosaicHttp(host).NamespaceInfo(NS);
+
+            Assert.AreEqual(NS, namespaceInfo.Name);
+            Assert.AreEqual((ulong)1817448, namespaceInfo.Height);
+            Assert.AreEqual(PRETTY, namespaceInfo.Owner.Pretty);
         }
 
         [TestMethod]
         public async Task GetNamespaceMosaics()
         {
-            var mosaics = await new NamespaceMosaicHttp(host).GetNamespaceMosaics("testlevy");
+            var mosaicInfos = await new NamespaceMosaicHttp(host).GetNamespaceMosaics(NS);
+            MosaicInfo mosaicInfo = mosaicInfos[0];
 
-            Assert.AreEqual("TCTUIF557ZCQOQPW2M6GH4TCDPM2ZYBBL54KGNHR", mosaics[0].Creator.Address.Plain);
-            Assert.AreEqual("test", mosaics[0].Description);
-            Assert.AreEqual(2853, mosaics[0].Id);
-            Assert.AreEqual("testlevy:nis1porttest", mosaics[0].MosaicId.FullName);
-            Assert.IsTrue(mosaics[0].Properties.Mutable);
-            Assert.IsTrue(mosaics[0].Properties.Transferable);
+            Assert.AreEqual(4763, mosaicInfo.Id);
+            Assert.AreEqual(PRETTY, mosaicInfo.Creator.Address.Pretty);
+            Assert.AreEqual("london:stock", mosaicInfo.MosaicId.FullName);
+            Assert.IsNull(mosaicInfo.Levy);
+            Assert.AreEqual(4763, mosaicInfo.Id);
+            Assert.IsTrue(mosaicInfo.Properties.Mutable);
+            Assert.IsTrue(mosaicInfo.Properties.Transferable);
         }
     }
 }
