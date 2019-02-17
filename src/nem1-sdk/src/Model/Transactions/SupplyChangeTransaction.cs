@@ -162,7 +162,7 @@ namespace io.nem1.sdk.Model.Transactions
         {
             var builder = new FlatBufferBuilder(1);
             var mosaicName = Encoding.UTF8.GetBytes(MosaicId.Name);
-            var namespaceName = Encoding.UTF8.GetBytes(MosaicId.NamespaceId.Name);
+            var namespaceName = Encoding.UTF8.GetBytes(MosaicId.NamespaceId);
             var signerVector = SupplyChangeBuffer.CreatePublicKeyVector(builder, GetSigner());
             var namespaceVector = SupplyChangeBuffer.CreateNamespaceIdstringVector(builder, namespaceName);
             var mosaicNameVector = SupplyChangeBuffer.CreateMosaicNameStringVector(builder, mosaicName);

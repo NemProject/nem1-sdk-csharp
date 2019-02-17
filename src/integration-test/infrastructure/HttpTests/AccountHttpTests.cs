@@ -172,7 +172,7 @@ namespace IntegrationTest.infrastructure.HttpTests
                 Assert.AreEqual(PRETTY, cosigAcctInfo.Address.Pretty);
                 Assert.AreNotEqual((ulong)0, cosigAcctInfo.Balance);
                 Assert.AreNotEqual((ulong)0, cosigAcctInfo.VestedBalance);
-                Assert.AreEqual((ulong)0, cosigAcctInfo.Importance);
+                Assert.AreEqual((double)0, cosigAcctInfo.Importance);
                 Assert.AreEqual((ulong)0, cosigAcctInfo.HarvestedBlocks);
                 break;
             case PUBKEYMS:
@@ -181,7 +181,7 @@ namespace IntegrationTest.infrastructure.HttpTests
                 Assert.AreEqual(PRETTYMS, cosigAcctInfo.Address.Pretty);
                 Assert.IsTrue(cosigAcctInfo.Balance > (ulong)1000000);
                 Assert.IsTrue(cosigAcctInfo.VestedBalance > (ulong)1000000);
-                Assert.AreEqual((ulong)0, cosigAcctInfo.Importance);
+                Assert.AreEqual((double)0, cosigAcctInfo.Importance);
                 Assert.AreEqual((ulong)0, cosigAcctInfo.HarvestedBlocks);
                 break;
             case PUBKEYCS1:
@@ -190,7 +190,7 @@ namespace IntegrationTest.infrastructure.HttpTests
                 Assert.AreEqual(PRETTYCS1, cosigAcctInfo.Address.Pretty);
                 Assert.IsTrue(cosigAcctInfo.Balance > (ulong)1000000);
                 Assert.IsTrue(cosigAcctInfo.VestedBalance > (ulong)1000000);
-                Assert.AreEqual((ulong)0, cosigAcctInfo.Importance);
+                Assert.AreEqual((double)0, cosigAcctInfo.Importance);
                 Assert.AreEqual((ulong)0, cosigAcctInfo.HarvestedBlocks);
                 break;
             case PUBKEYCS2:
@@ -199,7 +199,7 @@ namespace IntegrationTest.infrastructure.HttpTests
                 Assert.AreEqual(PRETTYCS2, cosigAcctInfo.Address.Pretty);
                 Assert.IsTrue(cosigAcctInfo.Balance >= (ulong)900000);
                 Assert.IsTrue(cosigAcctInfo.VestedBalance >= (ulong)900000);
-                Assert.AreEqual((ulong)0, cosigAcctInfo.Importance);
+                Assert.AreEqual((double)0, cosigAcctInfo.Importance);
                 Assert.AreEqual((ulong)0, cosigAcctInfo.HarvestedBlocks);
                 break;
             case PUBKEYCSA:
@@ -208,11 +208,11 @@ namespace IntegrationTest.infrastructure.HttpTests
                 Assert.AreEqual(PRETTYCSA, cosigAcctInfo.Address.Pretty);
                 Assert.IsTrue(cosigAcctInfo.Balance >= (ulong)450000);
                 Assert.IsTrue(cosigAcctInfo.VestedBalance >= (ulong)450000);
-                Assert.AreEqual((ulong)0, cosigAcctInfo.Importance);
+                Assert.AreEqual((double)0, cosigAcctInfo.Importance);
                 Assert.AreEqual((ulong)0, cosigAcctInfo.HarvestedBlocks);
                 break;
             default:
-                throw new Exception("AssertAcct: Unsupported Public Key");
+                throw new Exception("AssertCosigAcctInfo: Unsupported Public Key");
             }
         }
 
@@ -250,7 +250,7 @@ namespace IntegrationTest.infrastructure.HttpTests
             Assert.AreEqual(PUBKEYCS2, mstx.Signer.PublicKey);
             Assert.AreEqual(expectedHash, mstx.TransactionInfo.InnerHash);
             TransferTransaction ttx = (TransferTransaction)mstx.InnerTransaction;
-            Assert.AreEqual(ttx.Mosaics[0].MosaicName, Xem.MosaicName);
+            Assert.AreEqual(MosaicId.XEM, ttx.Mosaics[0].MosaicInfo.Name);
         }
 
         private void AssertTx(Transaction tx, TransactionInfo txinfo)
@@ -265,7 +265,7 @@ namespace IntegrationTest.infrastructure.HttpTests
             CosignatureTransaction cstx;
             TransferTransaction ttx;
             ImportanceTransferTransaction ittx;
-            Mosaic mosaic;
+            MosaicAmount mosaic;
 
             Assert.IsNotNull(tx);
             Assert.IsNotNull(txinfo);
@@ -348,8 +348,8 @@ namespace IntegrationTest.infrastructure.HttpTests
                 Assert.IsNotNull(ttx.Mosaics);
                 Assert.AreEqual(1, ttx.Mosaics.Count);
                 mosaic = ttx.Mosaics[0];
-                Assert.AreEqual(Xem.NamespaceName, mosaic.NamespaceName);
-                Assert.AreEqual(Xem.MosaicName, mosaic.MosaicName);
+                Assert.AreEqual(MosaicId.NEM, mosaic.MosaicInfo.NamespaceId);
+                Assert.AreEqual(MosaicId.XEM, mosaic.MosaicInfo.Name);
                 Assert.AreEqual((ulong)1000, mosaic.Amount);
                 break;
             case hashMS2:   // Multisig Transaction with Transfer
@@ -419,8 +419,8 @@ namespace IntegrationTest.infrastructure.HttpTests
                 Assert.IsNotNull(ttx.Mosaics);
                 Assert.AreEqual(1, ttx.Mosaics.Count);
                 mosaic = ttx.Mosaics[0];
-                Assert.AreEqual(Xem.NamespaceName, mosaic.NamespaceName);
-                Assert.AreEqual(Xem.MosaicName, mosaic.MosaicName);
+                Assert.AreEqual(MosaicId.XEM, mosaic.MosaicInfo.NamespaceId);
+                Assert.AreEqual(MosaicId.NEM, mosaic.MosaicInfo.Name);
                 Assert.AreEqual((ulong)1000000, mosaic.Amount);
                 break;
             case hashMS3:   // Multisig transaction with Importance Transfer (to remote harvesting account)
@@ -491,28 +491,28 @@ namespace IntegrationTest.infrastructure.HttpTests
         public async Task GetMosaicsOwned()
         {
             const string MOSAIC_PRETTY = "TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR";
-            List<Mosaic> mosaics = await new AccountHttp(host).MosaicsOwned(new Address(MOSAIC_PRETTY));
+            List<MosaicAmount> mosaics = await new AccountHttp(host).MosaicsOwned(new Address(MOSAIC_PRETTY));
             Assert.IsNotNull(mosaics);
             Assert.AreEqual(4, mosaics.Count);
 
-            Mosaic mosaic = mosaics[0];
-            Assert.AreEqual(mosaic.NamespaceName, Xem.NamespaceName);
-            Assert.AreEqual(mosaic.MosaicName, Xem.MosaicName);
+            MosaicAmount mosaic = mosaics[0];
+            Assert.AreEqual(MosaicId.NEM, mosaic.MosaicInfo.NamespaceId);
+            Assert.AreEqual(MosaicId.XEM, mosaic.MosaicInfo.Name);
             Assert.IsTrue(mosaic.Amount > 1000000);
 
             mosaic = mosaics[1];
-            Assert.AreEqual(mosaic.NamespaceName, "nis1porttest");
-            Assert.AreEqual(mosaic.MosaicName, "test");
+            Assert.AreEqual("nis1porttest", mosaic.MosaicInfo.NamespaceId);
+            Assert.AreEqual("test", mosaic.MosaicInfo.Name);
             Assert.IsTrue(mosaic.Amount <= 100000000000);
 
             mosaic = mosaics[2];
-            Assert.AreEqual(mosaic.NamespaceName, "myspace");
-            Assert.AreEqual(mosaic.MosaicName, "subspacewithlevy");
+            Assert.AreEqual("myspace", mosaic.MosaicInfo.NamespaceId);
+            Assert.AreEqual("subspacewithlevy", mosaic.MosaicInfo.Name);
             Assert.IsTrue(mosaic.Amount <= 10000000000000);
 
             mosaic = mosaics[3];
-            Assert.AreEqual(mosaic.NamespaceName, "myspace");
-            Assert.AreEqual(mosaic.MosaicName, "subspace");
+            Assert.AreEqual("myspace", mosaic.MosaicInfo.NamespaceId);
+            Assert.AreEqual("subspace", mosaic.MosaicInfo.Name);
             Assert.IsTrue(mosaic.Amount <= 10001000000000);
         }
 

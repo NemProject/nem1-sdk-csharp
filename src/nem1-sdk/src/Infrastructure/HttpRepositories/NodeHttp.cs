@@ -41,7 +41,8 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// </example>
         public IObservable<NetworkType.Types> GetNetworkType()
         {
-            return Observable.FromAsync(async ar => await NodeRoutesApi.ExtendedNodeInfoAsync()).Select(a => NetworkType.GetRawValue((byte) int.Parse(a["node"]["metaData"]["networkId"].ToString())));
+            return Observable.FromAsync(async ar => await NodeRoutesApi.ExtendedNodeInfoAsync())
+                .Select(a => NetworkType.GetRawValue((byte) int.Parse(a["node"]["metaData"]["networkId"].ToString())));
         }
 
         /// <summary>

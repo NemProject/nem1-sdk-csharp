@@ -24,19 +24,19 @@ namespace Tests.Model.MosaicsTests
     {
 
         [TestMethod]
-        public void CreateANewMosaicViaConstructor()
+        public void CreateANewMosaicWithNamespaceIdAndName()
         {
-            Mosaic mosaic = new Mosaic("nem", "xem", 24);
-            Assert.IsTrue(mosaic.MosaicName.Equals("xem"));
+            MosaicAmount mosaic = new MosaicAmount(MosaicId.NEM, MosaicId.XEM, 24);
+            Assert.IsTrue(mosaic.MosaicInfo.FullName().Equals(MosaicInfo.Xem.FullName()));
             Assert.IsTrue(mosaic.Amount.Equals(24));
         }
 
         [TestMethod]
-        public void CreateANewMosaicWithIdentifier()
+        public void CreateANewMosaicWithFullName()
         {
-            Mosaic mosaic = Mosaic.CreateFromIdentifier("nem:xem", 24);
-            Assert.IsTrue(mosaic.MosaicName == "xem");
-            Assert.IsTrue(mosaic.NamespaceName == "nem");
+            MosaicAmount mosaic = new MosaicAmount("nem:xem", 24);
+            Assert.IsTrue(mosaic.MosaicInfo.Name == MosaicId.XEM);
+            Assert.IsTrue(mosaic.MosaicInfo.NamespaceId == MosaicId.NEM);
             Assert.IsTrue(mosaic.Amount.Equals(24));
         }
 
@@ -50,7 +50,7 @@ namespace Tests.Model.MosaicsTests
         [DataRow(":nem")]
         public void CreateANewMosaicWithIdentifierThrowsExeption(string data)
         {
-            Mosaic.CreateFromIdentifier(data, 24);       
+            MosaicAmount mosaicA = new MosaicAmount(data, 24);       
         }
     }
 }

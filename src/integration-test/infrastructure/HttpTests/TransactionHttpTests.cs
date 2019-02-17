@@ -56,8 +56,9 @@ namespace IntegrationTest.infrastructure.HttpTests
             var ttx = (TransferTransaction)tx;
             Assert.IsNotNull(ttx.Mosaics);
             Assert.IsTrue(ttx.Mosaics.Count > 0);
-            Mosaic mosaic = ttx.Mosaics[0];
-            Assert.AreEqual(Xem.MosaicName, mosaic.MosaicName);
+            MosaicAmount mosaic = ttx.Mosaics[0];
+            Assert.AreEqual(MosaicId.NEM, mosaic.MosaicInfo.NamespaceId);
+            Assert.AreEqual(MosaicId.XEM, mosaic.MosaicInfo.Name);
             Assert.AreEqual((ulong)10000000, mosaic.Amount);
             Assert.AreEqual(MessageType.Type.UNENCRYPTED, ttx.Message.GetMessageType());
             Assert.AreEqual("abcd1234", ((HexMessage)ttx.Message).GetStringPayload());

@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : nem1-sdk
 // Author           : kailin
-// Created          : 02-01-2018
+// Created          : 01-25-2018
 //
 // Last Modified By : kailin
 // Last Modified On : 02-01-2018
 // ***********************************************************************
-// <copyright file="NamespaceId.cs" company="Nem.io">
+// <copyright file="XEM.cs" company="Nem.io">
 // Copyright 2018 NEM
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,39 +25,24 @@
 
 using System;
 
-namespace io.nem1.sdk.Model.Namespace
+namespace io.nem1.sdk.Model.Mosaics
 {
     /// <summary>
-    /// NamespaceId.
+    /// Describes the XEM mosaic definition
+    /// see http://csharpindepth.com/Articles/General/Singleton.aspx
     /// </summary>
-    public class NamespaceId
+    public class XemAmount : MosaicAmount
     {
         /// <summary>
-        /// Gets the name of the namespace.
+        /// Initializes a new instance of the <see cref="XemAmount"/> class.
         /// </summary>
-        /// <value>The name of the namespace.</value>
-        public string Name { get; }
+        /// <param name="amount">The amount.</param>
+        public XemAmount(ulong amount) : base(MosaicInfo.Xem, amount) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NamespaceId"/> class.
+        /// Initializes a new instance of the <see cref="XemAmount"/> class.
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <exception cref="ArgumentException">id</exception>
-        /// <exception cref="ArgumentNullException">id</exception>
-        public NamespaceId(string id)
-        {
-            Name = id ?? throw new ArgumentNullException(nameof(id) + " cannot be null");
-        }
-
-
-        /// <summary>
-        /// Creates a NamespaceId instance from a given Id.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>NamespaceId.</returns>
-        public static NamespaceId Create(string id)
-        {
-            return new NamespaceId(id);
-        }
+        /// <param name="decimalAmount">The amount.</param>
+        public XemAmount(double decimalAmount) : base(MosaicInfo.Xem, decimalAmount) { }
     }
 }

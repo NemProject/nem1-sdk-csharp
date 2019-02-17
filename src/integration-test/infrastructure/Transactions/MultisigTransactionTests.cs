@@ -28,7 +28,7 @@ namespace IntegrationTest.infrastructure.HttpTests
                 NetworkType.Types.TEST_NET,
                 Deadline.CreateHours(2),
                 recipient.Address,
-                new List<Mosaic> { Mosaic.CreateFromIdentifier("nem:xem", 1000000) },
+                new List<MosaicAmount> { new MosaicAmount("nem:xem", 1000000) },
                 PlainMessage.Create("hello")
             );
 

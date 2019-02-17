@@ -99,15 +99,8 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         internal IObservable<NetworkType.Types> GetNetworkTypeObservable()
         {
             if (_NetworkType != 0x00) return Observable.Return(_NetworkType);
-
-            var typeObservable = Observable.FromAsync(async ar =>
-                await NodeHttp.GetNetworkType());
-
-            typeObservable.Subscribe(ar =>
-            {
-                _NetworkType = ar;
-            });
-
+            var typeObservable = Observable.FromAsync(async ar => await NodeHttp.GetNetworkType());
+            typeObservable.Subscribe(ar => _NetworkType = ar);
             return typeObservable;          
         }
     }

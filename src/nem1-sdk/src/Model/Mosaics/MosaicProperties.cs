@@ -15,6 +15,30 @@ namespace io.nem1.sdk.Model.Mosaics
         internal List<Tuple<string, string>> Properties { get; }
 
         /// <summary>
+        /// Gets the divisibility.
+        /// </summary>
+        /// <value>The divisibility.</value>
+        public int Divisibility { get; }
+
+        /// <summary>
+        /// Gets the initial supply.
+        /// </summary>
+        /// <value>The initial supply.</value>
+        public ulong InitialSupply { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="MosaicAmount"/> is supply mutable.
+        /// </summary>
+        /// <value><c>true</c> if mutable; otherwise, <c>false</c>.</value>
+        public bool Mutable { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="MosaicAmount"/> is transferable.
+        /// </summary>
+        /// <value><c>true</c> if transferable; otherwise, <c>false</c>.</value>
+        public bool Transferable { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MosaicProperties"/> class.
         /// </summary>
         /// <param name="divisibility">The divisibility.</param>
@@ -33,33 +57,9 @@ namespace io.nem1.sdk.Model.Mosaics
 
             InitialSupply = initialSupply;
             Divisibility = divisibility;
-            Transferable = transferable;
             Mutable = mutable;
-
+            Transferable = transferable;
         }
 
-        /// <summary>
-        /// Gets the divisibility.
-        /// </summary>
-        /// <value>The divisibility.</value>
-        public int Divisibility { get; }
-
-        /// <summary>
-        /// Gets the initial supply.
-        /// </summary>
-        /// <value>The initial supply.</value>
-        public ulong InitialSupply { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="Mosaic"/> is supply mutable.
-        /// </summary>
-        /// <value><c>true</c> if mutable; otherwise, <c>false</c>.</value>
-        public bool Mutable { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="Mosaic"/> is transferable.
-        /// </summary>
-        /// <value><c>true</c> if transferable; otherwise, <c>false</c>.</value>
-        public bool Transferable { get; }
     }
 }

@@ -207,10 +207,10 @@ namespace io.nem1.sdk.Model.Transactions
             var signer = MosaicDefinitionTransactionBuffer.CreatePublicKeyVector(builder, GetSigner());
             var creatorVector = MosaicDefinitionTransactionBuffer.CreateCreatorPublicKeyVector(builder, Creator.PublicKey.FromHex());
             var descriptionVector = MosaicDefinitionTransactionBuffer.CreateDescriptionStringVector(builder, Encoding.UTF8.GetBytes(Description));
-            var nammespaceVector = MosaicDefinitionTransactionBuffer.CreateNamespaceIdStringVector(builder, Encoding.UTF8.GetBytes(Mosaic.NamespaceId.Name));
+            var nammespaceVector = MosaicDefinitionTransactionBuffer.CreateNamespaceIdStringVector(builder, Encoding.UTF8.GetBytes(Mosaic.NamespaceId));
             var mosaicNameVector = MosaicDefinitionTransactionBuffer.CreateMosaicNameStringVector(builder, Encoding.UTF8.GetBytes(Mosaic.Name));
             var feeSinkVector = MosaicDefinitionTransactionBuffer.CreateFeeSinkAddressVector(builder, Encoding.UTF8.GetBytes(new Address("53e140b5947f104cabc2d6fe8baedbc30ef9a0609c717d9613de593ec2a266d3", NetworkType).Plain));
-            var definitionStructureLength = 60 + Encoding.UTF8.GetBytes(Mosaic.NamespaceId.Name).Length + Encoding.UTF8.GetBytes(Mosaic.Name).Length + Encoding.UTF8.GetBytes(Description).Length;
+            var definitionStructureLength = 60 + Encoding.UTF8.GetBytes(Mosaic.NamespaceId).Length + Encoding.UTF8.GetBytes(Mosaic.Name).Length + Encoding.UTF8.GetBytes(Description).Length;
 
             var propertiesOffset = new Offset<MosaicPropertyBuffer>[4];
 
@@ -241,9 +241,9 @@ namespace io.nem1.sdk.Model.Transactions
 
             if (MosaicLevy != null)
             {
-                var mosaicName = Encoding.UTF8.GetBytes(MosaicLevy.Mosaic.MosaicName);
-                var namespaceName = Encoding.UTF8.GetBytes(MosaicLevy.Mosaic.NamespaceName);
-                var recipient = Encoding.UTF8.GetBytes(MosaicLevy.LevyRecipient.Plain);
+                var mosaicName = Encoding.UTF8.GetBytes(MosaicLevy.Name);
+                var namespaceName = Encoding.UTF8.GetBytes(MosaicLevy.NamespaceId);
+                var recipient = Encoding.UTF8.GetBytes(MosaicLevy.Recipient.Plain);
 
                 definitionStructureLength += 68 + namespaceName.Length + mosaicName.Length;
 
@@ -262,7 +262,7 @@ namespace io.nem1.sdk.Model.Transactions
                 MosaicLevyBuffer.AddNamespaceIdString(builder, namespaceLevyNameVector);
                 MosaicLevyBuffer.AddLengthMosaicNameString(builder, mosaicName.Length);
                 MosaicLevyBuffer.AddMosaicNameString(builder, mosaicLevyNameVector);
-                MosaicLevyBuffer.AddFeeQuantity(builder, MosaicLevy.Mosaic.Amount);
+                MosaicLevyBuffer.AddFeeQuantity(builder, MosaicLevy.Fee);
                 levyVector[0] = MosaicLevyBuffer.EndMosaicLevyBuffer(builder);
             }
             else {
@@ -275,7 +275,7 @@ namespace io.nem1.sdk.Model.Transactions
            
             MosaicDefinitionTransactionBuffer.StartMosaicDefinitionTransactionBuffer(builder);
 
-            var namespaceBytes = Encoding.UTF8.GetBytes(Mosaic.NamespaceId.Name);
+            var namespaceBytes = Encoding.UTF8.GetBytes(Mosaic.NamespaceId);
             var mosaicNameBytes = Encoding.UTF8.GetBytes(Mosaic.Name);
             var descriptionBytes = Encoding.UTF8.GetBytes(Description);
 

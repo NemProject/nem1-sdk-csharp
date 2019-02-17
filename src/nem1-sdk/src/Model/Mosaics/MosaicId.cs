@@ -34,24 +34,42 @@ namespace io.nem1.sdk.Model.Mosaics
     /// </summary>
     public class MosaicId
     {
+        ///// <summary>
+        ///// The NEM namespace name
+        ///// </summary>
+        public const string NEM = "nem";
+
+        ///// <summary>
+        ///// The XEM mosaic name
+        ///// </summary>
+        public const string XEM = "xem";
+
+        ///// <summary>
+        ///// The XEM mosaic FullName
+        ///// </summary>
+        public const string XEMfullName = NEM + ":" + XEM;
 
         /// <summary>
         /// Gets the namespace identifier.
         /// </summary>
         /// <value>The namespace identifier.</value>
-        public NamespaceId NamespaceId { get; }
+        public string NamespaceId { get; private set; }
 
         /// <summary>
         /// The mosaic name.
         /// </summary>
         /// <value>The name of the mosaic.</value>
-        public string Name { get; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Gets or sets the full name.
         /// </summary>
         /// <value>The full name.</value>
-        public string FullName { get; }
+        public string FullName()
+        {
+            if (IsFullNamePresent) return NamespaceId + ":" + Name;
+            else return "";
+        }
 
         /// <summary>
         /// Describes if the namespace name is present.
@@ -63,38 +81,44 @@ namespace io.nem1.sdk.Model.Mosaics
         /// Describes if the full name is present.
         /// </summary>
         /// <returns><c>true</c> if FullName is present, <c>false</c> otherwise.</returns>
-        public bool IsFullNamePresent => FullName != null;
+        public bool IsFullNamePresent => (NamespaceId != null && IsNamePresent);
+
+        /// <summary>
+        /// Constructs a new instance of the <see cref="MosaicId"/> class.
+        /// </summary>
+        /// <param name="namespaceId"></param>
+        /// <param name="name"></param>
+        private void ConstructMosaicId(string namespaceId, string name)
+        {
+            NamespaceId = namespaceId ?? throw new ArgumentNullException(nameof(namespaceId));
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            if (namespaceId == "") throw new ArgumentException(namespaceId + " is not valid");
+            if (name == "") throw new ArgumentException(name + " is not valid");
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MosaicId"/> class.
         /// </summary>
-        /// <param name="identifier">The identifier.</param>
-        /// <exception cref="System.ArgumentException">
-        /// </exception>
-        public MosaicId(string identifier)
+        /// <param name="namespaceId"></param>
+        /// <param name="name"></param>
+        public MosaicId(string namespaceId, string name)
         {
-            if (string.IsNullOrEmpty(identifier)) throw new ArgumentException(identifier + " is not valid");
-            if (!identifier.Contains(":")) throw new ArgumentException(identifier + " is not valid");
-            var parts = identifier.Split(':');
-            if (parts.Length != 2) throw new ArgumentException(identifier + " is not valid");
-            if (parts[0] == "") throw new ArgumentException(identifier + " is not valid");
-            if (parts[1] == "") throw new ArgumentException(identifier + " is not valid");
-            var namespaceName = parts[0];
-            NamespaceId = new NamespaceId(namespaceName);
-            Name = parts[1];
-            FullName = identifier;
+            ConstructMosaicId(namespaceId, name);
         }
 
         /// <summary>
-        /// Create a Mosaic from an identifier and amount.
+        /// Initializes a new instance of the <see cref="MosaicId"/> class.
         /// </summary>
-        /// <param name="identifier">The mosaic identifier. ex: nem:xem or test.namespace:token</param>
-        /// <returns>A Mosaic instance</returns>
+        /// <param name="fullName">The identifier.</param>
         /// <exception cref="System.ArgumentException">
         /// </exception>
-        public static MosaicId CreateFromMosaicIdentifier(string identifier)
+        public MosaicId(string fullName)
         {
-            return new MosaicId(identifier);
-        } 
+            if (string.IsNullOrEmpty(fullName)) throw new ArgumentException(fullName + " is not valid");
+            if (!fullName.Contains(":")) throw new ArgumentException(fullName + " is not valid");
+            var parts = fullName.Split(':');
+            if (parts.Length != 2) throw new ArgumentException(fullName + " is not valid");
+            ConstructMosaicId(parts[0], parts[1]);
+        }
     }
 }

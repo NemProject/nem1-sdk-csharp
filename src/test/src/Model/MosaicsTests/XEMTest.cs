@@ -24,22 +24,22 @@ namespace Tests.Model.MosaicsTests
         [TestMethod]
         public void ShouldCreateXEMViaConstructor()
         {
-            var xem = new Xem(0);
+            var xem = new XemAmount(0);
             Assert.AreEqual((ulong)0, xem.Amount);
         }
 
         [TestMethod]
         public void ShouldCreateRelativeXEM()
         {
-            var xem = Xem.CreateRelative(1);
+            var xem = new XemAmount((double)1);
             Assert.AreEqual((ulong)1000000, xem.Amount);
         }
 
         [TestMethod]
         public void ShouldCreateAbsoluteXEM()
         {
-            var xem = Xem.CreateAbsolute(1);
-            Assert.AreEqual((ulong)1, xem.Amount);
+            var xem = new XemAmount(1000000);
+            Assert.AreEqual((ulong)1000000, xem.Amount);
         }
     }
 }

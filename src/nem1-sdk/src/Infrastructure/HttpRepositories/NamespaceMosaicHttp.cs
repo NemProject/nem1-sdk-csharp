@@ -40,11 +40,10 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
     /// Mosaic Http Repository.
     /// </summary>
     /// <seealso cref="HttpRouter" />
-    /// <seealso cref="IMosaicRepository" />
-    /// <seealso cref="HttpRouter" />
-    /// <seealso cref="IMosaicRepository" />
-    public class NamespaceMosaicHttp : HttpRouter //, IMosaicRepository
+    public class NamespaceMosaicHttp : HttpRouter
     {
+        const int DEFAULT_PAGESIZE = 25;
+
         /// <summary>
         /// Gets or sets the mosaic routes API.
         /// </summary>
@@ -87,15 +86,10 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// NamespaceInfo namespaceInfo = await new NamespaceMosaicHttp("<!--insert host like: http://0.0.0.0:7890-->").NamespaceInfo("test");
         /// </code>
         /// </example>
-        public IObservable<NamespaceInfo> NamespaceInfo(string nameSpace)
+        public IObservable<NamespaceInfo> GetNamespaceInfo(string nameSpace)
         {
             return Observable.FromAsync(async ar => await NamespaceMosaicRoutesApi.NamespaceInfoAsync(nameSpace))
-                .Select(e => 
-                    new NamespaceInfo(
-                        e["fqn"].ToString(), 
-                        ulong.Parse(e["height"].ToString()), 
-                        new Address(e["owner"].ToString()))
-                    );
+                .Select(oNsInfo => new NamespaceInfo(oNsInfo));
         }
 
         /// <summary>
@@ -111,9 +105,9 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// List&lt;NamespaceRootInfo&gt; namespaceInfo = await new NamespaceMosaicHttp("<!--insert host like: http://0.0.0.0:7890-->").NamespaceRootInfoPage();
         /// </code>
         /// </example>
-        public IObservable<List<NamespaceRootInfo>> NamespaceRootInfoPage()
+        public IObservable<List<NamespaceRootInfo>> GetNamespaceRootInfo()
         {
-            return NamespaceRootInfoPage(null, 25);
+            return GetNamespaceRootInfoPage(null, DEFAULT_PAGESIZE);
         }
 
         /// <summary>
@@ -130,9 +124,9 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// List&lt;NamespaceRootInfo&gt; namespaceInfo = await new NamespaceMosaicHttp("<!--insert host like: http://0.0.0.0:7890-->").NamespaceInfo("test");
         /// </code>
         /// </example>
-        public IObservable<List<NamespaceRootInfo>> NamespaceRootInfoPage(string id)
+        public IObservable<List<NamespaceRootInfo>> GetNamespaceRootInfo(string id)
         {
-            return NamespaceRootInfoPage(id, 25);
+            return GetNamespaceRootInfoPage(id, DEFAULT_PAGESIZE);
         }
 
         /// <summary>
@@ -150,7 +144,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// List&lt;NamespaceRootInfo&gt; namespaceInfo = await new NamespaceMosaicHttp("<!--insert host like: http://0.0.0.0:7890-->").NamespaceInfo("test", 10);
         /// </code>
         /// </example>
-        public IObservable<List<NamespaceRootInfo>> NamespaceRootInfoPage(string id, int pageSize)
+        public IObservable<List<NamespaceRootInfo>> GetNamespaceRootInfoPage(string id, int pageSize)
         {
             return Observable.FromAsync(async ar => await NamespaceMosaicRoutesApi.NamespaceRootInfoAsync(id, pageSize))
                 .Select(e =>  e["data"].ToObject<List<JObject>>()
@@ -179,7 +173,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// </example>
         public IObservable<List<MosaicInfo>> GetNamespaceMosaics(string nameSpace)
         {
-            return GetNamespaceMosaics(nameSpace, null, 25);
+            return GetNamespaceMosaicsPage(nameSpace, null, DEFAULT_PAGESIZE);
         }
 
         /// <summary>
@@ -199,7 +193,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// </example>
         public IObservable<List<MosaicInfo>> GetNamespaceMosaics(string nameSpace, string id)
         {
-            return GetNamespaceMosaics(nameSpace, id, 25);
+            return GetNamespaceMosaicsPage(nameSpace, id, DEFAULT_PAGESIZE);
         }
 
         /// <summary>
@@ -218,23 +212,10 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// LList&lt;MosaicInfo&gt; namespaceInfo = await new NamespaceMosaicHttp("<!--insert host like: http://0.0.0.0:7890-->").GetNamespaceMosaics("test", "xyz", 10);
         /// </code>
         /// </example>
-        public IObservable<List<MosaicInfo>> GetNamespaceMosaics(string nameSpace, string id, int pageSize)
+        public IObservable<List<MosaicInfo>> GetNamespaceMosaicsPage(string nameSpace, string id, int pageSize)
         {
             return Observable.FromAsync(async ar => await NamespaceMosaicRoutesApi.NamespaceMosaicInfoAsync(nameSpace, id, pageSize))
-               
-                .Select(e =>
-                    e.Select(i => new MosaicInfo(
-                        int.Parse(i["meta"]["id"].ToString()),
-                        new PublicAccount(i["mosaic"]["creator"].ToString(), GetNetworkTypeObservable().Wait()),
-                        i["mosaic"]["description"].ToString(),
-                        MosaicId.CreateFromMosaicIdentifier(i["mosaic"]["id"]["namespaceId"].ToString() + ":" + i["mosaic"]["id"]["name"].ToString()),
-                        new MosaicProperties(
-                            int.Parse(i["mosaic"]["properties"].ToList()[0]["value"].ToString()), 
-                            ulong.Parse(i["mosaic"]["properties"].ToList()[1]["value"].ToString()),
-                            bool.Parse(i["mosaic"]["properties"].ToList()[2]["value"].ToString()),
-                            bool.Parse(i["mosaic"]["properties"].ToList()[3]["value"].ToString())),
-                        null)).ToList()                
-                );
+                .Select(e => e.Select(oMosaic => new MosaicInfo((JObject)oMosaic["mosaic"], 0)).ToList());
         }
     } 
 }

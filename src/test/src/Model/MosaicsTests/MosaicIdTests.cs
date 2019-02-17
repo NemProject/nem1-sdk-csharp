@@ -11,8 +11,9 @@ namespace Tests.Model.MosaicsTests
         public void CreateAMosaicIdFromMosaicNameViaConstructor()
         {
             MosaicId mosaicId = new MosaicId("nem:xem");
-            Assert.AreEqual(mosaicId.FullName, "nem:xem");
+            Assert.AreEqual(mosaicId.NamespaceId, "nem");
             Assert.AreEqual(mosaicId.Name, "xem");
+            Assert.AreEqual(mosaicId.FullName(), "nem:xem");
 
         }
     }

@@ -1,39 +1,55 @@
 ﻿using io.nem1.sdk.Model.Accounts;
+using Newtonsoft.Json.Linq;
 
 namespace io.nem1.sdk.Model.Mosaics
 {
     /// <summary>
     /// Class MosaicLevy.
     /// </summary>
-    public class MosaicLevy
+    public class MosaicLevy : MosaicId
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MosaicLevy"/> class.
+        /// Gets the Amount of the Fee.
         /// </summary>
-        /// <param name="mosaic">The mosaic.</param>
-        /// <param name="feeType">Type of the fee.</param>
-        /// <param name="recipient">The recipient.</param>
-        public MosaicLevy(Mosaic mosaic, int feeType, Address recipient)
-        {
-            Mosaic = mosaic;
-            FeeType = feeType;
-            LevyRecipient = recipient;
-        }
+        public ulong Fee { get; }
 
         /// <summary>
         /// Gets the levy recipient.
         /// </summary>
         /// <value>The levy recipient.</value>
-        public Address LevyRecipient { get; }
-        /// <summary>
-        /// Gets the mosaic.
-        /// </summary>
-        /// <value>The mosaic.</value>
-        public Mosaic Mosaic { get; }
+        public Address Recipient { get; }
+
         /// <summary>
         /// Gets the type of the fee.
         /// </summary>
         /// <value>The type of the fee.</value>
         public int FeeType { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MosaicLevy"/> class.
+        /// </summary>
+        /// <param name="oMosaicLevy"></param>
+        public MosaicLevy(JToken oMosaicLevy) : this(   oMosaicLevy["mosaicId"]["namespaceId"].ToString(), 
+                                                        oMosaicLevy["mosaicId"]["name"].ToString(),
+                                                        ulong.Parse(oMosaicLevy["fee"].ToString()), 
+                                                        new Address(oMosaicLevy["recipient"].ToString()),
+                                                        int.Parse(oMosaicLevy["type"].ToString())
+                                                ) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MosaicLevy"/> class.
+        /// </summary>
+        /// <param name="namespaceId"></param>
+        /// <param name="mosaicName"></param>
+        /// <param name="fee"></param>
+        /// <param name="recipient"></param>
+        /// <param name="feeType"></param>
+        public MosaicLevy(string namespaceId, string mosaicName, ulong fee, Address recipient, int feeType) : base(namespaceId, mosaicName)
+        {
+            Fee = fee;
+            Recipient = recipient;
+            FeeType = feeType;
+        }
+
     }
 }

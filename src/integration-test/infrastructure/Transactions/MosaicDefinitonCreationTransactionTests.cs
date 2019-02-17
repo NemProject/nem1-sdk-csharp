@@ -21,7 +21,7 @@ namespace IntegrationTest.infrastructure.Transactions
                 NetworkType.Types.TEST_NET,
                 Deadline.CreateHours(1),
                 new MosaicProperties(4, 1000000000, true, true),
-                MosaicId.CreateFromMosaicIdentifier("myspace:subspace"),
+                new MosaicId("myspace:subspace"),
                 new PublicAccount(keyPair.PublicKeyString, NetworkType.Types.TEST_NET),
                 "new mosaic test"
             ).SignWith(keyPair);
@@ -39,8 +39,8 @@ namespace IntegrationTest.infrastructure.Transactions
                 NetworkType.Types.TEST_NET,
                 Deadline.CreateHours(1),
                 new MosaicProperties(4, 1000000000, true, true),
-                MosaicId.CreateFromMosaicIdentifier("myspace:subspacewithlevy"),
-                new MosaicLevy(Mosaic.CreateFromIdentifier("myspace:subspace", 100), 1, new Address("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR") ),
+                new MosaicId("myspace:subspacewithlevy"),
+                new MosaicLevy("myspace", "subspace", 100, new Address("TCTUIF-557ZCQ-OQPW2M-6GH4TC-DPM2ZY-BBL54K-GNHR"), 1),
                 new PublicAccount(keyPair.PublicKeyString, NetworkType.Types.TEST_NET),
                 "new mosaic test"
             ).SignWith(keyPair);

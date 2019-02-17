@@ -204,7 +204,7 @@ namespace IntegrationTest.infrastructure.HttpTests
             Assert.AreEqual(16386, tx.TransactionType.GetValue());
 
             Assert.AreEqual((ulong)100000, tx.Delta);
-            Assert.AreEqual("myspace:subspace", tx.MosaicId.FullName);
+            Assert.AreEqual("myspace:subspace", tx.MosaicId.FullName());
             Assert.AreEqual(1, tx.SupplyType);
         }
 
@@ -233,11 +233,11 @@ namespace IntegrationTest.infrastructure.HttpTests
 
             Assert.AreEqual("TCTUIF557ZCQOQPW2M6GH4TCDPM2ZYBBL54KGNHR", tx.Creator.Address.Plain);
             Assert.AreEqual("new mosaic test", tx.Description);
-            Assert.AreEqual("myspace:subspacewithlevy", tx.Mosaic.FullName);
+            Assert.AreEqual("myspace:subspacewithlevy", tx.Mosaic.FullName());
             Assert.AreEqual(1, tx.MosaicLevy.FeeType);
-            Assert.AreEqual("TCTUIF557ZCQOQPW2M6GH4TCDPM2ZYBBL54KGNHR", tx.MosaicLevy.LevyRecipient.Plain);
-            Assert.AreEqual("subspace", tx.MosaicLevy.Mosaic.MosaicName);
-            Assert.AreEqual("myspace", tx.MosaicLevy.Mosaic.NamespaceName);         
+            Assert.AreEqual("TCTUIF557ZCQOQPW2M6GH4TCDPM2ZYBBL54KGNHR", tx.MosaicLevy.Recipient.Plain);
+            Assert.AreEqual("myspace", tx.MosaicLevy.NamespaceId);
+            Assert.AreEqual("subspace", tx.MosaicLevy.Name);
         }
 
         [TestMethod, Timeout(20000)]

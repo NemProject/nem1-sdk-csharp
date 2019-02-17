@@ -23,11 +23,13 @@
         /// </summary>
         /// <value>The code.</value>
         public int Code { get; }
+
         /// <summary>
         /// Gets the type.
         /// </summary>
         /// <value>The type.</value>
         public int Type { get; }
+
         /// <summary>
         /// Gets the message.
         /// </summary>

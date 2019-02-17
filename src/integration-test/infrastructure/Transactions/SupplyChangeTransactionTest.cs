@@ -21,7 +21,7 @@ namespace IntegrationTest.infrastructure.Transactions
                     NetworkType.Types.TEST_NET,
                     Deadline.CreateHours(1), 
                     100000, 
-                    MosaicId.CreateFromMosaicIdentifier("myspace:subspace")
+                    new MosaicId("myspace:subspace")
                 ).SignWith(keyPair);
 
             var response = await new TransactionHttp("http://" + Config.Domain + ":7890").Announce(transaction);
@@ -38,7 +38,7 @@ namespace IntegrationTest.infrastructure.Transactions
                     NetworkType.Types.TEST_NET,
                     Deadline.CreateHours(1), 
                     100000, 
-                    MosaicId.CreateFromMosaicIdentifier("myspace:subspace")
+                    new MosaicId("myspace:subspace")
                  ).SignWith(keyPair);
 
             var response = await new TransactionHttp("http://" + Config.Domain + ":7890").Announce(transaction);

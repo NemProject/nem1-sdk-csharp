@@ -212,7 +212,7 @@ namespace io.nem1.sdk.Infrastructure.Imported.Api
         /// <exception cref="ApiException">Thrown when fails to make API call</exception>
         /// <param name="address">Account address</param>
         /// <returns>Task of MosaicInfoDTO</returns>
-        System.Threading.Tasks.Task<List<Mosaic>> MosaicsOwnedAsync (string address);
+        System.Threading.Tasks.Task<List<MosaicAmount>> MosaicsOwnedAsync (string address);
 
         /// <summary>
         /// Get all mosaics owned by an account
@@ -1519,7 +1519,7 @@ namespace io.nem1.sdk.Infrastructure.Imported.Api
         /// <exception cref="ApiException">Thrown when fails to make API call</exception>
         /// <param name="address">Account address</param>
         /// <returns>Task of MosaicInfoDTO</returns>
-        public async System.Threading.Tasks.Task<List<Mosaic>> MosaicsOwnedAsync (string address)
+        public async System.Threading.Tasks.Task<List<MosaicAmount>> MosaicsOwnedAsync (string address)
         {
              ApiResponse<string> localVarResponse = await MosaicsOwnedAsyncWithHttpInfo(address);
              return new MosaicMapping().Apply(localVarResponse.Data);

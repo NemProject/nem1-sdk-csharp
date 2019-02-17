@@ -58,7 +58,7 @@ namespace io.nem1.sdk.Model.Transactions
         /// Gets the mosaics.
         /// </summary>
         /// <value>The mosaics.</value>
-        public List<Mosaic> Mosaics { get; }
+        public List<MosaicAmount> Mosaics { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TransferTransaction"/> class.
@@ -71,14 +71,14 @@ namespace io.nem1.sdk.Model.Transactions
         /// <param name="mosaics">The mosaics.</param>
         /// <param name="message">The message.</param>
         /// <exception cref="System.ArgumentNullException">recipient</exception>
-        internal TransferTransaction(NetworkType.Types networkType, byte version, Deadline deadline, ulong fee, Address recipient, List<Mosaic> mosaics, IMessage message)
+        internal TransferTransaction(NetworkType.Types networkType, byte version, Deadline deadline, ulong fee, Address recipient, List<MosaicAmount> mosaics, IMessage message)
         {
             Address = recipient ?? throw new ArgumentNullException(nameof(recipient));
             TransactionType = TransactionTypes.Types.Transfer;
             Version = version;
             Deadline = deadline;
             Message = message ?? EmptyMessage.Create();
-            Mosaics = mosaics ?? new List<Mosaic>();
+            Mosaics = mosaics ?? new List<MosaicAmount>();
             NetworkType = networkType;
             Fee = fee == 0 ? CalculateFee() : fee;          
         }
@@ -98,10 +98,10 @@ namespace io.nem1.sdk.Model.Transactions
         /// <param name="signer">The signer.</param>
         /// <param name="transactionInfo">The transaction information.</param>
         /// <exception cref="System.ArgumentNullException">recipient</exception>
-        internal TransferTransaction(NetworkType.Types networkType, int version, NetworkTime networkTime, Deadline deadline, ulong fee, Address recipient, List<Mosaic> mosaics, IMessage message, string signature, PublicAccount signer, TransactionInfo transactionInfo)
+        internal TransferTransaction(NetworkType.Types networkType, int version, NetworkTime networkTime, Deadline deadline, ulong fee, Address recipient, List<MosaicAmount> mosaics, IMessage message, string signature, PublicAccount signer, TransactionInfo transactionInfo)
         {
             Address = recipient ?? throw new ArgumentNullException(nameof(recipient));
-            Mosaics = mosaics ?? new List<Mosaic>();
+            Mosaics = mosaics ?? new List<MosaicAmount>();
             TransactionType = TransactionTypes.Types.Transfer;
             Version = version;
             NetworkTime = networkTime;
@@ -124,7 +124,7 @@ namespace io.nem1.sdk.Model.Transactions
         /// <param name="mosaics">The mosaics.</param>
         /// <param name="message">The message.</param>
         /// <returns>TransferTransaction.</returns>
-        public static TransferTransaction Create(NetworkType.Types netowrkType, Deadline deadline, ulong fee, Address address, List<Mosaic> mosaics, IMessage message)
+        public static TransferTransaction Create(NetworkType.Types netowrkType, Deadline deadline, ulong fee, Address address, List<MosaicAmount> mosaics, IMessage message)
         {
             return new TransferTransaction(netowrkType, 2, deadline, fee, address, mosaics, message);
         }
@@ -137,7 +137,7 @@ namespace io.nem1.sdk.Model.Transactions
         /// <param name="mosaics">The mosaics.</param>
         /// <param name="message">The message.</param>
         /// <returns>TransferTransaction.</returns>
-        public static TransferTransaction Create(NetworkType.Types netowrkType, Deadline deadline, Address address, List<Mosaic> mosaics, IMessage message)
+        public static TransferTransaction Create(NetworkType.Types netowrkType, Deadline deadline, Address address, List<MosaicAmount> mosaics, IMessage message)
         {
             return new TransferTransaction(netowrkType, 2, deadline, 0, address, mosaics, message);
         }
@@ -172,13 +172,13 @@ namespace io.nem1.sdk.Model.Transactions
             for (var index = 0; index < Mosaics.Count; index++)
             {
                 var mosaic = Mosaics[index];
-                var namespaceVector = MosaicBuffer.CreateNamespaceStringVector(builder, Encoding.UTF8.GetBytes(mosaic.NamespaceName));
-                var mosaicNameVector = MosaicBuffer.CreateMosaicIdStringVector(builder, Encoding.UTF8.GetBytes(mosaic.MosaicName));
+                var namespaceVector = MosaicBuffer.CreateNamespaceStringVector(builder, Encoding.UTF8.GetBytes(mosaic.MosaicInfo.NamespaceId));
+                var mosaicNameVector = MosaicBuffer.CreateMosaicIdStringVector(builder, Encoding.UTF8.GetBytes(mosaic.MosaicInfo.Name));
 
                 MosaicBuffer.StartMosaicBuffer(builder);
 
-                var nsLen = Encoding.Default.GetBytes(mosaic.NamespaceName).Length;
-                var msLen = Encoding.Default.GetBytes(mosaic.MosaicName).Length;
+                var nsLen = Encoding.Default.GetBytes(mosaic.MosaicInfo.NamespaceId).Length;
+                var msLen = Encoding.Default.GetBytes(mosaic.MosaicInfo.Name).Length;
 
                 MosaicBuffer.AddMosaicStructureLen(builder, 20 + nsLen + msLen);
                 MosaicBuffer.AddMosaicIdStructureLen(builder, nsLen + msLen + 8);
@@ -231,7 +231,7 @@ namespace io.nem1.sdk.Model.Transactions
              {
                  foreach (MosaicConfigElement Config in new ConfigDiscovery().GetConfig("MosaicConfigElement"))
                  {
-                     if (Config.MosaicID == m.NamespaceName + ":" +m.MosaicName)
+                     if (Config.MosaicID == m.MosaicInfo.NamespaceId + ":" +m.MosaicInfo.Name)
                      {
                          var q = m.Amount;
                          var d = Convert.ToUInt32(Config.Divisibility);

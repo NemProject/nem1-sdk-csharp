@@ -109,8 +109,8 @@ namespace io.nem1.sdk.Infrastructure.Mapping
                 ulong.Parse(tx["fee"].ToString()),
                 new Address(tx["recipient"].ToString()),
                 tx["mosaics"] == null
-                    ? new List<Mosaic>() { new Mosaic("nem", "xem", ulong.Parse(tx["amount"].ToString())) }
-                    : tx["mosaics"]?.Select(m => new Mosaic(m["mosaicId"]["namespaceId"].ToString(), m["mosaicId"]["name"].ToString(), ulong.Parse(m["quantity"].ToString()))).ToList(),
+                    ? new List<MosaicAmount>() { new MosaicAmount("nem", "xem", ulong.Parse(tx["amount"].ToString())) }
+                    : tx["mosaics"]?.Select(m => new MosaicAmount(m["mosaicId"]["namespaceId"].ToString(), m["mosaicId"]["name"].ToString(), ulong.Parse(m["quantity"].ToString()))).ToList(),
                 tx["message"].ToString() == "{}" ? EmptyMessage.Create() : RetrieveMessage(tx["message"].ToObject<JObject>()),
                 tx["signature"]?.ToString(),
                 new PublicAccount(tx["signer"].ToString(), ExtractNetworkType(int.Parse(tx["version"].ToString()))),
@@ -179,15 +179,16 @@ namespace io.nem1.sdk.Infrastructure.Mapping
                     ulong.Parse(tx["mosaicDefinition"]["properties"].ToList()[1]["value"].ToString()),
                     bool.Parse(tx["mosaicDefinition"]["properties"].ToList()[2]["value"].ToString()),
                     bool.Parse(tx["mosaicDefinition"]["properties"].ToList()[3]["value"].ToString())),
-                MosaicId.CreateFromMosaicIdentifier(tx["mosaicDefinition"]["id"]["namespaceId"] + ":" + tx["mosaicDefinition"]["id"]["name"]),
+                new MosaicId(tx["mosaicDefinition"]["id"]["namespaceId"].ToString(), tx["mosaicDefinition"]["id"]["name"].ToString()),
                 tx["mosaicDefinition"]["levy"].ToString() == "{}" 
                     ? null 
-                    : new MosaicLevy(
-                        Mosaic.CreateFromIdentifier(
-                            (tx["mosaicDefinition"]["levy"]["mosaicId"]["namespaceId"] + ":" + tx["mosaicDefinition"]["levy"]["mosaicId"]["name"]), 
-                            ulong.Parse(tx["mosaicDefinition"]["levy"]["fee"].ToString())), 
-                        int.Parse(tx["mosaicDefinition"]["levy"]["type"].ToString()),
-                        new Address(tx["mosaicDefinition"]["levy"]["recipient"].ToString())),
+                    : new MosaicLevy(   tx["mosaicDefinition"]["levy"]["mosaicId"]["namespaceId"].ToString(),
+                                    tx["mosaicDefinition"]["levy"]["mosaicId"]["name"].ToString(), 
+                                    ulong.Parse(tx["mosaicDefinition"]["levy"]["fee"].ToString()),
+                                    new Address(tx["mosaicDefinition"]["levy"]["recipient"].ToString()),
+                                    int.Parse(tx["mosaicDefinition"]["levy"]["type"].ToString())
+                                        
+                    ),
                 new PublicAccount(tx["mosaicDefinition"]["creator"].ToString(), ExtractNetworkType(int.Parse(tx["version"].ToString()))),
                 tx["mosaicDefinition"]["description"].ToString(),
                 tx["signature"].ToString(),
@@ -225,7 +226,7 @@ namespace io.nem1.sdk.Infrastructure.Mapping
                 new Deadline(int.Parse(tx["deadline"].ToString())),
                 ulong.Parse(tx["fee"].ToString()),
                 ulong.Parse(tx["delta"].ToString()),
-                MosaicId.CreateFromMosaicIdentifier(tx["mosaicId"]["namespaceId"] + ":" + tx["mosaicId"]["name"]),
+                new MosaicId(tx["mosaicId"]["namespaceId"] + ":" + tx["mosaicId"]["name"]),
                 int.Parse(tx["supplyType"].ToString()),
                 tx["signature"].ToString(),
                 new PublicAccount(tx["signer"].ToString(), ExtractNetworkType(int.Parse(tx["version"].ToString()))),

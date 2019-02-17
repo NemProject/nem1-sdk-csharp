@@ -24,6 +24,9 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace io.nem1.sdk.Model.Accounts
 {
@@ -76,7 +79,7 @@ namespace io.nem1.sdk.Model.Accounts
         /// Gets the importance.
         /// </summary>
         /// <value>The importance.</value>
-        public ulong Importance { get; }
+        public double Importance { get; }
         /// <summary>
         /// Gets the harvested blocks.
         /// </summary>
@@ -110,6 +113,45 @@ namespace io.nem1.sdk.Model.Accounts
         public List<AccountInfo> CosignatoryOf { get; }
 
         /// <summary>
+        /// Constructor taking a JObject (parsed JSON) as parameter
+        /// </summary>
+        /// <param name="oAcctInfo"></param>
+        public AccountInfo(JObject oAcctInfo)
+            : this(
+                    oAcctInfo["account"]["publicKey"].ToString(),
+                    new Address(oAcctInfo["account"]["address"].ToString()),
+                    ulong.Parse(oAcctInfo["account"]["balance"].ToString()),
+                    ulong.Parse(oAcctInfo["account"]["vestedBalance"].ToString()),
+                    double.Parse(oAcctInfo["account"]["importance"].ToString()),
+                    ulong.Parse(oAcctInfo["account"]["harvestedBlocks"].ToString()),
+                    oAcctInfo["meta"]["status"].ToString(),
+                    oAcctInfo["meta"]["remoteStatus"].ToString(),
+                    (oAcctInfo["account"]["multisigInfo"].HasValues) ? int.Parse(oAcctInfo["account"]["multisigInfo"]["minCosignatories"].ToString()) : 0,
+                    oAcctInfo["meta"]["cosignatories"]?.Select(
+                        oAcctInfo2 => new AccountInfo(
+                            oAcctInfo2["publicKey"].ToString(),
+                            new Address(oAcctInfo2["address"].ToString()),
+                            ulong.Parse(oAcctInfo2["balance"].ToString()),
+                            ulong.Parse(oAcctInfo2["vestedBalance"].ToString()),
+                            double.Parse(oAcctInfo2["importance"].ToString()),
+                            ulong.Parse(oAcctInfo2["harvestedBlocks"].ToString())
+                        )
+                    ).ToList(),
+                    oAcctInfo["meta"]["cosignatoryOf"]?.Select(
+                        oAcctInfo2 => new AccountInfo(
+                            oAcctInfo2["publicKey"].ToString(),
+                            new Address(oAcctInfo2["address"].ToString()),
+                            ulong.Parse(oAcctInfo2["balance"].ToString()),
+                            ulong.Parse(oAcctInfo2["vestedBalance"].ToString()),
+                            double.Parse(oAcctInfo2["importance"].ToString()),
+                            ulong.Parse(oAcctInfo2["harvestedBlocks"].ToString())
+                        )
+                    ).ToList()
+                )
+        { }
+
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AccountInfo"/> class.
         /// </summary>
         /// <param name="publicKey">The public key.</param>
@@ -123,7 +165,7 @@ namespace io.nem1.sdk.Model.Accounts
         /// <param name="minCosigners">The minimum number of Cosigners (less or eqaul than cosigners.Count).</param>
         /// <param name="cosigners">The cosigners of this multisig account .</param>
         /// <param name="cosignatoryOf">The account is cosignatoryOf these multisig Accounts.</param>
-        public AccountInfo(string publicKey, Address address, ulong balance, ulong vestedBalance, ulong importance, ulong harvestedBlocks,
+        public AccountInfo(string publicKey, Address address, ulong balance, ulong vestedBalance, double importance, ulong harvestedBlocks,
                             string status = "", string remoteStatus = "", 
                             int minCosigners = 0, List<AccountInfo> cosigners = null, List<AccountInfo> cosignatoryOf = null)
         {

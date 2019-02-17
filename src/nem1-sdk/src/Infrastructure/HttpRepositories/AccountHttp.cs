@@ -84,42 +84,8 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         {
             if (address == null) throw new ArgumentNullException(nameof(address));
 
-            return Observable.FromAsync(async ar => await AccountRoutesApi.GetAccountInfoAsync(address.Plain)).Select(
-                accountInfo =>
-                {
-                    return new AccountInfo(
-                        accountInfo["account"]["publicKey"].ToString(),
-                        new Address(accountInfo["account"]["address"].ToString()),
-                        ulong.Parse(accountInfo["account"]["balance"].ToString()),
-                        ulong.Parse(accountInfo["account"]["vestedBalance"].ToString()),
-                        ulong.Parse(accountInfo["account"]["importance"].ToString()),
-                        ulong.Parse(accountInfo["account"]["harvestedBlocks"].ToString()),
-                        accountInfo["meta"]["status"].ToString(),
-                        accountInfo["meta"]["remoteStatus"].ToString(),
-                        (accountInfo["account"]["multisigInfo"].HasValues) ? int.Parse(accountInfo["account"]["multisigInfo"]["minCosignatories"].ToString()) : 0,
-                        accountInfo["meta"]["cosignatories"]?.Select(
-                            accountInfo2 => new AccountInfo(
-                                accountInfo2["publicKey"].ToString(),
-                                new Address(accountInfo2["address"].ToString()),
-                                ulong.Parse(accountInfo2["balance"].ToString()),
-                                ulong.Parse(accountInfo2["vestedBalance"].ToString()),
-                                ulong.Parse(accountInfo2["importance"].ToString()),
-                                ulong.Parse(accountInfo2["harvestedBlocks"].ToString())
-                            )
-                        ).ToList(),
-                        accountInfo["meta"]["cosignatoryOf"]?.Select(
-                            accountInfo2 => new AccountInfo(
-                                accountInfo2["publicKey"].ToString(),
-                                new Address(accountInfo2["address"].ToString()),
-                                ulong.Parse(accountInfo2["balance"].ToString()),
-                                ulong.Parse(accountInfo2["vestedBalance"].ToString()),
-                                ulong.Parse(accountInfo2["importance"].ToString()),
-                                ulong.Parse(accountInfo2["harvestedBlocks"].ToString())
-                            )
-                        ).ToList()
-                    );
-                }
-            );
+            return Observable.FromAsync(async ar => await AccountRoutesApi.GetAccountInfoAsync(address.Plain))
+                .Select(accountInfo => new AccountInfo(accountInfo));
         }
 
         /// <summary>
@@ -146,48 +112,14 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
             if (account == null) throw new ArgumentNullException(nameof(account));
 
             return Observable.FromAsync(async ar => await AccountRoutesApi.GetAccountInfoFromPublicKeyAsync(account.PublicKey))
-                .Select(accountInfo =>
-                {
-                    return new AccountInfo(
-                        accountInfo["account"]["publicKey"].ToString(),
-                        new Address(accountInfo["account"]["address"].ToString()),
-                        ulong.Parse(accountInfo["account"]["balance"].ToString()),
-                        ulong.Parse(accountInfo["account"]["vestedBalance"].ToString()),
-                        ulong.Parse(accountInfo["account"]["importance"].ToString()),
-                        ulong.Parse(accountInfo["account"]["harvestedBlocks"].ToString()),
-                        accountInfo["meta"]["status"].ToString(),
-                        accountInfo["meta"]["remoteStatus"].ToString(),
-                        (accountInfo["account"]["multisigInfo"].HasValues) ? int.Parse(accountInfo["account"]["multisigInfo"]["minCosignatories"].ToString()) : 0,
-                        accountInfo["meta"]["cosignatories"]?.Select(
-                            accountInfo2 => new AccountInfo(
-                                accountInfo2["publicKey"].ToString(),
-                                new Address(accountInfo2["address"].ToString()),
-                                ulong.Parse(accountInfo2["balance"].ToString()),
-                                ulong.Parse(accountInfo2["vestedBalance"].ToString()),
-                                ulong.Parse(accountInfo2["importance"].ToString()),
-                                ulong.Parse(accountInfo2["harvestedBlocks"].ToString())
-                            )
-                        ).ToList(),
-                        accountInfo["meta"]["cosignatoryOf"]?.Select(
-                            accountInfo2 => new AccountInfo(
-                                accountInfo2["publicKey"].ToString(),
-                                new Address(accountInfo2["address"].ToString()),
-                                ulong.Parse(accountInfo2["balance"].ToString()),
-                                ulong.Parse(accountInfo2["vestedBalance"].ToString()),
-                                ulong.Parse(accountInfo2["importance"].ToString()),
-                                ulong.Parse(accountInfo2["harvestedBlocks"].ToString())
-                            )
-                        ).ToList()
-                    );
-                }
-            );
+                .Select(accountInfo => new AccountInfo(accountInfo));
         }
 
         /// <summary>
         /// Get mosaics owned.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <returns>An <see cref="IObservable"/> list of <see cref="Mosaic"/>.</returns>
+        /// <returns>An <see cref="IObservable"/> list of <see cref="MosaicAmount"/>.</returns>
         /// <exception cref="ArgumentNullException">
         /// account
         /// or
@@ -206,7 +138,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// var accountInfo = await accountHttp.MosaicsOwned(publicAccount);
         /// </code>
         /// </example>
-        public IObservable<List<Mosaic>> MosaicsOwned(PublicAccount account)
+        public IObservable<List<MosaicAmount>> MosaicsOwned(PublicAccount account)
         {
             return MosaicsOwned(account.Address);
         }
@@ -215,7 +147,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// Get mosaics owned.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <returns>An <see cref="IObservable"/> list of <see cref="Mosaic"/>.</returns>
+        /// <returns>An <see cref="IObservable"/> list of <see cref="MosaicAmount"/>.</returns>
         /// <exception cref="ArgumentNullException">
         /// account
         /// or
@@ -234,7 +166,7 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// var accountInfo = await accountHttp.MosaicsOwned(address);
         /// </code>
         /// </example>
-        public IObservable<List<Mosaic>> MosaicsOwned(Address account)
+        public IObservable<List<MosaicAmount>> MosaicsOwned(Address account)
         {
             if (account == null) throw new ArgumentNullException(nameof(account));
 

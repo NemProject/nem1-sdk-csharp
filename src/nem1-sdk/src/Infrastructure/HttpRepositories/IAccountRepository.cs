@@ -107,13 +107,13 @@ namespace io.nem1.sdk.Infrastructure.HttpRepositories
         /// </summary>
         /// <param name="account">The account.</param>
         /// <returns>IObservable&lt;List&lt;Mosaic&gt;&gt;.</returns>
-        IObservable<List<Mosaic>> MosaicsOwned(PublicAccount account);
+        IObservable<List<MosaicAmount>> MosaicsOwned(PublicAccount account);
 
         /// <summary>
         /// Mosaicses the owned.
         /// </summary>
         /// <param name="account">The account.</param>
         /// <returns>IObservable&lt;List&lt;Mosaic&gt;&gt;.</returns>
-        IObservable<List<Mosaic>> MosaicsOwned(Address account);
+        IObservable<List<MosaicAmount>> MosaicsOwned(Address account);
     }
 }
