@@ -39,11 +39,10 @@ namespace io.nem1.sdk.Model.Transactions
         /// <param name="message">The message.</param>
         /// <param name="hash">The hash.</param>
         /// <param name="innerHash">The inner hash.</param>
-        public TransactionResponse(int type, int code, string status, string message, string hash, string innerHash)
+        public TransactionResponse(int type, int code, string message, string hash, string innerHash)
         {
             Type = type;
             Code = code;
-            Status = status;
             Message = message;
             Hash = hash;
             InnerHash = innerHash;
@@ -59,11 +58,6 @@ namespace io.nem1.sdk.Model.Transactions
         /// </summary>
         /// <value>The code.</value>
         public int Code { get; }
-        /// <summary>
-        /// Gets the status.
-        /// </summary>
-        /// <value>The status.</value>
-        public string Status { get; }
         /// <summary>
         /// Gets the message.
         /// </summary>
