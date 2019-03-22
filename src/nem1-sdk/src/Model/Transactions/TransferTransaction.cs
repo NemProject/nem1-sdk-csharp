@@ -239,7 +239,7 @@ namespace io.nem1.sdk.Model.Transactions
                          
                          if (s <= 10000 && d == 0)
                          {
-                             Fee += 1000000;
+                             Fee += 50000;
                          }
                          else
                          {
